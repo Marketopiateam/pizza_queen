@@ -145,13 +145,13 @@ sup {
 }
 
 a {
-    color: #FC6A57;
+    color: #ff0000;
     text-decoration: none;
     background-color: transparent
 }
 
 a:hover {
-    color: #FC6A57;
+    color: #ff0000;
     text-decoration: none
 }
 
@@ -2883,8 +2883,8 @@ a.btn.disabled, fieldset:disabled a.btn {
 
 .btn-primary {
     color: #fff;
-    background-color: #FC6A57;
-    border-color: #FC6A57
+    background-color: #ff0000;
+    border-color: #ff0000
 }
 
 .btn-primary:hover {
@@ -4014,8 +4014,8 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 }
 
 .custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::before {
-    border-color: #FC6A57;
-    background-color: #FC6A57
+    border-color: #ff0000;
+    background-color: #ff0000
 }
 
 .custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::after {
@@ -4436,9 +4436,9 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 }
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
-    color: #FC6A57;
+    color: #ff0000;
     background-color: transparent;
-    border-color: transparent transparent #FC6A57
+    border-color: transparent transparent #ff0000
 }
 
 .nav-tabs .dropdown-menu {
@@ -4453,7 +4453,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
-    background-color: #FC6A57
+    background-color: #ff0000
 }
 
 .nav-fill .nav-item, .nav-fill > .nav-link {
@@ -4847,7 +4847,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 }
 
 .navbar-light .navbar-brand {
-    color: #FC6A57
+    color: #ff0000
 }
 
 .navbar-light .navbar-brand:focus, .navbar-light .navbar-brand:hover {
@@ -4867,7 +4867,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 }
 
 .navbar-light .navbar-nav .active > .nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show > .nav-link {
-    color: #FC6A57
+    color: #ff0000
 }
 
 .navbar-light .navbar-toggler {
@@ -4884,11 +4884,11 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 }
 
 .navbar-light .navbar-text a {
-    color: #FC6A57
+    color: #ff0000
 }
 
 .navbar-light .navbar-text a:focus, .navbar-light .navbar-text a:hover {
-    color: #FC6A57
+    color: #ff0000
 }
 
 .navbar-dark .navbar-brand {
@@ -13941,15 +13941,15 @@ input[type=number] {
 }
 
 .navbar .nav-link:hover {
-    color: #FC6A57;
+    color: #ff0000;
 }
 
 .navbar .nav-link.active {
-    color: #FC6A57
+    color: #ff0000
 }
 
 .navbar .active > .nav-link, .navbar .nav-link.active, .navbar .nav-link.show, .navbar .show > .nav-link {
-    color: #FC6A57
+    color: #ff0000
 }
 
 .navbar .nav-pills .show > .nav-link {

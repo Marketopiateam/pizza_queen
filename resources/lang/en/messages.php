@@ -2683,4 +2683,10 @@
   'successfully_added' => 'Successfully added',
   'The server encountered an internal error or misconfiguration and was unable to complete your request.' => 'The server encountered an internal error or misconfiguration and was unable to complete your request.',
   'Reload page' => 'Reload page',
+  'please_add_more_options_or_change_the_max_value_for' => 'Please add more options or change the max value for',
+  'maximum_value_can_not_be_smaller_or_equal_then_minimum_value' => 'Maximum value can not be smaller or equal then minimum value',
+  'Bulk_Export' => 'Bulk Export',
+  'STEP 1' => 'STEP 1',
+  'Select_Data_Type' => 'Select Data Type',
+  'STEP 2' => 'STEP 2',
 );

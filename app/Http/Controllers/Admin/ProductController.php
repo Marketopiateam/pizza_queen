@@ -37,8 +37,7 @@ class ProductController extends Controller
         private ProductByBranch $productByBranch,
         private Translation     $translation,
         private Cuisine         $cuisine,
-    )
-    {}
+    ) {}
 
 
     public function variantCombination(Request $request): JsonResponse
@@ -183,7 +182,7 @@ class ProductController extends Controller
         ]);
 
         if (in_array(request('stock_type'), ['daily', 'fixed'])) {
-            if($request->product_stock < 1){
+            if ($request->product_stock < 1) {
                 $validator->getMessageBag()->add('product_stock', translate('Product stock must be at least 1!'));
             }
         }
@@ -421,7 +420,7 @@ class ProductController extends Controller
         ]);
 
         if (in_array(request('stock_type'), ['daily', 'fixed'])) {
-            if($request->product_stock < 1){
+            if ($request->product_stock < 1) {
                 $validator->getMessageBag()->add('product_stock', translate('Product stock must be at least 1!'));
             }
         }
@@ -583,10 +582,12 @@ class ProductController extends Controller
         $product->tags()->sync($tagIds);
         $product->cuisines()->sync($request->cuisines);
 
-        $updatedProduct = $this->productByBranch->updateOrCreate([
-            'product_id' => $product->id,
-            'branch_id' => 1,
-        ], [
+        $updatedProduct = $this->productByBranch->updateOrCreate(
+            [
+                'product_id' => $product->id,
+                'branch_id' => 1,
+            ],
+            [
                 'product_id' => $product->id,
                 'price' => $request->price,
                 'discount_type' => $request->discount_type,
@@ -607,19 +608,23 @@ class ProductController extends Controller
         foreach ($request->lang as $index => $key) {
             if ($request->name[$index] && $key != 'en') {
                 $this->translation->updateOrInsert(
-                    ['translationable_type' => 'App\Model\Product',
+                    [
+                        'translationable_type' => 'App\Model\Product',
                         'translationable_id' => $product->id,
                         'locale' => $key,
-                        'key' => 'name'],
+                        'key' => 'name'
+                    ],
                     ['value' => $request->name[$index]]
                 );
             }
             if ($request->description[$index] && $key != 'en') {
                 $this->translation->updateOrInsert(
-                    ['translationable_type' => 'App\Model\Product',
+                    [
+                        'translationable_type' => 'App\Model\Product',
                         'translationable_id' => $product->id,
                         'locale' => $key,
-                        'key' => 'description'],
+                        'key' => 'description'
+                    ],
                     ['value' => strip_tags($request->description[$index])]
                 );
             }

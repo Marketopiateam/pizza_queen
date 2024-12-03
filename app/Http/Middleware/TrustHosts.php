@@ -13,9 +13,12 @@ class TrustHosts extends Middleware
      */
     public function hosts()
     {
-        return [    
+        return [
             $this->allSubdomainsOfApplicationUrl(),
-            'localhost','192.168.1.136','127.0.0.1'
+            'localhost',
+            '192.168.1.27',
+            '127.0.0.1',
+            '192.168.1.117'
         ];
     }
 }
