@@ -1,4 +1,4 @@
-<?php return array(
+<?php return array (
   'Dashboard' => 'لوحة القيادة',
   'welcome' => 'أهلاً وسهلاً',
   'Monitor_your_business_analytics_and_statistics' => 'راقب تحليلات وإحصائيات عملك',
@@ -398,7 +398,6 @@
   'country_code' => 'رمز الدولة',
   'Select_Country_Code' => 'حدد رمز الدولة',
   'Submit' => 'إرسال',
-  // transelated
   'Code' => 'رمز',
   'default_Status' => 'الحالة الافتراضية',
   'Translate' => 'ترجمة',
@@ -541,7 +540,7 @@
   'Ex: 50%' => 'مثال: 50%',
   'minimum' => 'الحد الأدنى',
   'purchase' => 'الشراء',
-  '100' => '100',
+  100 => '100',
   'maximum' => 'الحد الأقصى',
   'discount' => 'الخصم',
   'start' => 'البداية',
@@ -598,7 +597,6 @@
   'Status' => 'الحالة',
   'Want to remove this information ?' => 'هل ترغب في إزالة هذه المعلومات؟',
   'Bonus status updated!' => 'تم تحديث حالة المكافأة!',
-  // transelated
   'Want to delete this bonus ?' => 'هل ترغب في حذف هذه المكافأة؟',
   'Bonus removed!' => 'تم حذف المكافأة!',
   'Update Coupon' => 'تحديث القسيمة',
@@ -847,7 +845,6 @@
   'your_server_php' => 'إصدار PHP على الخادم',
   'value_is_grater_or_equal_to_20MB' => 'القيمة أكبر أو تساوي 20 ميجابايت',
   'current_value_is' => 'القيمة الحالية هي',
-  'value_is_grater_or_equal_to_20MB' => 'القيمة أكبر أو تساوي 20 ميجابايت',
   'upload' => 'رفع',
   'updated successfully!' => 'تم التحديث بنجاح!',
   'get_your_zip_file_from_the_purchased_theme_and_upload_it_and_activate_theme_with_your_Codecanyon_username_and_purchase_code' => 'احصل على ملف ZIP من القالب المشتراة ورفعه وفعّل القالب باستخدام اسم المستخدم وكود الشراء الخاص بـ Codecanyon',
@@ -883,7 +880,7 @@
   'sms_gateways_configuration' => 'إعداد بوابات الرسائل النصية',
   'Your current sms settings are disabled, because you have enabled sms gateway addon, To visit your currently active sms gateway settings please follow the link' => 'تم تعطيل إعدادات الرسائل النصية الحالية لأنك قد قمت بتفعيل إضافة بوابة الرسائل النصية، لزيارة إعدادات بوابة الرسائل النصية النشطة حاليًا، يرجى اتباع الرابط',
   'Your current sms settings are disabled, because you have enabled sms gateway addon, To visit your currently active sms gateway settings please follow the link.' => 'تم تعطيل إعدادات الرسائل النصية الحالية لأنك قد قمت بتفعيل إضافة بوابة الرسائل النصية، لزيارة إعدادات بوابة الرسائل النصية النشطة حاليًا، يرجى اتباع الرابط.',
-  'Your current payment settings are disabled, because you have enabled payment gateway addon, To visit your currently active payment gateway settings please follow the link.' => 'تم تعطيل إعدادات الدفع الحالية لأنك قد قمت بتفعيل إضافة بوابة الدفع، لزيارة إعدادات بوابة الدفع النشطة حاليًا، يرجى اتباع الرابط.',
+  'Your current payment settings are disabled, because you have enabled payment gateway addon, To visit your currently active payment gateway settings please follow the link.' => 'إعدادات الدفع الحالية الخاصة بك معطلة لأنك قد قمت بتمكين الإضافة الخاصة بوابة الدفع، لزيارة إعدادات بوابة الدفع النشطة حاليًا يرجى اتباع الرابط.',
   'Add new category' => 'إضافة فئة جديدة',
   'add_New_Category' => 'إضافة فئة جديدة',
   'New Category' => 'فئة جديدة',
@@ -986,7 +983,6 @@
   'Want to delete this item ?' => 'هل تريد حذف هذا العنصر؟',
   'Product Preview' => 'معاينة المنتج',
   'of' => 'من',
-
   'Excellent' => 'ممتاز',
   'Good' => 'جيد',
   'Average' => 'متوسط',
@@ -2136,7 +2132,6 @@
   'chat settings updated!' => 'تم تحديث إعدادات الدردشة!',
   'Cancelled' => 'ملغي',
   'Yes?' => 'نعم؟',
-  'Your current payment settings are disabled, because you have enabled payment gateway addon, To visit your currently active payment gateway settings please follow the link.' => 'إعدادات الدفع الحالية الخاصة بك معطلة لأنك قد قمت بتمكين الإضافة الخاصة بوابة الدفع، لزيارة إعدادات بوابة الدفع النشطة حاليًا يرجى اتباع الرابط.',
   'free_delivery_over_amount' => 'التوصيل المجاني عند تجاوز المبلغ',
   'If this field is active and the order amount exceeds this free delivery over amount then the delivery fee will be free.' => 'إذا كانت هذه الخانة مفعلة وتجاوز المبلغ المطلوب للطلب هذا المبلغ، ستكون رسوم التوصيل مجانية.',
   'free_delivery_over_amount_status' => 'حالة التوصيل المجاني عند تجاوز المبلغ',
@@ -2388,230 +2383,119 @@
   'Firebase OTP Verification Setup' => 'إعداد التحقق من OTP فايربيس',
   'Firebase OTP code is required to verify user identity' => 'رمز OTP فايربيس مطلوب للتحقق من هوية المستخدم',
   'By turning on this option, you can be able to see the map on customer app& website, admin, branch setup and deliveryman app. You can now also setup your delivery charges based on distance(km) from ' => 'بتفعيل هذا الخيار، يمكنك رؤية الخريطة على تطبيق العميل والموقع الإلكتروني، إعدادات المسؤول، الفرع، وتطبيق السائق. يمكنك الآن أيضًا إعداد رسوم التوصيل بناءً على المسافة (كم) من ',
-
   'By turning on this option, you can be able to see the map on customer app& website, admin panel, branch panel and deliveryman app. You can now also setup your delivery charges based on distance(km) from ' => 'بتفعيل هذا الخيار، يمكنك رؤية الخريطة على تطبيق العميل والموقع الإلكتروني، لوحة التحكم الخاصة بالمسؤول، لوحة الفرع، وتطبيق السائق. يمكنك الآن أيضًا إعداد رسوم التوصيل بناءً على المسافة (كم) من ',
-
   'Turn on google Map' => 'تفعيل خرائط جوجل',
-
   'If Phone Number verification is on, Customers must verify their Phone Number with an OTP to complete the signup process.' => 'إذا كان التحقق من رقم الهاتف مفعلًا، يجب على العملاء التحقق من رقم هاتفهم باستخدام OTP لإكمال عملية التسجيل.',
-
   'You can not delete this area. At least one area must be' => 'لا يمكنك حذف هذه المنطقة. يجب أن تبقى منطقة واحدة على الأقل',
-
   'One or more Branch delivery charge setup is based on distance, so you must need to update branch wise delivery charge setup to be Fixed or based on Area/Zip code.' => 'إعداد رسوم التوصيل لفرع واحد أو أكثر يعتمد على المسافة، لذلك يجب عليك تحديث إعدادات رسوم التوصيل لكل فرع ليكون ثابتًا أو يعتمد على المنطقة/الرمز البريدي.',
-
   'Turn off google Map' => 'إيقاف خرائط جوجل',
-
   'If Email verification is on, Customers must verify their email address with an OTP to complete the signup process.' => 'إذا كان التحقق من البريد الإلكتروني مفعلًا، يجب على العملاء التحقق من عنوان بريدهم الإلكتروني باستخدام OTP لإكمال عملية التسجيل.',
-
   'You cannot delete this area. At least one area must remain.' => 'لا يمكنك حذف هذه المنطقة. يجب أن تبقى منطقة واحدة على الأقل.',
-
   'By turning on this option, you can be able to see the map on customer app & website, admin panel, branch panel and deliveryman app. You can now also setup your delivery charges based on distance(km) from ' => 'بتفعيل هذا الخيار، يمكنك رؤية الخريطة على تطبيق العميل والموقع الإلكتروني، لوحة التحكم الخاصة بالمسؤول، لوحة الفرع، وتطبيق السائق. يمكنك الآن أيضًا إعداد رسوم التوصيل بناءً على المسافة (كم) من ',
-
   'Enabling Apple Login, customers can log in to the site using their existing Apple login credentials.' => 'بتفعيل تسجيل الدخول باستخدام Apple، يمكن للعملاء تسجيل الدخول إلى الموقع باستخدام بيانات اعتماد تسجيل الدخول الخاصة بهم في Apple.',
-
   'eFood Software Update' => 'تحديث برنامج eFood',
-
   'Ex : Api key' => 'مثال: مفتاح API',
-
   'Ex: F-12345678' => 'مثال: F-12345678',
-
   'measurement_id' => 'معرف القياس',
-
   'Ex: 9876543210' => 'مثال: 9876543210',
-
   'app_id' => 'معرف التطبيق',
-
   'Ex: 1234567890' => 'مثال: 1234567890',
-
   'messaging_sender_id' => 'معرف مرسل الرسائل',
-
   'Ex: my-awesome-app.appspot.com' => 'مثال: my-awesome-app.appspot.com',
-
   'storage_bucket' => 'دلو التخزين',
-
   'Ex: my-awesome-app.firebaseapp.com' => 'مثال: my-awesome-app.firebaseapp.com',
-
   'Firebase' => 'فايربيس',
-
   'Manual' => 'يدوي',
-
   'For Firebase a single real-time notification will be sent upon order placement with no repetition. For the Manual option notifications will appear at 10-second intervals until the order is viewed.' => 'بالنسبة لفايربيس، سيتم إرسال إشعار واحد في الوقت الفعلي عند تقديم الطلب دون تكرار. بالنسبة للخيار اليدوي، ستظهر الإشعارات كل 10 ثوانٍ حتى يتم عرض الطلب.',
-
   'Admin Order Notification Type' => 'نوع إشعار طلب المسؤول',
-
   'Admin will get a pop-up notification with sounds for every order placed by customers.' => 'سيحصل المسؤول على إشعار منبثق مع صوت لكل طلب يتم تقديمه من قبل العملاء.',
-
   'Order Notification for Admin' => 'إشعار الطلب للمسؤول',
-
   'auth_domain' => 'نطاق المصادقة',
-
   'Ex: my-awesome-app-12345' => 'مثال: my-awesome-app-12345',
-
   'API_key' => 'مفتاح API',
-
   'new_order_push_description' => 'وصف دفع الإشعار للطلب الجديد',
-
   'order_push_title' => 'عنوان دفع الإشعار للطلب',
-
   'Order Notification Type' => 'نوع إشعار الطلب',
-
   'Admin/Branch will get a pop-up notification with sounds for every order placed by customers.' => 'سيحصل المسؤول/الفرع على إشعار منبثق مع صوت لكل طلب يتم تقديمه من قبل العملاء.',
-
   'Order Notification' => 'إشعار الطلب',
-
   'Wynne Walter' => 'وين والتر',
-
   'You can not switch to Area/Zip code. At least one area must be added to switch to Area.' => 'لا يمكنك التبديل إلى المنطقة/الرمز البريدي. يجب إضافة منطقة واحدة على الأقل للتبديل إلى المنطقة.',
-
   'Enabling Facebook Login, customers can log in to the site using their existing Facebook credentials.' => 'بتفعيل تسجيل الدخول باستخدام فيسبوك، يمكن للعملاء تسجيل الدخول إلى الموقع باستخدام بيانات اعتماد فيسبوك الخاصة بهم.',
-
   'Enabling Google Login, customers can log in to the site using their existing Gmail credentials.' => 'بتفعيل تسجيل الدخول باستخدام جوجل، يمكن للعملاء تسجيل الدخول إلى الموقع باستخدام بيانات اعتماد جيميل الخاصة بهم.',
-
   'With Social Login, customers can log in using social media credentials. while new customers can create accounts instantly.' => 'مع تسجيل الدخول الاجتماعي، يمكن للعملاء تسجيل الدخول باستخدام بيانات اعتماد وسائل التواصل الاجتماعي. بينما يمكن للعملاء الجدد إنشاء حسابات على الفور.',
-
   'With OTP Login, customers can log in using their phone number. while new customers can create accounts instantly.' => 'مع تسجيل الدخول باستخدام OTP، يمكن للعملاء تسجيل الدخول باستخدام رقم هاتفهم. بينما يمكن للعملاء الجدد إنشاء حسابات على الفور.',
-
   'By enabling manual login, customers will get the option to create account and log in using necessary credentials & password in the app & website' => 'من خلال تفعيل تسجيل الدخول اليدوي، سيحصل العملاء على خيار إنشاء حساب وتسجيل الدخول باستخدام البيانات الضرورية وكلمة المرور في التطبيق والموقع الإلكتروني',
-
   'Please active at lest one social media login option between google or facebook.' => 'يرجى تفعيل خيار تسجيل الدخول عبر وسائل التواصل الاجتماعي على الأقل بين جوجل أو فيسبوك.',
-
   'Configure here' => 'إعداد هنا',
-
   'Configure from here' => 'إعداد من هنا',
-
   'App ID' => 'معرف التطبيق',
-
   'Messaging Sender ID' => 'معرف مرسل الرسائل',
-
   'API Key' => 'مفتاح واجهة برمجة التطبيقات',
-
   'Auth Domain' => 'نطاق المصادقة',
-
   'Project ID' => 'معرف المشروع',
-
   'Storage Bucket' => 'دلو التخزين',
-
   'No?' => 'لا؟',
-
   'Marketing Tools' => 'أدوات التسويق',
-
   'Profile updated successfully' => 'تم تحديث الملف الشخصي بنجاح',
-
   'Total_Order_Amount' => 'إجمالي مبلغ الطلب',
-
   'Completed' => 'مكتمل',
-
   'Ongoing' => 'جاري',
-
   'Joining_Date ' => 'تاريخ الانضمام',
-
   'Search by mail title, ID or customer type' => 'البحث حسب عنوان البريد، المعرف أو نوع العميل',
-
   'Total Deliveryman' => 'إجمالي السائقين',
-
   'Inactive Deliveryman' => 'سائق التوصيل غير نشط',
-
   'Active Deliveryman' => 'سائق توصيل نشط',
-
   'status changed successfully' => 'تم تغيير الحالة بنجاح',
-
   'Profile_Details' => 'تفاصيل الملف الشخصي',
-
   'Deliveryman_Details' => 'تفاصيل السائق',
-
   'Joining' => 'الانضمام',
-
   'edit' => 'تعديل',
-
   'Identity info' => 'معلومات الهوية',
-
   '+880162720045' => '+880162720045',
-
   'Contact info' => 'معلومات الاتصال',
-
   'Action' => 'إجراء',
-
   'Order Status' => 'حالة الطلب',
-
   'Total Items' => 'إجمالي العناصر',
-
   'Order Date' => 'تاريخ الطلب',
-
   'Customer Info' => 'معلومات العميل',
-
   'Order list' => 'قائمة الطلبات',
-
   'Marketing_Tool' => 'أداة التسويق',
-
   'How_It_Work' => 'كيف يعمل',
-
   'Meta_Pixel' => 'بيكسل ميتا',
-
   'Meta Pixel ID' => 'معرف بيكسل ميتا',
-
   'Enter Meta Pixel ID' => 'أدخل معرف بيكسل ميتا',
-
   'TikTok_Pixel' => 'بيكسل تيك توك',
-
   'TikTok Pixel ID' => 'معرف بيكسل تيك توك',
-
   'Enter TikTok Pixel ID' => 'أدخل معرف بيكسل تيك توك',
-
   'X (Twitter) Pixel' => 'بيكسل X (تويتر)',
-
   'X Pixel ID' => 'معرف بيكسل X',
-
   'Enter X Pixel ID' => 'أدخل معرف بيكسل X',
-
   'Pinterest_Pixel' => 'بيكسل بينتيريست',
-
   'Pinterest Tag ID' => 'معرف وسمة بينتيريست',
-
   'Enter Pinterest Tag ID' => 'أدخل معرف وسمة بينتيريست',
-
   'Google_Tag_Manager' => 'مدير علامات جوجل',
-
   'Container ID' => 'معرف الحاوية',
-
   'Enter Container ID' => 'أدخل معرف الحاوية',
-
   'Google_Analytics' => 'تحليلات جوجل',
-
   'Measurement ID' => 'معرف القياس',
-
   'Enter Measurement ID' => 'أدخل معرف القياس',
-
-  'How to Get the Tag ID' => 'كيفية الحصول على معرف الوسمة',
-
+  'How to Get the Tag ID' => 'كيفية الحصول على معرف الوسم',
   'Where to use the Tag ID' => 'أين تستخدم معرف الوسمة',
-
   'got_it' => 'فهمت',
-
   'Deliveryman Joining Date' => 'تاريخ انضمام السائق',
-
   'Deliveryman Status' => 'حالة السائق',
-
   'Deliveryman_Info' => 'معلومات السائق',
-
   'Profile_Image' => 'صورة الملف الشخصي',
-
   'Click to upload' => 'انقر لتحميل',
-
   'or drag and drop' => 'أو اسحب وأفلت',
-
   'Identity_Info' => 'معلومات الهوية',
-
   'Select Driver Identity type' => 'اختر نوع هوية السائق',
-
   'Provider Phone number & Password' => 'رقم هاتف المزود وكلمة المرور',
-
   '+8801711223344' => '+8801711223344',
-
   'Search by name or email or phone' => 'البحث حسب الاسم أو البريد الإلكتروني أو الهاتف',
   'Update_Deliveryman' => 'تحديث السائق',
   'Out for Delivery' => 'خارج للتوصيل',
   '01747413273' => '01747413273',
-  'How to Get the Tag ID' => 'كيفية الحصول على معرف الوسم',
   'Lorem Ipsum is simply dummy text.' => 'لوريم إيبسوم هو نص تجريبي فقط.',
   'Lorem Ipsum is simply dummy text of the printing industry.' => 'لوريم إيبسوم هو نص تجريبي لصناعة الطباعة.',
   'Lorem Ipsum is simply dummy text industry.' => 'لوريم إيبسوم هو نص تجريبي في الصناعة.',
@@ -2625,7 +2509,7 @@
   'Privacy policy updated!' => 'تم تحديث سياسة الخصوصية!',
   '+1 (833) 332-5412' => '+1 (833) 332-5412',
   '+1 (181) 629-1031' => '+1 (181) 629-1031',
-  '8801711223344' => '8801711223344',
+  8801711223344 => '8801711223344',
   'phone number' => 'رقم الهاتف',
   'Deliveryman Email & Password' => 'بريد السائق الإلكتروني وكلمة المرور',
   'Category already exists!' => 'الفئة موجودة بالفعل!',
@@ -2633,7 +2517,7 @@
   'Clean' => 'تنظيف',
   '+1 (253) 284-6183' => '+1 (253) 284-6183',
   'Select Date' => 'اختر التاريخ',
-  '880162720045' => '880162720045',
+  880162720045 => '880162720045',
   '+1 (125) 637-1447' => '+1 (125) 637-1447',
   '01712251697' => '01712251697',
   'Now go the' => 'الآن اذهب إلى',
@@ -2759,4 +2643,7 @@
   'successfully_added' => 'تم الإضافة بنجاح',
   'The server encountered an internal error or misconfiguration and was unable to complete your request.' => 'واجه الخادم خطأ داخليًا أو تكوينًا غير صحيح ولم يتمكن من إتمام طلبك.',
   'Reload page' => 'إعادة تحميل الصفحة',
+  ' ex: 0.00' => ' ex: 0.00',
+  'When this option is enabled the user may pick up their own order. ' => 'When this option is enabled the user may pick up their own order. ',
+  'Currently Delivery Charge is set based on Zip Code/Area wise or Based on Fixed Delivery Charge' => 'Currently Delivery Charge is set based on Zip Code/Area wise or Based on Fixed Delivery Charge',
 );
