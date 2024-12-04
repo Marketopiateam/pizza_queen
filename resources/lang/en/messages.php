@@ -2689,4 +2689,5 @@
   'STEP 1' => 'STEP 1',
   'Select_Data_Type' => 'Select Data Type',
   'STEP 2' => 'STEP 2',
+  'order_canceled' => 'Order canceled',
 );

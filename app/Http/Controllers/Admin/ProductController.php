@@ -284,6 +284,9 @@ class ProductController extends Controller
                         $temp_option['label'] = $value['label'];
                     }
                     $temp_option['optionPrice'] = $value['optionPrice'];
+                    if ($option['type'] != 'single') {
+                        $temp_option['qty'] = 1;
+                    }
                     $temp_value[] = $temp_option;
                 }
                 $temp_variation['values'] = $temp_value;
@@ -511,6 +514,9 @@ class ProductController extends Controller
                         $temp_option['label'] = $value['label'];
                     }
                     $temp_option['optionPrice'] = $value['optionPrice'];
+                    if ($option['type'] != 'single') {
+                        $temp_option['qty'] = 1;
+                    }
                     $temp_value[] = $temp_option;
                 }
                 $temp_variation['values'] = $temp_value;

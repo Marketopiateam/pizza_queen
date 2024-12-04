@@ -30,8 +30,7 @@ class DeliveryChargeSetupController extends Controller
         private DeliveryChargeSetup $deliveryChargeSetup,
         private DeliveryChargeByArea $deliveryChargeByArea,
         private Branch $branch,
-    )
-    {}
+    ) {}
 
     /**
      * @param Request $request
@@ -43,10 +42,10 @@ class DeliveryChargeSetupController extends Controller
 
         $branches = $this->branch
             ->with(['delivery_charge_setup', 'delivery_charge_by_area' => function ($query) use ($search) {
-            if ($search) {
-                $query->where('area_name', 'LIKE', "%{$search}%");
-            }
-        }])->get(['id', 'name', 'status']);
+                if ($search) {
+                    $query->where('area_name', 'LIKE', "%{$search}%");
+                }
+            }])->get(['id', 'name', 'status']);
 
         return view('admin-views.business-settings.restaurant.delivery-fee', compact('branches'));
     }
@@ -64,10 +63,12 @@ class DeliveryChargeSetupController extends Controller
             'minimum_distance_for_free_delivery' => 'required|numeric|min:0|max:99999999',
         ]);
 
-        $this->deliveryChargeSetup->updateOrCreate([
-            'branch_id' => (integer) $request['branch_id']
-        ], [
-                'branch_id' => (integer) $request['branch_id'],
+        $this->deliveryChargeSetup->updateOrCreate(
+            [
+                'branch_id' => (int) $request['branch_id']
+            ],
+            [
+                'branch_id' => (int) $request['branch_id'],
                 'delivery_charge_per_kilometer' => $request['delivery_charge_per_kilometer'],
                 'minimum_delivery_charge' => $request['minimum_delivery_charge'],
                 'minimum_distance_for_free_delivery' => $request['minimum_distance_for_free_delivery'],
@@ -89,10 +90,12 @@ class DeliveryChargeSetupController extends Controller
             'fixed_delivery_charge' => 'required|numeric|min:0|max:99999999',
         ]);
 
-        $this->deliveryChargeSetup->updateOrCreate([
-            'branch_id' => (integer) $request['branch_id']
-        ], [
-                'branch_id' => (integer) $request['branch_id'],
+        $this->deliveryChargeSetup->updateOrCreate(
+            [
+                'branch_id' => (int) $request['branch_id']
+            ],
+            [
+                'branch_id' => (int) $request['branch_id'],
                 'fixed_delivery_charge' => $request['fixed_delivery_charge'],
             ]
         );
@@ -107,12 +110,12 @@ class DeliveryChargeSetupController extends Controller
      */
     public function changeDeliveryChargeType(Request $request): JsonResponse
     {
-        $branchId = (integer) $request['branch_id'];
-        $status = (boolean) $request['status'];
+        $branchId = (int) $request['branch_id'];
+        $status = (bool) $request['status'];
 
         if ($status) {
             $googleMapStatus = Helpers::get_business_settings('google_map_status');
-            if ($request['delivery_charge_type'] == 'distance' && $googleMapStatus != 1){
+            if ($request['delivery_charge_type'] == 'distance' && $googleMapStatus != 1) {
                 return response()->json(['status' => false, 'error' => translate('Can not change delivery charge to distance while Google Map status is off. Please turn on the Google Map status first.')], 200);
             }
 
@@ -129,13 +132,13 @@ class DeliveryChargeSetupController extends Controller
 
             if ($newDeliveryChargeType == 'area') {
                 $areaCount = $this->deliveryChargeByArea->where(['branch_id' => $branchId])->count();
-                if ($areaCount < 1){
+                if ($areaCount < 1) {
                     return response()->json(['status' => false, 'error' => translate('You can not switch to Area/Zip code. At least one area must be added to switch to Area.')], 200);
                 }
             }
 
             $googleMapStatus = Helpers::get_business_settings('google_map_status');
-            if ($newDeliveryChargeType == 'distance' && $googleMapStatus != 1){
+            if ($newDeliveryChargeType == 'distance' && $googleMapStatus != 1) {
                 return response()->json(['status' => false, 'error' => translate('Can not change delivery charge to distance while Google Map status is off. Please turn on the Google Map status first.')], 200);
             }
 
@@ -167,12 +170,12 @@ class DeliveryChargeSetupController extends Controller
         ]);
 
         $deliveryChargeByArea = $this->deliveryChargeByArea;
-        $deliveryChargeByArea->branch_id = (integer) $request['branch_id'];
+        $deliveryChargeByArea->branch_id = (int) $request['branch_id'];
         $deliveryChargeByArea->area_name = $request['area_name'];
         $deliveryChargeByArea->delivery_charge = $request['delivery_charge'];
         $deliveryChargeByArea->save();
 
-        if ($request->has('change_status') && $request['change_status'] == 1){
+        if ($request->has('change_status') && $request['change_status'] == 1) {
             $this->deliveryChargeSetup->updateOrCreate(
                 ['branch_id' => $request['branch_id']],
                 ['delivery_charge_type' => 'area']
@@ -191,7 +194,7 @@ class DeliveryChargeSetupController extends Controller
     public function deleteAreaDeliveryCharge(Request $request, $id): RedirectResponse
     {
         $areaCount = $this->deliveryChargeByArea->where(['branch_id' => $request['branch_id']])->count();
-        if ($areaCount <= 1){
+        if ($areaCount <= 1) {
             Toastr::warning(translate('You cannot delete this area. At least one area must remain.'));
             return back();
         }
@@ -221,6 +224,7 @@ class DeliveryChargeSetupController extends Controller
      */
     public function updateAreaDeliveryCharge(Request $request, $id): RedirectResponse
     {
+        dd('treu');
         $deliveryArea = $this->deliveryChargeByArea->find($id);
 
         $request->validate([
@@ -260,7 +264,7 @@ class DeliveryChargeSetupController extends Controller
         $deliveryAreas = $this->deliveryChargeByArea
             ->with('branch')
             ->where(['branch_id' => $branch_id])
-            ->when($search, function ($query) use($search){
+            ->when($search, function ($query) use ($search) {
                 $key = explode(' ', $search);
                 foreach ($key as $value) {
                     $query->where('area_name', 'LIKE', "%{$value}%");

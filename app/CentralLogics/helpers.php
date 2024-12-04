@@ -73,10 +73,10 @@ class Helpers
         $match = $variations;
         $result = 0;
 
-        foreach($product as $product_variation){
-            foreach($product_variation['values'] as $option){
-                foreach($match as $variation){
-                    if($product_variation['name'] == $variation['name'] && isset($variation['values']) && in_array($option['label'], $variation['values']['label'])){
+        foreach ($product as $product_variation) {
+            foreach ($product_variation['values'] as $option) {
+                foreach ($match as $variation) {
+                    if ($product_variation['name'] == $variation['name'] && isset($variation['values']) && in_array($option['label'], $variation['values']['label'])) {
                         $result += $option['optionPrice'];
                     }
                 }
@@ -86,28 +86,65 @@ class Helpers
     }
 
     //new variation price calculation for order
+    // public static function get_varient(array $product_variations, array $variations)
+    // {
+    //     $result = [];
+    //     $variation_price = 0;
+
+    //     foreach ($variations as $k => $variation) {
+    //         foreach ($product_variations as  $product_variation) {
+    //             if (isset($variation['values']) && isset($product_variation['values']) && $product_variation['name'] == $variation['name']) {
+    //                 $result[$k] = $product_variation;
+    //                 $result[$k]['values'] = [];
+    //                 foreach ($product_variation['values'] as $key => $option) {
+    //                     if (in_array($option['label'], $variation['values']['label'])) {
+    //                         $result[$k]['values'][] = $option;
+    //                         $result[$k]['values']['qty'] = $option['qty'];
+
+    //                         $variation_price += $option['optionPrice'];
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return ['price' => $variation_price, 'variations' => $result];
+    // }
+
     public static function get_varient(array $product_variations, array $variations)
     {
         $result = [];
         $variation_price = 0;
 
-        foreach($variations as $k=> $variation){
-            foreach($product_variations as  $product_variation){
-                if( isset($variation['values']) && isset($product_variation['values']) && $product_variation['name'] == $variation['name']  ){
+        foreach ($variations as $k => $variation) {
+            foreach ($product_variations as $product_variation) {
+                if (isset($variation['values']) && isset($product_variation['values']) && $product_variation['name'] === $variation['name']) {
                     $result[$k] = $product_variation;
-                    $result[$k]['values'] = [];
-                    foreach($product_variation['values'] as $key=> $option){
-                        if(in_array($option['label'], $variation['values']['label'])){
-                            $result[$k]['values'][] = $option;
-                            $variation_price += $option['optionPrice'];
+                    $result[$k]['values'] = []; // Initialize as an array to hold ['label', 'qty']
+
+                    foreach ($product_variation['values'] as $key => $option) {
+                        if (in_array($option['label'], $variation['values']['label'])) {
+                            // Match the label's index to fetch the corresponding qty
+                            $labelIndex = array_search($option['label'], $variation['values']['label']);
+                            $qty = $variation['values']['qty'][$labelIndex] ?? 0;
+                            $optionalPrice = $option['optionPrice'] ?? 0;
+                            // Calculate the price based on qty and optionPrice
+                            $variation_price += $optionalPrice * $qty;
+                            // Add the structured ['label', 'qty'] pair
+                            $result[$k]['values'][] = [
+                                'label'       => $option['label'],
+                                'optionPrice' => $variation_price,
+                                'qty'         => $qty,
+                            ];
                         }
                     }
                 }
             }
         }
 
-        return ['price'=>$variation_price,'variations'=>$result];
+        return ['price' => $variation_price, 'variations' => $result];
     }
+
 
     public static function product_data_formatting($data, $multi_data = false)
     {
@@ -141,14 +178,12 @@ class Helpers
         } else {
             $data_addons = $data['add_ons'];
             $addon_ids = [];
-            if(gettype($data_addons) != 'array') {
+            if (gettype($data_addons) != 'array') {
                 $addon_ids = json_decode($data_addons);
-
-            } elseif(gettype($data_addons) == 'array' && isset($data_addons[0]['id'])) {
-                foreach($data_addons as $addon) {
+            } elseif (gettype($data_addons) == 'array' && isset($data_addons[0]['id'])) {
+                foreach ($data_addons as $addon) {
                     $addon_ids[] = $addon['id'];
                 }
-
             } else {
                 $addon_ids = $data_addons;
             }
@@ -286,22 +321,22 @@ class Helpers
     {
         $config = self::get_business_settings('push_notification_service_file_content');
         $key = (array)$config;
-        if (isset($key['project_id'])){
-            $url = 'https://fcm.googleapis.com/v1/projects/'.$key['project_id'].'/messages:send';
+        if (isset($key['project_id'])) {
+            $url = 'https://fcm.googleapis.com/v1/projects/' . $key['project_id'] . '/messages:send';
             $headers = [
                 'Authorization' => 'Bearer ' . self::getAccessToken($key),
                 'Content-Type' => 'application/json',
             ];
             try {
                 return Http::withHeaders($headers)->post($url, $data);
-            }catch (\Exception $exception){
+            } catch (\Exception $exception) {
                 return false;
             }
         }
         return false;
     }
 
-    public static function getAccessToken($key):String
+    public static function getAccessToken($key): String
     {
         $jwtToken = [
             'iss' => $key['client_email'],
@@ -375,7 +410,7 @@ class Helpers
             ]
         ];
 
-      /*  if (!$isNotificationPayloadRemove) {
+        /*  if (!$isNotificationPayloadRemove) {
             $postData['message']['notification'] = [
                 "title" => (string)$data['title'],
                 "body" => (string)$data['description'],
@@ -493,7 +528,7 @@ class Helpers
         } else {
             $data['status'] = 0;
             $data['message'] = "";
-//            $data = '{"status":"0","message":""}';
+            //            $data = '{"status":"0","message":""}';
 
         }
 
@@ -530,7 +565,9 @@ class Helpers
         $path = base_path('.env');
         if (file_exists($path)) {
             file_put_contents($path, str_replace(
-                $key . '=' . env($key), $key . '=' . $value, file_get_contents($path)
+                $key . '=' . env($key),
+                $key . '=' . $value,
+                file_get_contents($path)
             ));
         }
     }
@@ -540,7 +577,9 @@ class Helpers
         $path = base_path('.env');
         if (file_exists($path)) {
             file_put_contents($path, str_replace(
-                $key_from . '=' . env($key_from), $key_to . '=' . $value, file_get_contents($path)
+                $key_from . '=' . env($key_from),
+                $key_to . '=' . $value,
+                file_get_contents($path)
             ));
         }
     }
@@ -551,7 +590,8 @@ class Helpers
             $objects = scandir($dir);
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
-                    if (filetype($dir . "/" . $object) == "dir") Helpers::remove_dir($dir . "/" . $object); else unlink($dir . "/" . $object);
+                    if (filetype($dir . "/" . $object) == "dir") Helpers::remove_dir($dir . "/" . $object);
+                    else unlink($dir . "/" . $object);
                 }
             }
             reset($objects);
@@ -763,13 +803,13 @@ class Helpers
         } else {
             $oldValue = env($envKey);
         }
-//        $oldValue = var_export(env($envKey), true);
+        //        $oldValue = var_export(env($envKey), true);
 
         if (strpos($str, $envKey) !== false) {
             $str = str_replace("{$envKey}={$oldValue}", "{$envKey}={$envValue}", $str);
 
-//            dd("{$envKey}={$envValue}");
-//            dd($str);
+            //            dd("{$envKey}={$envValue}");
+            //            dd($str);
         } else {
             $str .= "{$envKey}={$envValue}\n";
         }
@@ -785,9 +825,9 @@ class Helpers
         $url = str_replace($remove, "", url('/'));
 
         $post = [
-            base64_decode('dXNlcm5hbWU=') => $request['username'],//un
-            base64_decode('cHVyY2hhc2Vfa2V5') => $request['purchase_key'],//pk
-            base64_decode('c29mdHdhcmVfaWQ=') => base64_decode(env(base64_decode('U09GVFdBUkVfSUQ='))),//sid
+            base64_decode('dXNlcm5hbWU=') => $request['username'], //un
+            base64_decode('cHVyY2hhc2Vfa2V5') => $request['purchase_key'], //pk
+            base64_decode('c29mdHdhcmVfaWQ=') => base64_decode(env(base64_decode('U09GVFdBUkVfSUQ='))), //sid
             base64_decode('ZG9tYWlu') => $url,
         ];
 
@@ -826,7 +866,7 @@ class Helpers
         return str_ireplace(['\'', '"', ';', '<', '>'], ' ', $str);
     }
 
-    public static function get_delivery_charge($branchId, $distance = null, $selectedDeliveryArea = null, )
+    public static function get_delivery_charge($branchId, $distance = null, $selectedDeliveryArea = null,)
     {
         $branch = Branch::with(['delivery_charge_setup', 'delivery_charge_by_area'])
             ->where(['id' => $branchId])
@@ -835,10 +875,10 @@ class Helpers
         $deliveryType = $branch->delivery_charge_setup->delivery_charge_type ?? 'fixed';
         $deliveryType = $deliveryType === 'area' ? 'area' : ($deliveryType === 'distance' ? 'distance' : 'fixed');
 
-        if($deliveryType == 'area'){
+        if ($deliveryType == 'area') {
             $area = DeliveryChargeByArea::find($selectedDeliveryArea);
             $deliveryCharge = $area->delivery_charge ?? 0;
-        }elseif($deliveryType == 'distance') {
+        } elseif ($deliveryType == 'distance') {
             $minDeliveryCharge = $branch->delivery_charge_setup->minimum_delivery_charge;
             $shippingChargePerKM = $branch->delivery_charge_setup->delivery_charge_per_kilometer;
             $minDistanceForFreeDelivery = $branch->delivery_charge_setup->minimum_distance_for_free_delivery;
@@ -849,7 +889,7 @@ class Helpers
                 $distanceDeliveryCharge = $shippingChargePerKM * $distance;
                 $deliveryCharge = max($distanceDeliveryCharge, $minDeliveryCharge);
             }
-        }else{
+        } else {
             $deliveryCharge = $branch->delivery_charge_setup->fixed_delivery_charge ?? 0;
         }
         return self::set_price($deliveryCharge);
@@ -893,7 +933,7 @@ class Helpers
 
     public static function module_permission_check($mod_name)
     {
-        $permission = auth('admin')->user()->role->module_access??null;
+        $permission = auth('admin')->user()->role->module_access ?? null;
         if (isset($permission) && in_array($mod_name, (array)json_decode($permission)) == true) {
             return true;
         }
@@ -925,7 +965,7 @@ class Helpers
                 $detail['add_on_prices'] = gettype($detail['add_on_prices']) != 'array' ? (array) json_decode($detail['add_on_prices'], true) : (array) $detail['add_on_prices'];
                 $detail['add_on_taxes'] = gettype($detail['add_on_taxes']) != 'array' ? (array) json_decode($detail['add_on_taxes'], true) : (array) $detail['add_on_taxes'];
 
-                if(!isset($detail['reviews_count'])) {
+                if (!isset($detail['reviews_count'])) {
                     $detail['review_count'] = Review::where(['order_id' => $detail['order_id'], 'product_id' => $detail['product_id']])->count();
                 }
 
@@ -952,11 +992,10 @@ class Helpers
             foreach ($product['add_ons'] as $add_on_id) {
                 $addon = AddOn::find($add_on_id);
                 if (isset($addon)) {
-                    $addons [] = $addon;
+                    $addons[] = $addon;
                 }
             }
             $product['add_ons'] = $addons;
-
         } catch (\Exception $exception) {
             //
         }
@@ -964,7 +1003,8 @@ class Helpers
         return $product;
     }
 
-    public static function generate_referer_code() {
+    public static function generate_referer_code()
+    {
         $ref_code = Str::random('20');
         if (User::where('refer_code', '=', $ref_code)->exists()) {
             return self::generate_referer_code();
@@ -972,12 +1012,13 @@ class Helpers
         return $ref_code;
     }
 
-    public static function update_daily_product_stock() {
+    public static function update_daily_product_stock()
+    {
         $currentDay = now()->day;
         $currentMonth = now()->month;
         $products = ProductByBranch::where(['stock_type' => 'daily'])->get();
-        foreach ($products as $product){
-            if ($currentDay != $product['updated_at']->day || $currentMonth != $product['updated_at']->month){
+        foreach ($products as $product) {
+            if ($currentDay != $product['updated_at']->day || $currentMonth != $product['updated_at']->month) {
                 $product['sold_quantity'] = 0;
                 $product->save();
             }
@@ -985,23 +1026,23 @@ class Helpers
         return true;
     }
 
-    public static function text_variable_data_format($value,$user_name=null,$restaurant_name=null,$delivery_man_name=null,$transaction_id=null,$order_id=null)
+    public static function text_variable_data_format($value, $user_name = null, $restaurant_name = null, $delivery_man_name = null, $transaction_id = null, $order_id = null)
     {
         $data = $value;
         if ($value) {
-            if($user_name){
+            if ($user_name) {
                 $data =  str_replace("{userName}", $user_name, $data);
             }
 
-            if($restaurant_name){
+            if ($restaurant_name) {
                 $data =  str_replace("{restaurantName}", $restaurant_name, $data);
             }
 
-            if($delivery_man_name){
+            if ($delivery_man_name) {
                 $data =  str_replace("{deliveryManName}", $delivery_man_name, $data);
             }
 
-            if($order_id){
+            if ($order_id) {
                 $data =  str_replace("{orderId}", $order_id, $data);
             }
         }
@@ -1043,14 +1084,13 @@ class Helpers
         return $data;
     }
 
-    public static function onErrorImage($data, $src, $error_src ,$path)
+    public static function onErrorImage($data, $src, $error_src, $path)
     {
-        if(isset($data) && strlen($data) >1 && Storage::disk('public')->exists($path.$data)){
+        if (isset($data) && strlen($data) > 1 && Storage::disk('public')->exists($path . $data)) {
             return $src;
         }
         return $error_src;
     }
-
 }
 
 function translate($key)

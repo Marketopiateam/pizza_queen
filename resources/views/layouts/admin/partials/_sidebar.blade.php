@@ -34,8 +34,7 @@
                             <i class="tio-first-page navbar-vertical-aside-toggle-short-align" data-toggle="tooltip"
                                 data-placement="right" title="" data-original-title="Collapse"></i>
                             <i class="tio-last-page navbar-vertical-aside-toggle-full-align"></i>
-                        </button>
-                        <!-- End Navbar Vertical Toggle -->
+                            <!-- End Navbar Vertical Toggle -->
                     </div>
                 </div>
 
@@ -141,7 +140,8 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="nav-item {{ Request::is('admin/orders/list/pending') ? 'active' : '' }}">
+                                    <li
+                                        class="nav-item {{ Request::is('admin/orders/list/pending') ? 'active' : '' }}">
                                         <a class="nav-link " href="{{ route('admin.orders.list', ['pending']) }}"
                                             title="">
                                             <span class="tio-circle nav-indicator-icon"></span>
@@ -153,7 +153,8 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="nav-item {{ Request::is('admin/orders/list/confirmed') ? 'active' : '' }}">
+                                    <li
+                                        class="nav-item {{ Request::is('admin/orders/list/confirmed') ? 'active' : '' }}">
                                         <a class="nav-link " href="{{ route('admin.orders.list', ['confirmed']) }}"
                                             title="">
                                             <span class="tio-circle nav-indicator-icon"></span>
@@ -192,7 +193,8 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="nav-item {{ Request::is('admin/orders/list/delivered') ? 'active' : '' }}">
+                                    <li
+                                        class="nav-item {{ Request::is('admin/orders/list/delivered') ? 'active' : '' }}">
                                         <a class="nav-link " href="{{ route('admin.orders.list', ['delivered']) }}"
                                             title="">
                                             <span class="tio-circle nav-indicator-icon"></span>
@@ -204,7 +206,8 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="nav-item {{ Request::is('admin/orders/list/returned') ? 'active' : '' }}">
+                                    <li
+                                        class="nav-item {{ Request::is('admin/orders/list/returned') ? 'active' : '' }}">
                                         <a class="nav-link " href="{{ route('admin.orders.list', ['returned']) }}"
                                             title="">
                                             <span class="tio-circle nav-indicator-icon"></span>
@@ -216,7 +219,8 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="nav-item {{ Request::is('admin/orders/list/failed') ? 'active' : '' }}">
+                                    <li
+                                        class="nav-item {{ Request::is('admin/orders/list/failed') ? 'active' : '' }}">
                                         <a class="nav-link " href="{{ route('admin.orders.list', ['failed']) }}"
                                             title="">
                                             <span class="tio-circle nav-indicator-icon"></span>
@@ -229,7 +233,8 @@
                                         </a>
                                     </li>
 
-                                    <li class="nav-item {{ Request::is('admin/orders/list/canceled') ? 'active' : '' }}">
+                                    <li
+                                        class="nav-item {{ Request::is('admin/orders/list/canceled') ? 'active' : '' }}">
                                         <a class="nav-link " href="{{ route('admin.orders.list', ['canceled']) }}"
                                             title="">
                                             <span class="tio-circle nav-indicator-icon"></span>
@@ -242,7 +247,8 @@
                                         </a>
                                     </li>
 
-                                    <li class="nav-item {{ Request::is('admin/orders/list/schedule') ? 'active' : '' }}">
+                                    <li
+                                        class="nav-item {{ Request::is('admin/orders/list/schedule') ? 'active' : '' }}">
                                         <a class="nav-link " href="{{ route('admin.orders.list', ['schedule']) }}"
                                             title="">
                                             <span class="tio-circle nav-indicator-icon"></span>
@@ -354,14 +360,16 @@
                                             <span class="text-truncate">{{ translate('product_list') }}</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item {{ Request::is('admin/product/bulk-import') ? 'active' : '' }}">
+                                    <li
+                                        class="nav-item {{ Request::is('admin/product/bulk-import') ? 'active' : '' }}">
                                         <a class="nav-link " href="{{ route('admin.product.bulk-import') }}"
                                             title="{{ translate('bulk import') }}">
                                             <span class="tio-circle nav-indicator-icon"></span>
                                             <span class="text-truncate">{{ translate('bulk_import') }}</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item {{ Request::is('admin/product/bulk-export') ? 'active' : '' }}">
+                                    <li
+                                        class="nav-item {{ Request::is('admin/product/bulk-export') ? 'active' : '' }}">
                                         <a class="nav-link " href="{{ route('admin.product.bulk-export') }}"
                                             title="{{ translate('bulk export') }}">
                                             <span class="tio-circle nav-indicator-icon"></span>
@@ -474,7 +482,8 @@
                                         {{ translate('report') }}</span>
                                 </a>
                             </li>
-                            <li class="nav-item {{ Request::is('admin/report/deliveryman-report') ? 'active' : '' }}">
+                            <li
+                                class="nav-item {{ Request::is('admin/report/deliveryman-report') ? 'active' : '' }}">
                                 <a class="nav-link " href="{{ route('admin.report.deliveryman_report') }}">
                                     {{--                                            <i class="tio-chart-bar-3 nav-icon"></i> --}}
                                     <i class="tio-chart-donut-2 nav-icon"></i>
@@ -614,7 +623,8 @@
                                 </a>
                                 <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
                                     style="display:  {{ Request::is('admin/delivery-man*') ? 'block' : '' }}; top: 831.076px;">
-                                    <li class="nav-item {{ Request::is('admin/delivery-man/list') ? 'active' : '' }}">
+                                    <li
+                                        class="nav-item {{ Request::is('admin/delivery-man/list') ? 'active' : '' }}">
                                         <a class="nav-link" href="{{ route('admin.delivery-man.list') }}">
                                             <span class="tio-circle nav-indicator-icon"></span>
                                             <span class="text-truncate">{{ translate('Delivery_Man_List') }}</span>

@@ -311,7 +311,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
                 Route::get('time-schedule-remove', [TimeScheduleController::class, 'removeSchedule'])->name('time_schedule_remove');
 
                 Route::get('location-setup', [LocationSettingsController::class, 'locationIndex'])->name('location-setup')->middleware('actch');
-                Route::post('update-location', [LocationSettingsController::class,'locationSetup'])->name('update-location')->middleware('actch');
+                Route::post('update-location', [LocationSettingsController::class, 'locationSetup'])->name('update-location')->middleware('actch');
 
                 //Route::get('cookies-setup', [BusinessSettingsController::class, 'cookiesSetup'])->name('cookies-setup');
                 //Route::post('cookies-setup-update', [BusinessSettingsController::class, 'cookiesSetupUpdate'])->name('cookies-setup-update');
@@ -341,7 +341,6 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
                 Route::post('login-setup-update', [LoginSetupController::class, 'loginSetupUpdate'])->name('login-setup-update');
                 Route::get('check-active-sms-gateway', [LoginSetupController::class, 'checkActiveSMSGateway'])->name('check-active-sms-gateway');
                 Route::get('check-active-social-media', [LoginSetupController::class, 'checkActiveSocialMedia'])->name('check-active-social-media');
-
             });
 
             Route::group(['prefix' => 'web-app', 'as' => 'web-app.', 'middleware' => ['module:system_management']], function () {
@@ -403,7 +402,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
                     Route::get('chat', [BusinessSettingsController::class, 'chatIndex'])->name('chat');
                     Route::post('chat-update/{name}', [BusinessSettingsController::class, 'chatUpdate'])->name('chat-update');
 
-                    Route::group(['prefix' => 'offline-payment', 'as' => 'offline-payment.'], function(){
+                    Route::group(['prefix' => 'offline-payment', 'as' => 'offline-payment.'], function () {
                         Route::get('list', [OfflinePaymentMethodController::class, 'list'])->name('list');
                         Route::get('add', [OfflinePaymentMethodController::class, 'add'])->name('add');
                         Route::post('store', [OfflinePaymentMethodController::class, 'store'])->name('store');
@@ -417,13 +416,11 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
                     Route::get('firebase-otp-verification', [BusinessSettingsController::class, 'firebaseOTPVerification'])->name('firebase-otp-verification');
                     Route::get('marketing-tools', [BusinessSettingsController::class, 'marketingTools'])->name('marketing-tools');
                     Route::post('update-marketing-tools/{type}', [BusinessSettingsController::class, 'updateMarketingTools'])->name('update-marketing-tools');
-
                 });
 
                 Route::group(['as' => 'third-party.', 'middleware' => ['module:system_management']], function () {
                     Route::get('social-media', [BusinessSettingsController::class, 'socialMedia'])->name('social-media');
                 });
-
             });
 
             Route::post('update-fcm-messages', [BusinessSettingsController::class, 'updateFcmMessages'])->name('update-fcm-messages');
@@ -451,7 +448,6 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             });
             Route::get('currency-position/{position}', [BusinessSettingsController::class, 'currencySymbolPosition'])->name('currency-position');
             Route::get('maintenance-mode', [BusinessSettingsController::class, 'maintenanceMode'])->name('maintenance-mode');
-
         });
 
         Route::group(['prefix' => 'report', 'as' => 'report.', 'middleware' => ['module:report_and_analytics_management']], function () {
@@ -551,7 +547,5 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
         Route::get('verify-offline-payment/quick-view-details', [OfflinePaymentMethodController::class, 'quickViewDetails'])->name('offline-modal-view');
         Route::get('verify-offline-payment/{status}', [OfflinePaymentMethodController::class, 'offlinePaymentList'])->name('verify-offline-payment');
-
     });
 });
-
