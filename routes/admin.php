@@ -300,8 +300,8 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
                 Route::post('store-fixed-delivery-charge', [DeliveryChargeSetupController::class, 'storeFixedDeliveryCharge'])->name('store-fixed-delivery-charge')->middleware('actch');
                 Route::post('change-delivery-charge-type', [DeliveryChargeSetupController::class, 'changeDeliveryChargeType'])->name('change-delivery-charge-type')->middleware('actch');
                 Route::delete('delete-area-delivery-charge/{id}', [DeliveryChargeSetupController::class, 'deleteAreaDeliveryCharge'])->name('delete-area-delivery-charge');
-                Route::get('edit-area-delivery-charge/{id}', [DeliveryChargeSetupController::class, 'editAreaDeliveryCharge'])->name('edit-area-delivery-charge');
-                Route::post('update-area-delivery-charge/{id}', [DeliveryChargeSetupController::class, 'updateAreaDeliveryCharge'])->name('update-area-delivery-charge');
+                Route::post('edit-area-delivery-charge/{id}', [DeliveryChargeSetupController::class, 'editAreaDeliveryCharge'])->name('edit-area-delivery-charge');
+                Route::put('update-area-delivery-charge/{id}', [DeliveryChargeSetupController::class, 'updateAreaDeliveryCharge'])->name('update-area-delivery-charge');
                 Route::get('export-area-delivery-charge/{id}', [DeliveryChargeSetupController::class, 'exportAreaDeliveryCharge'])->name('export-area-delivery-charge');
                 Route::post('import-area-delivery-charge/{id}', [DeliveryChargeSetupController::class, 'importAreaDeliveryCharge'])->name('import-area-delivery-charge');
                 Route::get('check-distance-based-delivery', [DeliveryChargeSetupController::class, 'checkDistanceBasedDelivery'])->name('check-distance-based-delivery');
