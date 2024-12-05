@@ -768,7 +768,7 @@
 }
 
 :root {
-    --tagify-dd-color-primary: #FC6A57;
+    --tagify-dd-color-primary: #fc0000;
     --tagify-dd-bg-color: white
 }
 
@@ -782,7 +782,7 @@
     --tag-text-color--edit: black;
     --tag-pad: 0.3em 0.5em;
     --tag-inset-shadow-size: 1.1em;
-    --tag-invalid-color: #D39494;
+    --tag-invalid-color: #ff0000;
     --tag-invalid-bg: rgba(211, 148, 148, 0.5);
     --tag-remove-bg: rgba(211, 148, 148, 0.3);
     --tag-remove-btn-color: black;

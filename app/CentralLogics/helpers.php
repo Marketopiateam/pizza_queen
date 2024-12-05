@@ -129,13 +129,14 @@ class Helpers
                             $qty = $variation['values']['qty'][$labelIndex] ?? 0;
                             $optionalPrice = $option['optionPrice'] ?? 0;
                             // Calculate the price based on qty and optionPrice
-                            $variation_price += $optionalPrice * $qty;
+                            $priceperOneVareiant = $optionalPrice * $qty;
                             // Add the structured ['label', 'qty'] pair
                             $result[$k]['values'][] = [
                                 'label'       => $option['label'],
-                                'optionPrice' => $variation_price,
+                                'optionPrice' => $priceperOneVareiant,
                                 'qty'         => $qty,
                             ];
+                            $variation_price += $optionalPrice * $qty;
                         }
                     }
                 }

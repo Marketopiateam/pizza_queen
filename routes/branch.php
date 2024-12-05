@@ -55,7 +55,6 @@ Route::group(['namespace' => 'Branch', 'as' => 'branch.', 'middleware' => 'maint
             Route::post('add-delivery-address', [POSController::class, 'addDeliveryInfo'])->name('add-delivery-address');
             Route::get('get-distance', [POSController::class, 'getDistance'])->name('get-distance');
             Route::post('order_type/store', [POSController::class, 'orderTypeStore'])->name('order_type.store');
-
         });
 
         Route::group(['prefix' => 'orders', 'as' => 'orders.'], function () {
@@ -74,7 +73,7 @@ Route::group(['namespace' => 'Branch', 'as' => 'branch.', 'middleware' => 'maint
         });
 
         Route::group(['prefix' => 'table/order', 'as' => 'table.order.', 'middleware' => ['app_activate:' . APPS['table_app']['software_id']]], function () {
-            Route::get('list/{status}', [TableOrderController::class, 'orderList'])->name('list');
+            // Route::get('list/{status}', [TableOrderController::class, 'orderList'])->name('list');
             Route::get('details/{id}', [TableOrderController::class, 'orderDetails'])->name('details');
             Route::get('running', [TableOrderController::class, 'tableRunningOrder'])->name('running');
             Route::get('running/invoice', [TableOrderController::class, 'runningOrderInvoice'])->name('running.invoice');
@@ -87,34 +86,34 @@ Route::group(['namespace' => 'Branch', 'as' => 'branch.', 'middleware' => 'maint
             Route::post('update-shipping/{id}', [OrderController::class, 'updateShipping'])->name('update-shipping');
         });
 
-        Route::group(['prefix' => 'table', 'as' => 'table.','middleware'=>[ 'app_activate:' . APPS['table_app']['software_id']]], function () {
-            Route::get('index', [TableController::class, 'index'])->name('index');
-            Route::get('list', [TableController::class, 'list'])->name('list');
-            Route::post('store', [TableController::class, 'store'])->name('store');
-            Route::get('edit/{id}', [TableController::class, 'edit'])->name('edit');
-            Route::post('update/{id}', [TableController::class, 'update'])->name('update');
-            Route::delete('delete/{id}', [TableController::class, 'delete'])->name('delete');
-            Route::get('status/{id}/{status}', [TableController::class, 'status'])->name('status');
-        });
+        // Route::group(['prefix' => 'table', 'as' => 'table.', 'middleware' => ['app_activate:' . APPS['table_app']['software_id']]], function () {
+        // Route::get('index', [TableController::class, 'index'])->name('index');
+        // Route::get('list', [TableController::class, 'list'])->name('list');
+        //     Route::post('store', [TableController::class, 'store'])->name('store');
+        //     Route::get('edit/{id}', [TableController::class, 'edit'])->name('edit');
+        //     Route::post('update/{id}', [TableController::class, 'update'])->name('update');
+        //     Route::delete('delete/{id}', [TableController::class, 'delete'])->name('delete');
+        //     Route::get('status/{id}/{status}', [TableController::class, 'status'])->name('status');
+        // });
 
-        Route::group(['prefix' => 'kitchen', 'as' => 'kitchen.','middleware'=>[ 'app_activate:' . APPS['kitchen_app']['software_id']]], function () {
-            Route::get('list', [KitchenController::class, 'list'])->name('list');
-            Route::get('add-new', [KitchenController::class, 'index'])->name('add-new');
-            Route::post('add-new', [KitchenController::class, 'store']);
-            Route::get('edit/{id}', [KitchenController::class, 'edit'])->name('edit');
-            Route::post('update/{id}', [KitchenController::class, 'update'])->name('update');
-            Route::delete('delete/{id}', [KitchenController::class, 'delete'])->name('delete');
-            Route::get('status/{id}/{status}', [KitchenController::class, 'status'])->name('status');
-        });
+        // Route::group(['prefix' => 'kitchen', 'as' => 'kitchen.', 'middleware' => ['app_activate:' . APPS['kitchen_app']['software_id']]], function () {
+        // Route::get('list', [KitchenController::class, 'list'])->name('list');
+        // Route::get('add-new', [KitchenController::class, 'index'])->name('add-new');
+        //     Route::post('add-new', [KitchenController::class, 'store']);
+        //     Route::get('edit/{id}', [KitchenController::class, 'edit'])->name('edit');
+        //     Route::post('update/{id}', [KitchenController::class, 'update'])->name('update');
+        //     Route::delete('delete/{id}', [KitchenController::class, 'delete'])->name('delete');
+        //     Route::get('status/{id}/{status}', [KitchenController::class, 'status'])->name('status');
+        // });
 
-        Route::group(['prefix' => 'promotion', 'as' => 'promotion.','middleware'=>[ 'app_activate:' . APPS['table_app']['software_id']]], function () {
-            Route::get('create', [BranchPromotionController::class, 'create'])->name('create');
-            Route::post('store', [BranchPromotionController::class, 'store'])->name('store');
-            Route::get('edit/{id}', [BranchPromotionController::class, 'edit'])->name('edit');
-            Route::post('update/{id}', [BranchPromotionController::class, 'update'])->name('update');
-            Route::delete('delete/{id}', [BranchPromotionController::class, 'delete'])->name('delete');
-            Route::get('status/{id}/{status}', [BranchPromotionController::class, 'status'])->name('status');
-        });
+        // Route::group(['prefix' => 'promotion', 'as' => 'promotion.', 'middleware' => ['app_activate:' . APPS['table_app']['software_id']]], function () {
+        //     // Route::get('create', [BranchPromotionController::class, 'create'])->name('create');
+        //     Route::post('store', [BranchPromotionController::class, 'store'])->name('store');
+        //     Route::get('edit/{id}', [BranchPromotionController::class, 'edit'])->name('edit');
+        //     Route::post('update/{id}', [BranchPromotionController::class, 'update'])->name('update');
+        //     Route::delete('delete/{id}', [BranchPromotionController::class, 'delete'])->name('delete');
+        //     Route::get('status/{id}/{status}', [BranchPromotionController::class, 'status'])->name('status');
+        // });
 
         Route::group(['prefix' => 'product', 'as' => 'product.'], function () {
             Route::get('list', [ProductController::class, 'list'])->name('list');
@@ -126,13 +125,9 @@ Route::group(['namespace' => 'Branch', 'as' => 'branch.', 'middleware' => 'maint
         Route::group(['prefix' => 'business-settings', 'as' => 'business-settings.'], function () {
             Route::get('index', [BusinessSettingsController::class, 'branchIndex'])->name('index');
             Route::post('update', [BusinessSettingsController::class, 'settingsUpdate'])->name('update');
-
         });
 
         Route::get('verify-offline-payment/quick-view-details', [OrderController::class, 'offlineViewDetails'])->name('offline-modal-view');
         Route::get('verify-offline-payment/{status}', [OrderController::class, 'offlineOrderList'])->name('verify-offline-payment');
-
     });
 });
-
-
