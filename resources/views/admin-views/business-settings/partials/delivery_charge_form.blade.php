@@ -209,13 +209,55 @@
                                                 <td>{{ Helpers::set_symbol($deliveryArea->delivery_charge) }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center gap-3">
-                                                        <a class="btn btn-outline-info btn-sm edit square-btn edit-area"
-                                                            data-toggle="modal"
-                                                            data-target="#editDeliveryChargeModal-{{ $branch->id }}"
-                                                            data-id="{{ $deliveryArea->id }}"
-                                                            href="{{ route('admin.business-settings.restaurant.update-area-delivery-charge', $deliveryArea->id) }}">
-                                                            <i class="tio-edit"></i>
-                                                        </a>
+                                                       
+                                                        <!-- Form to update the area delivery charge and area name -->
+                                                        <form action="{{ route('admin.business-settings.restaurant.update-area-delivery-charge', $deliveryArea->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('PUT') <!-- Use PATCH if you prefer -->
+
+                                                            <!-- Button to open the modal and submit the form -->
+                                                            <button type="button" class="btn btn-outline-info btn-sm edit square-btn edit-area"
+                                                                data-toggle="modal"
+                                                                data-target="#editDeliveryChargeModal-{{ $branch->id }}"
+                                                                data-id="{{ $deliveryArea->id }}">
+                                                                <i class="tio-edit"></i>
+                                                            </button>
+
+                                                            <!-- Modal to edit the delivery charge and area name -->
+                                                            <div class="modal fade" id="editDeliveryChargeModal-{{ $branch->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="exampleModalLabel">Edit Area Delivery Charge</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <!-- Input field for the Area Name -->
+                                                                            <div class="form-group">
+                                                                                <label for="area_name">Area Name</label>
+                                                                                <input type="text" class="form-control" id="area_name" name="area_name" value="{{ $deliveryArea->area_name }}" required>
+                                                                            </div>
+
+                                                                            <!-- Input field for the Delivery Charge -->
+                                                                            <div class="form-group">
+                                                                                <label for="delivery_charge">Delivery Charge</label>
+                                                                                <input type="text" class="form-control" id="delivery_charge" name="delivery_charge" value="{{ $deliveryArea->delivery_charge }}" required>
+                                                                            </div>
+
+                                                                            <!-- Additional fields can be added here if necessary -->
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <!-- Save changes and submit the form -->
+                                                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+          
                                                         <button type="button"
                                                             class="btn btn-outline-danger btn-sm delete square-btn form-alert"
                                                             data-id="area-{{ $deliveryArea->id }}"

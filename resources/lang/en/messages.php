@@ -2690,4 +2690,5 @@
   'Select_Data_Type' => 'Select Data Type',
   'STEP 2' => 'STEP 2',
   'order_canceled' => 'Order canceled',
+  'Want to change this Area' => 'Want to change this Area',
 );

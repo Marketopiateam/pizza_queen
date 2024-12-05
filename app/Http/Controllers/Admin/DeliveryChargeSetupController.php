@@ -211,7 +211,7 @@ class DeliveryChargeSetupController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function editAreaDeliveryCharge(Request $request, $id): JsonResponse
+    public function editAreaDeliveryCharge($id): JsonResponse
     {
         $deliveryArea = $this->deliveryChargeByArea->find($id);
         return response()->json($deliveryArea);
@@ -224,7 +224,7 @@ class DeliveryChargeSetupController extends Controller
      */
     public function updateAreaDeliveryCharge(Request $request, $id): RedirectResponse
     {
-        dd('treu');
+        // dd('treu');
         $deliveryArea = $this->deliveryChargeByArea->find($id);
 
         $request->validate([
@@ -244,8 +244,8 @@ class DeliveryChargeSetupController extends Controller
         $deliveryArea->delivery_charge = $request['delivery_charge'];
         $deliveryArea->save();
 
-        Toastr::success(translate('Successfully updated!'));
-        return back();
+        return redirect()->back()->with('success', 'Delivery charge updated successfully!');
+
     }
 
     /**
