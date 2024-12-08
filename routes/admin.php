@@ -245,16 +245,16 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('priority', [CategoryController::class, 'priority'])->name('priority');
         });
 
-        Route::group(['prefix' => 'cuisine', 'as' => 'cuisine.', 'middleware' => ['module:product_management']], function () {
-            Route::get('add', [CuisineController::class, 'index'])->name('add');
-            Route::post('store', [CuisineController::class, 'store'])->name('store');
-            Route::get('edit/{id}', [CuisineController::class, 'edit'])->name('edit');
-            Route::post('update/{id}', [CuisineController::class, 'update'])->name('update');
-            Route::get('status/{id}/{status}', [CuisineController::class, 'status'])->name('status');
-            Route::get('feature/{id}/{status}', [CuisineController::class, 'featureStatus'])->name('feature');
-            Route::delete('delete/{id}', [CuisineController::class, 'delete'])->name('delete');
-            Route::get('priority', [CuisineController::class, 'priority'])->name('priority');
-        });
+        // Route::group(['prefix' => 'cuisine', 'as' => 'cuisine.', 'middleware' => ['module:product_management']], function () {
+        //     Route::get('add', [CuisineController::class, 'index'])->name('add');
+        //     Route::post('store', [CuisineController::class, 'store'])->name('store');
+        //     Route::get('edit/{id}', [CuisineController::class, 'edit'])->name('edit');
+        //     Route::post('update/{id}', [CuisineController::class, 'update'])->name('update');
+        //     Route::get('status/{id}/{status}', [CuisineController::class, 'status'])->name('status');
+        //     Route::get('feature/{id}/{status}', [CuisineController::class, 'featureStatus'])->name('feature');
+        //     Route::delete('delete/{id}', [CuisineController::class, 'delete'])->name('delete');
+        //     Route::get('priority', [CuisineController::class, 'priority'])->name('priority');
+        // });
 
         Route::group(['prefix' => 'message', 'as' => 'message.', 'middleware' => ['module:help_and_support_management']], function () {
             Route::get('list',  [ConversationController::class, 'list'])->name('list');

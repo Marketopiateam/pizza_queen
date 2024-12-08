@@ -308,7 +308,7 @@
                             <!-- End Pages -->
 
                             <!-- Cuisine -->
-                            <li
+                            {{-- <li
                                 class="navbar-vertical-aside-has-menu {{ Request::is('admin/cuisine*') ? 'active' : '' }}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
                                     href="{{ route('admin.cuisine.add') }}">
@@ -316,7 +316,7 @@
                                     <span
                                         class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{ translate('cuisine') }}</span>
                                 </a>
-                            </li>
+                            </li> --}}
 
                             <!-- Pages -->
                             <li

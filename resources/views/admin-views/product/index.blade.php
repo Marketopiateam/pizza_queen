@@ -46,7 +46,8 @@
                                             <div class="form-group">
                                                 <label class="input-label"
                                                     for="{{ $lang['code'] }}_name">{{ translate('name') }}
-                                                    ({{ strtoupper($lang['code']) }})</label>
+                                                    ({{ strtoupper($lang['code']) }})
+                                                </label>
                                                 <input type="text" name="name[]" id="{{ $lang['code'] }}_name"
                                                     class="form-control" placeholder="{{ translate('New Product') }}"
                                                     {{ $lang['status'] == true ? 'required' : '' }}
@@ -384,7 +385,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12">
+                                {{-- <div class="col-12">
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center justify-content-between gap-3">
@@ -402,8 +403,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12">
+                                </div> --}}
+                                {{-- <div class="col-12">
                                     <div class="card h-100">
                                         <div class="card-header">
                                             <h4 class="mb-0 d-flex gap-2 align-items-center">
@@ -431,7 +432,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -499,14 +500,16 @@
                                         <label class="input-label text-capitalize d-flex alig-items-center"><span class="line--limit-1">{{ translate('selcetion_type') }} </span></label>
                                         <div class="resturant-type-group border">
                                             <label class="form-check form--check mr-2 mr-md-4">
-                                                <input class="form-check-input" type="radio" value="multi "name="options[` + count + `][type]" id="type` + count +
+                                                <input class="form-check-input" type="radio" value="multi "name="options[` +
+                    count + `][type]" id="type` + count +
                     `" checked onchange="show_min_max(` + count +
                     `)">
                                                 <span class="form-check-label">{{ translate('Multiple') }}</span>
                                             </label>
 
                                             <label class="form-check form--check mr-2 mr-md-4">
-                                                <input class="form-check-input" type="radio" value="single" name="options[` + count + `][type]" id="type` + count +
+                                                <input class="form-check-input" type="radio" value="single" name="options[` +
+                    count + `][type]" id="type` + count +
                     `" onchange="hide_min_max(` + count + `)" >
                                                 <span class="form-check-label">{{ translate('Single') }}</span>
                                             </label>
@@ -553,7 +556,8 @@
                                     </div>
                                     <div class="col-md-4 col-sm-6">
                                         <label for="">{{ translate('Additional_price') }}</label>
-                                        <input class="form-control" required type="number" min="0" step="0.01" name="options[` + count + `][values][0][optionPrice]" id="">
+                                        <input class="form-control" required type="number" min="0" step="0.01" name="options[` +
+                    count + `][values][0][optionPrice]" id="">
                                     </div>
                                 </div>
                             </div>
