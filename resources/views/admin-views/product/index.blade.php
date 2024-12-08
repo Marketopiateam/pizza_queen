@@ -324,7 +324,7 @@
                                                     <div class="form-group">
                                                         <label
                                                             class="input-label">{{ translate('available_From') }}</label>
-                                                        <input type="time" name="available_time_starts"
+                                                        <input type="datetime-local" name="available_time_starts"
                                                             class="form-control" value="10:30:00"
                                                             placeholder="{{ translate('Ex : 10:30 am') }}" required>
                                                     </div>
@@ -333,7 +333,7 @@
                                                     <div class="form-group">
                                                         <label
                                                             class="input-label">{{ translate('available_Till') }}</label>
-                                                        <input type="time" name="available_time_ends"
+                                                        <input type="datetime-local" name="available_time_ends"
                                                             class="form-control" value="19:30:00"
                                                             placeholder="{{ translate('5:45 pm') }}" required>
                                                     </div>
