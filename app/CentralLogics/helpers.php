@@ -769,7 +769,7 @@ class Helpers
             }
             $imageInstance = Image::make($image);
 
-            $imageInstance->resize(200, null, function ($constraint) {
+            $imageInstance->resize(600, null, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
             });

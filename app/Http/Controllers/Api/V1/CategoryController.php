@@ -14,8 +14,7 @@ class CategoryController extends Controller
 {
     public function __construct(
         private Category $category,
-    )
-    {}
+    ) {}
 
     /**
      * @return JsonResponse
@@ -54,6 +53,7 @@ class CategoryController extends Controller
         $name = $request['name'];
         $products = CategoryLogic::products(category_id: $id, type: $productType, name: $name, limit: $request['limit'], offset: $request['offset']);
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
+        $products['products'] = ProductController::is_available($products['products']);
         return response()->json($products, 200);
     }
 

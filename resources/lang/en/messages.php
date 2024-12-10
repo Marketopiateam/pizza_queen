@@ -2703,4 +2703,6 @@
   'Ex : 2024-12-10' => 'Ex : 2024-12-10',
   ' send a message' => ' send a message',
   'Successfully sent!' => 'Successfully sent!',
+  'Remove subcategories first!' => 'Remove subcategories first!',
+  'Sub Category removed!' => 'Sub Category removed!',
 );
