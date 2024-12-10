@@ -251,11 +251,10 @@ class Helpers
     public static function get_business_settings($name)
     {
         $config = null;
-        $settings = Cache::rememberForever(CACHE_BUSINESS_SETTINGS_TABLE, function () {
-            return BusinessSetting::all();
-        });
-
+       
+        $settings = BusinessSetting::get();
         $data = $settings?->firstWhere('key', $name);
+       
         if (isset($data)) {
             $config = json_decode($data['value'], true);
             if (is_null($config)) {

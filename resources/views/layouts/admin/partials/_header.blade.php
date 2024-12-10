@@ -39,8 +39,8 @@
                                 @php( $local = session()->has('local')?session('local'):'en')
                                 @php($lang = \App\CentralLogics\Helpers::get_business_settings('language')??null)
                                 <div class="topbar-text dropdown disable-autohide text-capitalize">
-                                    @if(isset($lang) && array_key_exists('code', $lang[0]))
-                                        <a class="topbar-link dropdown-toggle d-flex gap-2 align-items-center font-weight-bold dropdown-toggle-empty lang-country-flag" href="#" data-toggle="dropdown">
+                                    @if(isset($lang) && is_array($lang) && array_key_exists(0, $lang) && array_key_exists('code', $lang[0]))
+                                    <a class="topbar-link dropdown-toggle d-flex gap-2 align-items-center font-weight-bold dropdown-toggle-empty lang-country-flag" href="#" data-toggle="dropdown">
                                             @foreach($lang as $data)
                                                 @if($data['code']==$local)
                                                     <img src="{{asset('public/assets/admin/img/google_translate_logo.png')}}" alt=""> <span>{{$data['name']}}</span>
