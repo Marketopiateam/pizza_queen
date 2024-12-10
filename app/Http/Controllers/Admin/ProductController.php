@@ -299,8 +299,10 @@ class ProductController extends Controller
         $product->set_menu = $request->item_type;
         $product->product_type = $request->product_type;
         $product->image = Helpers::upload('product/', 'png', $request->file('image'));
-        $product->available_time_starts = $request->available_time_starts;
-        $product->available_time_ends = $request->available_time_ends;
+        $product->available_date_starts = $request->available_date_starts ?? null;
+        $product->available_date_ends = $request->available_date_ends ?? null;
+        $product->available_time_starts = $request->available_time_starts ?? null;
+        $product->available_time_ends = $request->available_time_ends ?? null;
 
         $product->tax = $request->tax_type == 'amount' ? $request->tax : $request->tax;
         $product->tax_type = $request->tax_type;
@@ -570,8 +572,10 @@ class ProductController extends Controller
         $product->set_menu = $request->item_type;
         $product->product_type = $request->product_type;
         $product->image = $request->has('image') ? Helpers::update('product/', $product->image, 'png', $request->file('image')) : $product->image;
-        $product->available_time_starts = $request->available_time_starts;
-        $product->available_time_ends = $request->available_time_ends;
+        $product->available_date_starts = $request->available_date_starts ?? null;
+        $product->available_date_ends = $request->available_date_ends ?? null;
+        $product->available_time_starts = $request->available_time_starts ?? null;
+        $product->available_time_ends = $request->available_time_ends ?? null;
 
         $product->tax = $request->tax_type == 'amount' ? $request->tax : $request->tax;
         $product->tax_type = $request->tax_type;

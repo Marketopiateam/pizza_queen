@@ -28,7 +28,7 @@ class ProductController extends Controller
         private Translation $translation,
         private Review      $review,
         private Order      $order
-    ){}
+    ) {}
 
     /**
      * @param Request $request
@@ -40,6 +40,8 @@ class ProductController extends Controller
 
         $products = ProductLogic::get_latest_products($request['limit'], $request['offset'], $request['product_type'], $request['name'], $request['category_ids'], $request['sort_by']);
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
+        $products['products'] = $this->is_available($products['products']);
+
         return response()->json($products, 200);
     }
 
@@ -51,6 +53,9 @@ class ProductController extends Controller
     {
         $products = ProductLogic::get_popular_products(limit: $request['limit'], offset: $request['offset'], product_type: $request['product_type'], name: $request['name']);
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
+
+        $products['products'] = $this->is_available($products['products']);
+
         return response()->json($products, 200);
     }
 
@@ -101,19 +106,19 @@ class ProductController extends Controller
                 ->toArray();
 
             $ratingProductIds = [];
-            if (isset($rating)){
+            if (isset($rating)) {
                 $ratingProductIds = Product::active()->with('reviews')
                     ->whereHas('reviews', function ($q) use ($request) {
                         $q->select('product_id')
                             ->groupBy('product_id')
                             ->havingRaw("AVG(rating) >= ?", [$request['rating']]);
-                        })
+                    })
                     ->pluck('id')
                     ->toArray();
             }
 
             $productIdsForCategory = [];
-            if (isset($request['category_id'])){
+            if (isset($request['category_id'])) {
                 foreach (gettype($request['category_id']) != 'array' ? json_decode($request['category_id']) : $request['category_id'] as $categoryId) {
                     $productIds = Product::active()
                         ->where(function ($query) use ($categoryId) {
@@ -170,7 +175,7 @@ class ProductController extends Controller
                 ->when(isset($request['sort_by']) && $request['sort_by'] == 'z_to_a', function ($query) {
                     return $query->orderBy('name', 'DESC');
                 })
-                ->when(is_null($request['sort_by']), function ($query) use ($name){
+                ->when(is_null($request['sort_by']), function ($query) use ($name) {
                     $query->orderByRaw("
                     CASE
                         WHEN name = '$name' THEN 0
@@ -196,6 +201,9 @@ class ProductController extends Controller
         }
 
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
+
+        $products['products'] = $this->is_available($products['products']);
+
         return response()->json($products, 200);
     }
 
@@ -210,7 +218,6 @@ class ProductController extends Controller
             $product = Helpers::product_data_formatting($product, false);
 
             return response()->json($product, 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'errors' => ['code' => 'product-001', 'message' => translate('no_data_found')]
@@ -263,8 +270,11 @@ class ProductController extends Controller
         ];
 
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
-        return response()->json($products, 200);
+        foreach ($products['products'] as &$product) {
+            $product['is_available'] = true;
+        }
 
+        return response()->json($products, 200);
     }
 
     /**
@@ -297,7 +307,6 @@ class ProductController extends Controller
             $product = $this->product->find($id);
             $overallRating = ProductLogic::get_overall_rating($product->reviews);
             return response()->json(floatval($overallRating[0]), 200);
-
         } catch (\Exception $e) {
             return response()->json(['errors' => $e], 403);
         }
@@ -357,6 +366,9 @@ class ProductController extends Controller
 
         $products = ProductLogic::get_recommended_products(limit: $request['limit'], offset: $request['offset'], name: $request['name']);
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
+
+        $products['products'] = $this->is_available($products['products']);
+
         return response()->json($products, 200);
     }
 
@@ -368,6 +380,9 @@ class ProductController extends Controller
     {
         $products = ProductLogic::get_frequently_bought_products($request['limit'], $request['offset']);
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
+
+        $products['products'] = $this->is_available($products['products']);
+
         return response()->json($products, 200);
     }
 
@@ -501,62 +516,62 @@ class ProductController extends Controller
 
         $formattedProducts = [];
 
-        foreach ($fromBranchProducts as $fromBranchProduct){
+        foreach ($fromBranchProducts as $fromBranchProduct) {
             $newProductList = $newProducts->where('id', $fromBranchProduct['product_id'])->first();
             $newProductList['is_changed'] = 0;
             $newProductList['change_reason'] = '';
 
             $toBranchProduct = ProductByBranch::where(['product_id' => $fromBranchProduct['product_id'], 'branch_id' => $toBranchId])->first();
-            if (!isset($toBranchProduct)){
+            if (!isset($toBranchProduct)) {
                 $newProductList['is_changed'] = 1;
                 $newProductList['change_reason'] = 'unavailable';
             }
 
-            if ($toBranchProduct->is_available == 0){
+            if ($toBranchProduct->is_available == 0) {
                 $newProductList['is_changed'] = 1;
                 $newProductList['change_reason'] = 'unavailable';
             }
 
-            if($toBranchProduct->stock_type == 'daily' || $toBranchProduct->stock_type == 'fixed' ){
+            if ($toBranchProduct->stock_type == 'daily' || $toBranchProduct->stock_type == 'fixed') {
                 $availableStock = $toBranchProduct->stock - $toBranchProduct->sold_quantity;
-                if ($availableStock < $fromBranchProduct['quantity']){
+                if ($availableStock < $fromBranchProduct['quantity']) {
                     $newProductList['is_changed'] = 1;
                     $newProductList['change_reason'] = 'stock';
                 }
             }
 
             $fromProduct = ProductByBranch::where(['product_id' => $fromBranchProduct['product_id'], 'branch_id' => $fromBranchId])->first();
-            if ($fromProduct->price != $toBranchProduct->price){
+            if ($fromProduct->price != $toBranchProduct->price) {
                 $newProductList['is_changed'] = 1;
                 $newProductList['change_reason'] = 'price';
             }
 
-            if ($fromProduct->discount_type != $toBranchProduct->discount_type){
+            if ($fromProduct->discount_type != $toBranchProduct->discount_type) {
                 $newProductList['is_changed'] = 1;
                 $newProductList['change_reason'] = 'discount';
             }
 
-            if ($fromProduct->discount != $toBranchProduct->discount){
+            if ($fromProduct->discount != $toBranchProduct->discount) {
                 $newProductList['is_changed'] = 1;
                 $newProductList['change_reason'] = 'discount';
             }
 
-            if (count($fromBranchProduct['variations'])){
-                foreach ($fromBranchProduct['variations'] as $k => $selectedVariation){
-                    foreach($toBranchProduct as $toProductVariation) {
-                        if(isset($selectedVariation['values']) && isset($toProductVariation['values']) && $selectedVariation['name'] == $toProductVariation['name']) {
-                            foreach($toProductVariation['values'] as $key=> $option){
-                                if(in_array($option['label'], $selectedVariation['values']['label'])){
-                                    if ($option['optionPrice'] !=  $selectedVariation['values']['optionPrice'] ){
+            if (count($fromBranchProduct['variations'])) {
+                foreach ($fromBranchProduct['variations'] as $k => $selectedVariation) {
+                    foreach ($toBranchProduct as $toProductVariation) {
+                        if (isset($selectedVariation['values']) && isset($toProductVariation['values']) && $selectedVariation['name'] == $toProductVariation['name']) {
+                            foreach ($toProductVariation['values'] as $key => $option) {
+                                if (in_array($option['label'], $selectedVariation['values']['label'])) {
+                                    if ($option['optionPrice'] !=  $selectedVariation['values']['optionPrice']) {
                                         $newProductList['is_changed'] = 1;
                                         $newProductList['change_reason'] = 'variation';
                                     }
-                                }else{
+                                } else {
                                     $newProductList['is_changed'] = 1;
                                     $newProductList['change_reason'] = 'variation';
                                 }
                             }
-                        }else{
+                        } else {
                             $newProductList['is_changed'] = 1;
                             $newProductList['change_reason'] = 'variation';
                         }
@@ -564,11 +579,9 @@ class ProductController extends Controller
                 }
             }
             $formattedProducts[] = $newProductList;
-
         }
 
         return  Helpers::product_data_formatting($formattedProducts, true);
-
     }
 
     public function reOrderProducts(Request $request)
@@ -660,7 +673,7 @@ class ProductController extends Controller
             'requested_product_count' => count($productIds),
             'response_product_count' => count($formattedProducts),
             'order_branch' => $order ? $order->branch_id : null,
-            'current_branch' => (integer)Config::get('branch_id'),
+            'current_branch' => (int)Config::get('branch_id'),
             'products' => $formattedProducts,
         ];
 
@@ -730,7 +743,42 @@ class ProductController extends Controller
             'categories' => $categoryList,
             'cuisines' => $cuisineList,
         ];
-
     }
+    public static function is_available(array $products): array
+    {
+        $now = now();
 
+        foreach ($products as &$product) {
+            if (isset($product['item_type']) && $product['item_type'] === 'set_menu') {
+                $product['is_available'] = true;
+                continue;
+            }
+
+            $isAvailable = true;
+
+            if (!empty($product['available_time_starts']) && !empty($product['available_time_ends'])) {
+                $startTime = Carbon::parse($product['available_time_starts'])->setDate($now->year, $now->month, $now->day);
+                $endTime = Carbon::parse($product['available_time_ends'])->setDate($now->year, $now->month, $now->day);
+
+                if ($startTime->greaterThan($endTime)) {
+                    $endTime->addDay();
+                }
+
+                $isAvailable = $now->between($startTime, $endTime, true);
+            }
+
+
+            if (!empty($product['available_date_starts']) && !empty($product['available_date_ends'])) {
+                $startDate = Carbon::parse($product['available_date_starts']);
+                $endDate = Carbon::parse($product['available_date_ends']);
+
+                $isAvailable = $now->between($startDate, $endDate);
+            }
+
+            $product['is_available'] = $isAvailable;
+        }
+        unset($product);
+
+        return $products;
+    }
 }
