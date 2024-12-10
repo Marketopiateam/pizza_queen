@@ -2647,4 +2647,8 @@
   'When this option is enabled the user may pick up their own order. ' => 'When this option is enabled the user may pick up their own order. ',
   'Currently Delivery Charge is set based on Zip Code/Area wise or Based on Fixed Delivery Charge' => 'Currently Delivery Charge is set based on Zip Code/Area wise or Based on Fixed Delivery Charge',
   'You must create atleast one Zipcode & Its Delivery Charge to enable this delivery charge option.' => 'You must create atleast one Zipcode & Its Delivery Charge to enable this delivery charge option.',
+  'available_Till_date' => 'Available Till date',
+  'Set Availability Type:' => 'Set Availability Type:',
+  'Ex : 2024-12-09' => 'Ex : 2024-12-09',
+  'Ex : 2024-12-10' => 'Ex : 2024-12-10',
 );

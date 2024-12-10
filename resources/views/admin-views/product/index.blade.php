@@ -146,12 +146,13 @@
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <label class="input-label" for="exampleFormControlInput1">
+                                                        <label class="input-label" for="itemTypeDropdown">
                                                             {{ translate('item_Type') }}
                                                             <span class="text-danger">*</span>
                                                         </label>
 
-                                                        <select name="item_type" class="form-control js-select2-custom">
+                                                        <select id="itemTypeDropdown" name="item_type"
+                                                            class="form-control js-select2-custom">
                                                             <option selected disabled>---{{ translate('select') }}---
                                                             </option>
                                                             <option value="0">{{ translate('product') }}
@@ -311,38 +312,71 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12">
-                                    <div class="card h-100">
-                                        <div class="card-header">
-                                            <h4 class="mb-0 d-flex gap-2 align-items-center">
-                                                <i class="tio-watches"></i>
-                                                {{ translate('Availability') }}
-                                            </h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="row g-2">
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label
-                                                            class="input-label">{{ translate('available_From') }}</label>
-                                                        <input type="datetime-local" name="available_time_starts"
-                                                            class="form-control" value="10:30:00"
-                                                            placeholder="{{ translate('Ex : 10:30 am') }}" required>
+                                <div class="card-body" id="cardBody" style="display: none;">
+                                    <div class="col-12">
+                                        <div class="card h-100">
+                                            <div class="card-header">
+                                                <h4 class="mb-0 d-flex gap-2 align-items-center">
+                                                    <i class="tio-watches"></i>
+                                                    {{ translate('Availability') }}
+                                                </h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row g-2">
+                                                    <!-- Radio Buttons for Time or Date Selection -->
+                                                    <div id="availability-options" style="display: none;">
+                                                        <p>{{ translate('Set Availability Type:') }}</p>
+                                                        <div class="form-group">
+                                                            <label>
+                                                                <input type="radio" name="availability_type"
+                                                                    value="time">
+                                                                {{ translate('Time') }}
+                                                            </label>
+                                                            <label>
+                                                                <input type="radio" name="availability_type"
+                                                                    value="date">
+                                                                {{ translate('date') }}
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="form-group">
-                                                        <label
-                                                            class="input-label">{{ translate('available_Till') }}</label>
-                                                        <input type="datetime-local" name="available_time_ends"
-                                                            class="form-control" value="19:30:00"
-                                                            placeholder="{{ translate('5:45 pm') }}" required>
+
+                                                    <!-- Time Fields -->
+                                                    <div id="time-fields" style="display: none;">
+                                                        <div class="form-group">
+                                                            <label
+                                                                class="input-label">{{ translate('available_From') }}</label>
+                                                            <input type="time" name="available_time_starts"
+                                                                class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label
+                                                                class="input-label">{{ translate('available_Till') }}</label>
+                                                            <input type="time" name="available_time_ends"
+                                                                class="form-control">
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Date Fields -->
+                                                    <div id="date-fields" style="display: none;">
+                                                        <div class="form-group">
+                                                            <label
+                                                                class="input-label">{{ translate('available_From') }}</label>
+                                                            <input type="date" name="available_date_starts"
+                                                                class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label
+                                                                class="input-label">{{ translate('available_Till') }}</label>
+                                                            <input type="date" name="available_date_ends"
+                                                                class="form-control">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-12">
                                     <div class="card h-100">
                                         <div class="card-header">
@@ -357,7 +391,8 @@
                                                 <select name="addon_ids[]" class="form-control" id="choose_addons"
                                                     multiple="multiple">
                                                     @foreach (\App\Model\AddOn::orderBy('name')->get() as $addon)
-                                                        <option value="{{ $addon['id'] }}">{{ $addon['name'] }}</option>
+                                                        <option value="{{ $addon['id'] }}">{{ $addon['name'] }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -474,6 +509,96 @@
 @push('script_2')
     <script src="{{ asset('public/assets/admin/js/spartan-multi-image-picker.js') }}"></script>
 
+    <script>
+        $(document).ready(function() {
+            // Show availability options when Product Item is selected
+            $('#itemTypeDropdown').on('change', function() {
+                const selectedValue = $(this).val();
+
+                if (selectedValue === '0') { // Product Item selected
+                    $('#cardBody').show(); // Show the availability section
+                    $('#availability-options').show(); // Show the radio buttons for Time and Date
+                    resetFields(); // Reset any pre-filled data or visibility settings
+                    // Ensure the radio buttons are required when Product Item is selected
+                    $('input[name="availability_type"]').prop('required', true);
+                } else { // Set Menu selected
+                    $('#cardBody').hide(); // Hide the availability section
+                    $('#availability-options, #time-fields, #date-fields')
+                        .hide(); // Hide all availability options
+                    resetFields(); // Reset any pre-filled data or visibility settings
+                    // Remove required from radio buttons when Set Menu is selected
+                    $('input[name="availability_type"]').prop('required', false);
+                }
+            });
+
+            // Event handler for radio button selection (Time or Date)
+            $('input[name="availability_type"]').on('change', function() {
+                const selectedType = $(this).val();
+                toggleAvailability(selectedType); // Show the relevant fields (Time or Date)
+            });
+
+            // Function to toggle between Time and Date fields based on selected radio button
+            function toggleAvailability(type) {
+                if (type === 'time') {
+                    $('#time-fields').show(); // Show time fields
+                    $('#date-fields').hide(); // Hide date fields
+                    clearFields('#date-fields'); // Clear date fields if visible
+
+                    // Add required to time fields
+                    $('#time-fields').find('input').each(function() {
+                        $(this).prop('required', true); // Set each input in time-fields as required
+                    });
+
+                    // Remove required from date fields
+                    $('#date-fields').find('input').each(function() {
+                        $(this).prop('required', false); // Remove required from each input in date-fields
+                    });
+                } else if (type === 'date') {
+                    $('#date-fields').show(); // Show date fields
+                    $('#time-fields').hide(); // Hide time fields
+                    clearFields('#time-fields'); // Clear time fields if visible
+
+                    // Add required to date fields
+                    $('#date-fields').find('input').each(function() {
+                        $(this).prop('required', true); // Set each input in date-fields as required
+                    });
+
+                    // Remove required from time fields
+                    $('#time-fields').find('input').each(function() {
+                        $(this).prop('required', false); // Remove required from each input in time-fields
+                    });
+                }
+
+                // Ensure radio buttons are required when availability options are visible
+                $('input[name="availability_type"]:visible').prop('required',
+                    true); // Set radio buttons as required only if visible
+            }
+
+            // Reset all fields and hide both sections (Time and Date)
+            function resetFields() {
+                $('#time-fields, #date-fields').hide(); // Hide both time and date fields initially
+                clearFields('#time-fields'); // Clear time fields
+                clearFields('#date-fields'); // Clear date fields
+                $('input[name="availability_type"]').prop('checked', false); // Uncheck radio buttons
+
+                // Remove required from both time and date fields initially
+                $('#time-fields').find('input').each(function() {
+                    $(this).prop('required', false);
+                });
+                $('#date-fields').find('input').each(function() {
+                    $(this).prop('required', false);
+                });
+
+                // Remove required from radio buttons when hidden
+                $('input[name="availability_type"]:hidden').prop('required', false);
+            }
+
+            // Clear input fields in a specific section
+            function clearFields(section) {
+                $(section).find('input').val(''); // Clear all input fields in the section
+            }
+        });
+    </script>
 
     <script>
         var count = 0;

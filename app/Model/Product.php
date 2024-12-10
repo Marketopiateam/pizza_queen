@@ -25,6 +25,7 @@ class Product extends Model
         'set_menu' => 'integer',
         'popularity_count' => 'integer',
         'is_recommended' => 'integer',
+        'is_available',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
