@@ -32,7 +32,7 @@ class QRCodeController extends Controller
         $branches = $this->branch->all();
         $data = Helpers::get_business_settings('qr_code');
         $qr = base64_encode(json_encode($data));
-        $code = QrCode::size(180)->generate($data['website'].'?qrcode='.$qr);
+        $code = QrCode::size(180)->generate($data['website']);
         return view('admin-views.business-settings.qrcode-index', compact('branches', 'data', 'code'));
     }
 
@@ -65,7 +65,7 @@ class QRCodeController extends Controller
         $data['opening_time'] = $request->opening_time;
         $data['closing_time'] = $request->closing_time;
         $data['phone'] = $request->phone;
-        $data['website'] = $request->website. '/qr-category-screen';
+        $data['website'] = $request->website;
         $data['social_media'] = $request->social_media;
 
         $this->businessSetting->updateOrInsert(['key' => 'qr_code'], [
@@ -84,7 +84,7 @@ class QRCodeController extends Controller
     {
         $data = Helpers::get_business_settings('qr_code');
         $qr = base64_encode(json_encode($data));
-        $code = QrCode::size(180)->generate($data['website'].'?qrcode='.$qr);
+        $code = QrCode::size(180)->generate($data['website']);
         $pdf = PDF::loadView('admin-views.business-settings.partials.qrcode-pdf', compact('data', 'code'));
         return $pdf->download('qr-code' . rand(00001, 99999) . '.pdf');
     }
@@ -93,7 +93,7 @@ class QRCodeController extends Controller
     {
         $data = Helpers::get_business_settings('qr_code');
         $qr = base64_encode(json_encode($data));
-        $code = QrCode::size(180)->generate($data['website'].'?qrcode='.$qr);
+        $code = QrCode::size(180)->generate($data['website']);
         return view('admin-views.business-settings.partials.qrcode-print', compact('data', 'code'));
     }
 
