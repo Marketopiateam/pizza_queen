@@ -176,10 +176,12 @@ return [
         App\Providers\RouteServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         \App\Providers\ConfigServiceProvider::class,
-//        Kreait\Laravel\Firebase\ServiceProvider::class,
+        //        Kreait\Laravel\Firebase\ServiceProvider::class,
         Unicodeveloper\Paystack\PaystackServiceProvider::class,
         Nwidart\Modules\LaravelModulesServiceProvider::class,
         App\Providers\FirebaseServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+
     ],
 
     /*
@@ -235,6 +237,7 @@ return [
         'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
         'Helpers' => \App\CentralLogics\helpers::class,
         'Module' => Nwidart\Modules\Facades\Module::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

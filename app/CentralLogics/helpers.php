@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Intervention\Image\Facades\Image;
 
 class Helpers
 {
@@ -251,10 +252,10 @@ class Helpers
     public static function get_business_settings($name)
     {
         $config = null;
-       
+
         $settings = BusinessSetting::get();
         $data = $settings?->firstWhere('key', $name);
-       
+
         if (isset($data)) {
             $config = json_decode($data['value'], true);
             if (is_null($config)) {
@@ -766,7 +767,14 @@ class Helpers
             if (!Storage::disk('public')->exists($dir)) {
                 Storage::disk('public')->makeDirectory($dir);
             }
-            Storage::disk('public')->put($dir . $imageName, file_get_contents($image));
+            $imageInstance = Image::make($image);
+
+            $imageInstance->resize(200, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            Storage::disk('public')->put($dir . $imageName, (string) $imageInstance->encode($format));
         } else {
             $imageName = 'def.png';
         }
