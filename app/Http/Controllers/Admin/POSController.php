@@ -53,7 +53,7 @@ class POSController extends Controller
         private OrderDetail     $order_detail,
         private Notification    $notification,
         private DeliveryMan     $delivery_man
-    ){}
+    ) {}
 
     /**
      * @param Request $request
@@ -307,10 +307,10 @@ class POSController extends Controller
                         ]);
                     }
                 }
+                // dd($request->variations);
                 $variation_data = Helpers::get_varient($branch_product_variations, $request->variations);
                 $variation_price = $variation_data['price'];
                 $variations = $request->variations;
-
             }
 
             $branch_product_price = $branch_product['price'];
@@ -345,8 +345,8 @@ class POSController extends Controller
 
                 $add_on = AddOn::find($id);
                 $data['add_on_prices'][] = $add_on['price'];
-                $add_on_tax = ($add_on['price'] * $add_on['tax']/100);
-                $addon_total_tax += (($add_on['price'] * $add_on['tax']/100) * $request['addon-quantity' . $id]);
+                $add_on_tax = ($add_on['price'] * $add_on['tax'] / 100);
+                $addon_total_tax += (($add_on['price'] * $add_on['tax'] / 100) * $request['addon-quantity' . $id]);
                 $data['add_on_tax'][] = $add_on_tax;
             }
             $data['add_ons'] = $request['addon_id'];
@@ -388,43 +388,43 @@ class POSController extends Controller
 
         $order_type = session()->has('order_type') ? session()->get('order_type') : 'take_away';
 
-        if ($order_type == 'dine_in'){
-            if (!session()->has('table_id')){
+        if ($order_type == 'dine_in') {
+            if (!session()->has('table_id')) {
                 Toastr::error(translate('please select a table number'));
                 return back();
             }
-            if (!session()->has('people_number')){
+            if (!session()->has('people_number')) {
                 Toastr::error(translate('please enter people number'));
                 return back();
             }
 
             $table = Table::find(session('table_id'));
-            if (isset($table) && session('people_number') > $table->capacity  || session('people_number') < 1 ) {
-                Toastr::error(translate('enter valid people number between 1 to '. $table->capacity));
+            if (isset($table) && session('people_number') > $table->capacity  || session('people_number') < 1) {
+                Toastr::error(translate('enter valid people number between 1 to ' . $table->capacity));
                 return back();
             }
         }
 
         $delivery_charge = 0;
         // store customer address for home delivery
-        if ($order_type == 'home_delivery'){
-           if (!session()->has('customer_id')){
-               Toastr::error(translate('please select a customer'));
-               return back();
-           }
+        if ($order_type == 'home_delivery') {
+            if (!session()->has('customer_id')) {
+                Toastr::error(translate('please select a customer'));
+                return back();
+            }
 
-           if (!session()->has('address')){
-               Toastr::error(translate('please select a delivery address'));
-               return back();
-           }
+            if (!session()->has('address')) {
+                Toastr::error(translate('please select a delivery address'));
+                return back();
+            }
 
-           $address_data = session()->get('address');
-           $distance = $address_data['distance'] ?? 0;
-           $areaId = $address_data['area_id'];
+            $address_data = session()->get('address');
+            $distance = $address_data['distance'] ?? 0;
+            $areaId = $address_data['area_id'];
 
-           $delivery_charge = Helpers::get_delivery_charge(branchId: session()->get('branch_id') ?? 1, distance:  $distance, selectedDeliveryArea: $areaId);
+            $delivery_charge = Helpers::get_delivery_charge(branchId: session()->get('branch_id') ?? 1, distance: $distance, selectedDeliveryArea: $areaId);
 
-           $address = [
+            $address = [
                 'address_type' => 'Home',
                 'contact_person_name' => $address_data['contact_person_name'],
                 'contact_person_number' => $address_data['contact_person_number'],
@@ -458,7 +458,7 @@ class POSController extends Controller
         $order->user_id = session()->get('customer_id') ?? null;
         $order->coupon_discount_title = $request->coupon_discount_title == 0 ? null : 'coupon_discount_title';
         $order->payment_status = ($order_type == 'take_away') ? 'paid' : (($order_type == 'dine_in' && $request->type != 'pay_after_eating') ? 'paid' : 'unpaid');
-        $order->order_status = $order_type == 'take_away' ? 'delivered' : 'confirmed' ;
+        $order->order_status = $order_type == 'take_away' ? 'delivered' : 'confirmed';
         $order->order_type = ($order_type == 'take_away') ? 'pos' : (($order_type == 'dine_in') ? 'dine_in' : (($order_type == 'home_delivery') ? 'delivery' : null));
         $order->coupon_code = $request->coupon_code ?? null;
         $order->payment_method = $request->type;
@@ -602,26 +602,26 @@ class POSController extends Controller
                     }
                 }
                 //send notification to customer for home delivery
-                if ($order->order_type == 'delivery'){
+                if ($order->order_type == 'delivery') {
                     $message = Helpers::order_status_update_message('confirmed');
                     $customer = $this->user->find($order->user_id);
                     $customerFcmToken = $customer?->cm_firebase_token;
                     $local = $customer?->language_code ?? 'en';
-                    $customerName = $customer?->f_name . ' '. $customer?->l_name ?? '';
+                    $customerName = $customer?->f_name . ' ' . $customer?->l_name ?? '';
 
-                    if ($local != 'en'){
+                    if ($local != 'en') {
                         $statusKey = Helpers::order_status_message_key('confirmed');
                         $translatedMessage = $this->business_setting->with('translations')->where(['key' => $statusKey])->first();
-                        if (isset($translatedMessage->translations)){
-                            foreach ($translatedMessage->translations as $translation){
-                                if ($local == $translation->locale){
+                        if (isset($translatedMessage->translations)) {
+                            foreach ($translatedMessage->translations as $translation) {
+                                if ($local == $translation->locale) {
                                     $message = $translation->value;
                                 }
                             }
                         }
                     }
                     $restaurantName = Helpers::get_business_settings('restaurant_name');
-                    $value = Helpers::text_variable_data_format(value:$message, user_name: $customerName, restaurant_name: $restaurantName,  order_id: $order_id);
+                    $value = Helpers::text_variable_data_format(value: $message, user_name: $customerName, restaurant_name: $restaurantName,  order_id: $order_id);
 
                     if ($value && isset($customerFcmToken)) {
                         $data = [
@@ -640,7 +640,7 @@ class POSController extends Controller
                         if (isset($emailServices['status']) && $emailServices['status'] == 1 && $order_mail_status == 1 && isset($customer)) {
                             Mail::to($customer->email)->send(new \App\Mail\OrderPlaced($order_id));
                         }
-                    }catch (\Exception $e) {
+                    } catch (\Exception $e) {
                         //dd($e);
                     }
                 }
@@ -649,7 +649,6 @@ class POSController extends Controller
             } else {
                 Toastr::warning(translate('Branch select is required'));
             }
-
         } catch (\Exception $e) {
             info($e);
         }
@@ -752,7 +751,6 @@ class POSController extends Controller
                 })
                 ->get();
             $query_param = ['filter' => '', 'branch_id' => $request['branch_id'] ?? '', 'from' => $request['from'] ?? '', 'to' => $request['to'] ?? ''];
-
         }
 
         $orders = $query->latest()->paginate(Helpers::getPagination())->appends($query_param);
@@ -772,8 +770,8 @@ class POSController extends Controller
             return back();
         }
 
-        $deliverymen = $this->delivery_man->where(['is_active'=>1])
-            ->where(function($query) use ($order) {
+        $deliverymen = $this->delivery_man->where(['is_active' => 1])
+            ->where(function ($query) use ($order) {
                 $query->where('branch_id', $order->branch_id)
                     ->orWhere('branch_id', 0);
             })
@@ -848,7 +846,6 @@ class POSController extends Controller
                         ->orWhere('transaction_reference', 'like', "%{$value}%");
                 }
             })->get();
-
         } else {
             $branch_id = $request->branch_id != null ? $request->branch_id : 'all';
             $to = $request->to;
@@ -907,13 +904,13 @@ class POSController extends Controller
         ]);
 
         $user_phone = $this->user->where('phone', $request->phone)->first();
-        if (isset($user_phone)){
+        if (isset($user_phone)) {
             Toastr::error(translate('The phone is already taken'));
             return back();
         }
 
         $user_email = $this->user->where('email', $request->email)->first();
-        if (isset($user_email)){
+        if (isset($user_email)) {
             Toastr::error(translate('The email is already taken'));
             return back();
         }
@@ -967,17 +964,17 @@ class POSController extends Controller
         $destination_lat = $request['latitude'];
         $destination_lng = $request['longitude'];
 
-        if ($request->has('latitude') && $request->has('longitude')){
+        if ($request->has('latitude') && $request->has('longitude')) {
             $api_key = Helpers::get_business_settings('map_api_server_key');
             $response = Http::get('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' . $origin_lat . ',' . $origin_lng . '&destinations=' . $destination_lat . ',' . $destination_lng . '&key=' . $api_key);
 
             //return $response->json();
             $data = json_decode($response, true);
             $distance_value = $data['rows'][0]['elements'][0]['distance']['value'];
-            $distance = $distance_value/1000;
+            $distance = $distance_value / 1000;
         }
 
-        if ($request['selected_area_id']){
+        if ($request['selected_area_id']) {
             $area = DeliveryChargeByArea::find($request['selected_area_id']);
         }
 
@@ -1024,5 +1021,4 @@ class POSController extends Controller
         session()->put('order_type', $request['order_type']);
         return response()->json($request['order_type'], 200);
     }
-
 }

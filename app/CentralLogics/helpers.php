@@ -126,7 +126,7 @@ class Helpers
                         if (in_array($option['label'], $variation['values']['label'])) {
                             // Match the label's index to fetch the corresponding qty
                             $labelIndex = array_search($option['label'], $variation['values']['label']);
-                            $qty = $variation['values']['qty'][$labelIndex] ?? 0;
+                            $qty = $variation['values']['qty'][$labelIndex] ?? 1;
                             $optionalPrice = $option['optionPrice'] ?? 0;
                             // Calculate the price based on qty and optionPrice
                             $priceperOneVareiant = $optionalPrice * $qty;
