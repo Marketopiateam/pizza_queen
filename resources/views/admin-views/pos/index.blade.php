@@ -119,7 +119,7 @@
                                     </div>
                                 </div>
 
-                                <div class="d-none" id="dine_in_section">
+                                {{-- <div class="d-none" id="dine_in_section">
                                     <div class="form-group d-flex flex-wrap flex-sm-nowrap gap-2">
                                         <select name="table_id" class="js-select2-custom-x form-ellipsis form-control select-table">
                                             <option disabled selected>{{translate('select_table')}}</option>
@@ -134,7 +134,7 @@
                                                id="number_of_people" class="form-control" min="1" max="99"
                                                placeholder="{{translate('Number Of People')}}">
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="form-group d-none" id="home_delivery_section">
                                     <div class="d-flex justify-content-between">
@@ -278,7 +278,7 @@
                             $old = null;
                         }
                         ?>
-                        <form id='delivery_address_store'>
+                        <form id='delivery_address_store'>  
                             @csrf
 
                             <div class="row g-2" id="delivery_address">

@@ -2705,4 +2705,8 @@
   'Successfully sent!' => 'Successfully sent!',
   'Remove subcategories first!' => 'Remove subcategories first!',
   'Sub Category removed!' => 'Sub Category removed!',
+  'application_status_updated_successfully' => 'Application status updated successfully',
+  'ABC_Alahly' => 'ABC Alahly',
+  'Please fill available_time_starts field of row' => 'Please fill available time starts field of row',
+  'customer_wallet_status_is_disable' => 'Customer wallet status is disable',
 );

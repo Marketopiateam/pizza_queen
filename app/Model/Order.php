@@ -74,7 +74,7 @@ class Order extends Model
 
     public function scopePos($query)
     {
-        return $query->where('order_type', '=', 'pos');
+        return $query->where('order_type', '=', 'pos')->orWhere('order_type', 'dine_in');
     }
 
     public function scopeDineIn($query)
