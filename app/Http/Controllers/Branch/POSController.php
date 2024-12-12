@@ -354,22 +354,22 @@ class POSController extends Controller
 
         $orderType = session()->has('order_type') ? session()->get('order_type') : 'take_away';
 
-        if ($orderType == 'dine_in'){
-            if (!session()->has('table_id')){
-                Toastr::error(translate('please select a table number'));
-                return back();
-            }
-            if (!session()->has('people_number')){
-                Toastr::error(translate('please enter people number'));
-                return back();
-            }
+        // if ($orderType == 'dine_in'){
+        //     if (!session()->has('table_id')){
+        //         Toastr::error(translate('please select a table number'));
+        //         return back();
+        //     }
+        //     if (!session()->has('people_number')){
+        //         Toastr::error(translate('please enter people number'));
+        //         return back();
+        //     }
 
-            $table = Table::find(session('table_id'));
-            if (isset($table) && session('people_number') > $table->capacity  || session('people_number') < 1 ) {
-                Toastr::error(translate('enter valid people number between 1 to '. $table->capacity));
-                return back();
-            }
-        }
+        //     $table = Table::find(session('table_id'));
+        //     if (isset($table) && session('people_number') > $table->capacity  || session('people_number') < 1 ) {
+        //         Toastr::error(translate('enter valid people number between 1 to '. $table->capacity));
+        //         return back();
+        //     }
+        // }
 
         $deliveryCharge = 0;
         // store customer address for home delivery
