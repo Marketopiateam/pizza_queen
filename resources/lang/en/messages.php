@@ -2709,4 +2709,7 @@
   'ABC_Alahly' => 'ABC Alahly',
   'Please fill available_time_starts field of row' => 'Please fill available time starts field of row',
   'customer_wallet_status_is_disable' => 'Customer wallet status is disable',
+  'This coupon in not valid for you!' => 'This coupon in not valid for you!',
+  'Coupon updated successfully!' => 'Coupon updated successfully!',
+  1230913490 => '1230913490',
 );

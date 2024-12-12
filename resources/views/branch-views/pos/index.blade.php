@@ -926,7 +926,7 @@
                 const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
                     center: {
                         lat: 31.2000924,
-                        lng: 29.9187387
+                        lng: 29.9187387 
                     },
                     zoom: 13,
                     mapTypeId: "roadmap",
