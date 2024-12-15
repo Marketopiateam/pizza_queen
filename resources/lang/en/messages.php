@@ -2712,4 +2712,5 @@
   'This coupon in not valid for you!' => 'This coupon in not valid for you!',
   'Coupon updated successfully!' => 'Coupon updated successfully!',
   1230913490 => '1230913490',
+  'schedule_overlapping_warning' => 'Schedule overlapping warning',
 );
