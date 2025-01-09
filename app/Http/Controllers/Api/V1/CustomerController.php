@@ -33,8 +33,7 @@ class CustomerController extends Controller
         private Order            $order,
         private PhoneVerification  $phoneVerification,
         private EmailVerifications  $emailVerifications,
-    )
-    {}
+    ) {}
 
     /**
      * @param Request $request
@@ -82,7 +81,7 @@ class CustomerController extends Controller
         $userId = (bool)auth('api')->user() ? auth('api')->user()->id : $request['guest_id'];
         $userType = (bool)auth('api')->user() ? 0 : 1;
 
-        if ($request->has('is_default')){
+        if ($request->has('is_default')) {
             $this->customerAddress
                 ->where(['user_id' => $userId, 'is_guest' => $userType, 'is_default' => 1])
                 ->update(['is_default' => 0]);
@@ -128,7 +127,7 @@ class CustomerController extends Controller
         $userId = (bool)auth('api')->user() ? auth('api')->user()->id : $request['guest_id'];
         $userType = (bool)auth('api')->user() ? 0 : 1;
 
-        if ($request->has('is_default')){
+        if ($request->has('is_default')) {
             $this->customerAddress
                 ->where(['user_id' => $userId, 'is_guest' => $userType, 'is_default' => 1])
                 ->update(['is_default' => 0]);
@@ -147,8 +146,8 @@ class CustomerController extends Controller
             'longitude' => $request->longitude,
             'latitude' => $request->latitude,
             'is_default' => $request['is_default'] ? 1 : 0,
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => now('Africa/Cairo'),
+            'updated_at' => now('Africa/Cairo'),
         ]);
 
         return response()->json(['message' => translate('update_success')], 200);
@@ -223,14 +222,14 @@ class CustomerController extends Controller
         }
 
         $user = $this->user->find($request->user()->id);
-        if (!$user){
+        if (!$user) {
             return response()->json(['message' => translate('User not found')], 200);
         }
 
         $user->f_name = $request->f_name;
         $user->l_name = $request->l_name;
 
-        if ($user->email != $request['email']){
+        if ($user->email != $request['email']) {
             $user->email_verified_at = null;
             $user->email = $request->email;
         }
@@ -260,8 +259,8 @@ class CustomerController extends Controller
         $user = auth('api')->user();
         $guest = $request['guest_id'];
 
-        if (isset($user) && isset($guest)){
-            $this->user->where('id', auth('api')->user()->id )->update([
+        if (isset($user) && isset($guest)) {
+            $this->user->where('id', auth('api')->user()->id)->update([
                 'cm_firebase_token' => $request['cm_firebase_token'],
                 'language_code' => $request->header('X-localization') ?? 'en'
             ]);
@@ -269,14 +268,12 @@ class CustomerController extends Controller
             $this->guestUser->where('id', $request['guest_id'])->update([
                 'fcm_token' => '@',
             ]);
-
-        }elseif(isset($user)){
+        } elseif (isset($user)) {
             $this->user->where('id', auth('api')->user()->id)->update([
                 'cm_firebase_token' => $request['cm_firebase_token'],
                 'language_code' => $request->header('X-localization') ?? 'en'
             ]);
-
-        }elseif(isset($guest)){
+        } elseif (isset($guest)) {
             $this->guestUser->where('id',  $request['guest_id'])->update([
                 'fcm_token' => $request['cm_firebase_token'],
             ]);
@@ -315,7 +312,6 @@ class CustomerController extends Controller
             $newsLetter->save();
 
             return response()->json(['message' => translate('Successfully subscribed')], 200);
-
         } else {
             return response()->json(['message' => translate('Email Already exists')], 400);
         }
@@ -326,7 +322,7 @@ class CustomerController extends Controller
      */
     public function lastOrderedAddress(): JsonResponse
     {
-        if (!auth('api')->user()){
+        if (!auth('api')->user()) {
             return response()->json(['status_code' => 401, 'message' => translate('Unauthorized')], 200);
         }
 
@@ -336,7 +332,7 @@ class CustomerController extends Controller
             ->where(['user_id' => $userId, 'is_guest' => 0, 'is_default' => 1])
             ->first();
 
-        if (isset($defaultAddress)){
+        if (isset($defaultAddress)) {
             return response()->json($defaultAddress, 200);
         }
 
@@ -346,7 +342,7 @@ class CustomerController extends Controller
             ->with('customer_delivery_address')
             ->first();
 
-        if (isset($order) && $order->customer_delivery_address){
+        if (isset($order) && $order->customer_delivery_address) {
             return response()->json($order->customer_delivery_address, 200);
         }
 
@@ -354,12 +350,11 @@ class CustomerController extends Controller
             ->where(['user_id' => $userId, 'is_guest' => 0])
             ->first();
 
-        if (isset($lastAddedAddress)){
+        if (isset($lastAddedAddress)) {
             return response()->json($lastAddedAddress, 200);
         }
 
         return response()->json(null, 200);
-
     }
 
     public function verifyProfileInfo(Request $request)
@@ -376,10 +371,10 @@ class CustomerController extends Controller
 
         $type = $request['type'];
 
-        if ($type == 'phone'){
+        if ($type == 'phone') {
             $verificationData =  $this->phoneVerification->where(['phone' => $request['email_or_phone'], 'token' => $request['token']])->first();
 
-            if(!$verificationData){
+            if (!$verificationData) {
                 return response()->json(['errors' => [
                     ['code' => 'token', 'message' => translate('OTP is not matched!')]
                 ]], 403);
@@ -394,10 +389,10 @@ class CustomerController extends Controller
             return response()->json(['message' => translate('Phone number is successfully verified')], 200);
         }
 
-        if ($type == 'email'){
+        if ($type == 'email') {
             $verificationData =  $this->emailVerifications->where(['email' => $request['email_or_phone'], 'token' => $request['token']])->first();
 
-            if(!$verificationData){
+            if (!$verificationData) {
                 return response()->json(['errors' => [
                     ['code' => 'token', 'message' => translate('OTP is not matched!')]
                 ]], 403);
@@ -434,11 +429,9 @@ class CustomerController extends Controller
 
         try {
             $messaging->subscribeToTopic($topic, $token);
-            return response()->json(['message' => 'Successfully subscribed to topic '. $topic], 200);
+            return response()->json(['message' => 'Successfully subscribed to topic ' . $topic], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
-
 }

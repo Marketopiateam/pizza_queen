@@ -30,7 +30,7 @@ class BannerController extends Controller
 
     public static function is_available(array $products): array
     {
-        $now = now();
+        $now = now('Africa/Cairo');
 
         foreach ($products as &$product) {
             if (isset($product['item_type']) && $product['item_type'] === 'set_menu') {

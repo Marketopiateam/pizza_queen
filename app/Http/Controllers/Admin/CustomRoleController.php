@@ -17,9 +17,7 @@ class CustomRoleController extends Controller
     public function __construct(
         private AdminRole $adminRole,
         private Admin     $admin
-    )
-    {
-    }
+    ) {}
 
     public function create(Request $request): Renderable
     {
@@ -58,8 +56,8 @@ class CustomRoleController extends Controller
             'name' => $request->name,
             'module_access' => json_encode($request['modules']),
             'status' => 1,
-            'created_at' => now(),
-            'updated_at' => now()
+            'created_at' => now('Africa/Cairo'),
+            'updated_at' => now('Africa/Cairo')
         ]);
 
         Toastr::success(translate('Role added successfully!'));

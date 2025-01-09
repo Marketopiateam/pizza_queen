@@ -27,8 +27,7 @@ class DeliverymanController extends Controller
         private User            $user,
         private BusinessSetting $businessSetting
 
-    )
-    {}
+    ) {}
 
     /**
      * @param Request $request
@@ -181,10 +180,10 @@ class DeliverymanController extends Controller
             'deliveryman_id' => $deliveryman['id'],
             'longitude' => $request['longitude'],
             'latitude' => $request['latitude'],
-            'time' => now(),
+            'time' => now('Africa/Cairo'),
             'location' => $request['location'],
-            'created_at' => now(),
-            'updated_at' => now()
+            'created_at' => now('Africa/Cairo'),
+            'updated_at' => now('Africa/Cairo')
         ]);
 
         return response()->json(['message' => translate('location recorded')], 200);
@@ -252,36 +251,35 @@ class DeliverymanController extends Controller
 
         $customerFcmToken = null;
         $value = null;
-        if($order->is_guest == 0){
+        if ($order->is_guest == 0) {
             $customerFcmToken = $order->customer ? $order->customer->cm_firebase_token : null;
-        }elseif($order->is_guest == 1){
+        } elseif ($order->is_guest == 1) {
             $customerFcmToken = $order->guest ? $order->guest->fcm_token : null;
         }
 
         $restaurantName = Helpers::get_business_settings('restaurant_name');
-        $deliverymanName = $order->delivery_man ? $order->delivery_man->f_name. ' '. $order->delivery_man->l_name : '';
-        $customerName = $order->is_guest == 0 ? ($order->customer ? $order->customer->f_name. ' '. $order->customer->l_name : '') : '';
+        $deliverymanName = $order->delivery_man ? $order->delivery_man->f_name . ' ' . $order->delivery_man->l_name : '';
+        $customerName = $order->is_guest == 0 ? ($order->customer ? $order->customer->f_name . ' ' . $order->customer->l_name : '') : '';
         $local = $order->is_guest == 0 ? ($order->customer ? $order->customer->language_code : 'en') : 'en';;
 
         if ($request['status'] == 'out_for_delivery') {
             $message = Helpers::order_status_update_message('ord_start');
 
-            if ($local != 'en'){
+            if ($local != 'en') {
                 $statusKey = Helpers::order_status_message_key('ord_start');
                 $translatedMessage = $this->businessSetting->with('translations')->where(['key' => $statusKey])->first();
-                if (isset($translatedMessage->translations)){
-                    foreach ($translatedMessage->translations as $translation){
-                        if ($local == $translation->locale){
+                if (isset($translatedMessage->translations)) {
+                    foreach ($translatedMessage->translations as $translation) {
+                        if ($local == $translation->locale) {
                             $message = $translation->value;
                         }
                     }
                 }
             }
 
-            $value = Helpers::text_variable_data_format(value:$message, user_name: $customerName, restaurant_name: $restaurantName, delivery_man_name: $deliverymanName, order_id: $order->id);
-
+            $value = Helpers::text_variable_data_format(value: $message, user_name: $customerName, restaurant_name: $restaurantName, delivery_man_name: $deliverymanName, order_id: $order->id);
         } elseif ($request['status'] == 'delivered') {
-            if ($order->is_guest == 0){
+            if ($order->is_guest == 0) {
                 if ($order->user_id) CustomerLogic::create_loyalty_point_transaction($order->user_id, $order->id, $order->order_amount, 'order_place');
 
                 if ($order->transaction == null) {
@@ -299,9 +297,9 @@ class DeliverymanController extends Controller
                 }
             }
 
-            if ($order['payment_method'] == 'cash_on_delivery'){
+            if ($order['payment_method'] == 'cash_on_delivery') {
                 $partialData = OrderPartialPayment::where(['order_id' => $order->id])->first();
-                if ($partialData){
+                if ($partialData) {
                     $partial = new OrderPartialPayment;
                     $partial->order_id = $order['id'];
                     $partial->paid_with = 'cash_on_delivery';
@@ -312,19 +310,19 @@ class DeliverymanController extends Controller
             }
 
             $message = Helpers::order_status_update_message('delivery_boy_delivered');
-            if ($local != 'en'){
+            if ($local != 'en') {
                 $statusKey = Helpers::order_status_message_key('delivery_boy_delivered');
                 $translatedMessage = $this->businessSetting->with('translations')->where(['key' => $statusKey])->first();
-                if (isset($translatedMessage->translations)){
-                    foreach ($translatedMessage->translations as $translation){
-                        if ($local == $translation->locale){
+                if (isset($translatedMessage->translations)) {
+                    foreach ($translatedMessage->translations as $translation) {
+                        if ($local == $translation->locale) {
                             $message = $translation->value;
                         }
                     }
                 }
             }
 
-            $value = Helpers::text_variable_data_format(value:$message, user_name: $customerName, restaurant_name: $restaurantName, delivery_man_name: $deliverymanName, order_id: $order->id);
+            $value = Helpers::text_variable_data_format(value: $message, user_name: $customerName, restaurant_name: $restaurantName, delivery_man_name: $deliverymanName, order_id: $order->id);
         }
 
         try {
@@ -338,9 +336,7 @@ class DeliverymanController extends Controller
                 ];
                 Helpers::send_push_notif_to_device($customerFcmToken, $data);
             }
-
         } catch (\Exception $e) {
-
         }
 
         return response()->json(['message' => translate('Status updated')], 200);
@@ -402,13 +398,14 @@ class DeliverymanController extends Controller
         $deliveryman = $this->deliveryman->where(['auth_token' => $request['token']])->first();
         if (!isset($deliveryman)) {
             return response()->json([
-                'errors' => [['code' => 'delivery-man', 'message' => translate('Invalid token!')]]], 401);
+                'errors' => [['code' => 'delivery-man', 'message' => translate('Invalid token!')]]
+            ], 401);
         }
 
         $orders = $this->order
             ->with(['delivery_address', 'customer'])
             ->where(['delivery_man_id' => $deliveryman['id']])
-            ->when(($request->has('status') && $status != 'all'),function ($query) use ($status){
+            ->when(($request->has('status') && $status != 'all'), function ($query) use ($status) {
                 $query->where(['order_status' => $status]);
             })
             ->latest()
@@ -561,23 +558,23 @@ class DeliverymanController extends Controller
         $filter = $request->input('filter', 'all_time');
 
         $startDate = null;
-        $endDate = Carbon::now()->endOfDay();
+        $endDate = Carbon::now('Africa/Cairo')->endOfDay();
 
         switch ($filter) {
             case 'today':
-                $startDate = Carbon::now()->startOfDay();
+                $startDate = Carbon::now('Africa/Cairo')->startOfDay();
                 break;
             case 'this_week':
-                $startDate = Carbon::now()->startOfWeek();
-                $endDate = Carbon::now()->endOfWeek();
+                $startDate = Carbon::now('Africa/Cairo')->startOfWeek();
+                $endDate = Carbon::now('Africa/Cairo')->endOfWeek();
                 break;
             case 'this_month':
-                $startDate = Carbon::now()->startOfMonth();
-                $endDate = Carbon::now()->endOfMonth();
+                $startDate = Carbon::now('Africa/Cairo')->startOfMonth();
+                $endDate = Carbon::now('Africa/Cairo')->endOfMonth();
                 break;
             case 'this_year':
-                $startDate = Carbon::now()->startOfYear();
-                $endDate = Carbon::now()->endOfYear();
+                $startDate = Carbon::now('Africa/Cairo')->startOfYear();
+                $endDate = Carbon::now('Africa/Cairo')->endOfYear();
                 break;
             case 'all_time':
                 $startDate = null; // No date filtering for "all"

@@ -35,9 +35,7 @@ class BusinessSettingsController extends Controller
         private Currency        $currency,
         private SocialMedia     $social_media,
         private Branch          $branch
-    )
-    {
-    }
+    ) {}
 
     /**
      * @return Renderable
@@ -261,7 +259,7 @@ class BusinessSettingsController extends Controller
     public function mailConfig(Request $request): RedirectResponse
     {
         $request->has('status') ? $request['status'] = 1 : $request['status'] = 0;
-        $this->InsertOrUpdateBusinessData(['key' => 'mail_config'],[
+        $this->InsertOrUpdateBusinessData(['key' => 'mail_config'], [
             'value' => json_encode([
                 "status" => $request['status'],
                 "name" => $request['name'],
@@ -485,7 +483,6 @@ class BusinessSettingsController extends Controller
 
         Toastr::success(GATEWAYS_DEFAULT_UPDATE_200['message']);
         return back();
-
     }
 
     /**
@@ -919,7 +916,6 @@ class BusinessSettingsController extends Controller
             if (file_put_contents($filePath, $fileContent) === false) {
                 throw new \Exception('Failed to write to file: ' . $filePath);
             }
-
         } catch (\Exception $e) {
             //
         }
@@ -1362,8 +1358,8 @@ class BusinessSettingsController extends Controller
                 'site_key' => $request['site_key'],
                 'secret_key' => $request['secret_key']
             ]),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => now('Africa/Cairo'),
+            'updated_at' => now('Africa/Cairo'),
         ]);
 
         Toastr::success(translate('Updated Successfully'));
@@ -1459,7 +1455,6 @@ class BusinessSettingsController extends Controller
             return response()->json([
                 'success' => 1,
             ]);
-
         } catch (\Exception $exception) {
             return response()->json([
                 'error' => 1,
@@ -1536,14 +1531,16 @@ class BusinessSettingsController extends Controller
             $request['shipping_per_km'] = Helpers::get_business_settings('delivery_management')['shipping_per_km'];
         }
         if ($request['shipping_status'] == 1) {
-            $request->validate([
-                'min_shipping_charge' => 'required',
-                'shipping_per_km' => 'required',
-            ],
+            $request->validate(
+                [
+                    'min_shipping_charge' => 'required',
+                    'shipping_per_km' => 'required',
+                ],
                 [
                     'min_shipping_charge.required' => 'Minimum shipping charge is required while shipping method is active',
                     'shipping_per_km.required' => 'Shipping charge per Kilometer is required while shipping method is active',
-                ]);
+                ]
+            );
         }
 
         $this->InsertOrUpdateBusinessData(['key' => 'delivery_management'], [
@@ -1576,8 +1573,8 @@ class BusinessSettingsController extends Controller
         if (!$apple) {
             $this->InsertOrUpdateBusinessData(['key' => 'apple_login'], [
                 'value' => '{"login_medium":"apple","client_id":"","client_secret":"","team_id":"","key_id":"","service_file":"","redirect_url":"","status":""}',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now('Africa/Cairo'),
+                'updated_at' => now('Africa/Cairo'),
             ]);
             $apple = BusinessSetting::where('key', 'apple_login')->first();
         }
@@ -1957,8 +1954,11 @@ class BusinessSettingsController extends Controller
             }
         }
 
-        $this->InsertOrUpdateBusinessData(['key' => 'maintenance_system_setup'], [
-            'value' => json_encode($selectedSystems)],
+        $this->InsertOrUpdateBusinessData(
+            ['key' => 'maintenance_system_setup'],
+            [
+                'value' => json_encode($selectedSystems)
+            ],
         );
 
         $this->InsertOrUpdateBusinessData(['key' => 'maintenance_duration_setup'], [
@@ -1978,7 +1978,7 @@ class BusinessSettingsController extends Controller
             ]),
         ]);
 
-        $maintenanceStatus = (integer)(Helpers::get_business_settings('maintenance_mode') ?? 0);
+        $maintenanceStatus = (int)(Helpers::get_business_settings('maintenance_mode') ?? 0);
         $selectedMaintenanceDuration = Helpers::get_business_settings('maintenance_duration_setup') ?? [];
         $selectedMaintenanceSystem = Helpers::get_business_settings('maintenance_system_setup') ?? [];
         $isBranch = in_array('branch_panel', $selectedMaintenanceSystem) ? 1 : 0;
@@ -1993,13 +1993,12 @@ class BusinessSettingsController extends Controller
         ];
 
 
-        Cache::put('maintenance', $maintenance, now()->addYears(1));
+        Cache::put('maintenance', $maintenance, now('Africa/Cairo')->addYears(1));
 
         $this->sendMaintenanceModeNotification();
 
         Toastr::success(translate('Settings updated!'));
         return back();
-
     }
 
     private function sendMaintenanceModeNotification(): void

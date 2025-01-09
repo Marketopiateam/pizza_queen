@@ -30,8 +30,7 @@ class TableController extends Controller
         private Notification    $notification,
         private Product         $product,
         private ProductByBranch $productByBranch
-    )
-    {}
+    ) {}
 
     /**
      * @return JsonResponse
@@ -83,16 +82,16 @@ class TableController extends Controller
             $order->branch_id = $request['branch_id'];
             $order->checked = 0;
 
-            $order->delivery_date = Carbon::now()->format('Y-m-d');
-            $order->delivery_time = Carbon::now()->format('H:i:s');
+            $order->delivery_date = Carbon::now('Africa/Cairo')->format('Y-m-d');
+            $order->delivery_time = Carbon::now('Africa/Cairo')->format('H:i:s');
 
             $order->preparation_time = Helpers::get_business_settings('default_preparation_time') ?? 0;
 
             $order->table_id = $request['table_id'];
             $order->number_of_people = $request['number_of_people'];
 
-            $order->created_at = now();
-            $order->updated_at = now();
+            $order->created_at = now('Africa/Cairo');
+            $order->updated_at = now('Africa/Cairo');
 
             $tokenCheck = $this->tableOrder->where(['table_id' => $request->table_id, 'branch_table_token' => $request->branch_table_token, 'branch_table_token_is_expired' => '0'])->first();
 
@@ -127,9 +126,9 @@ class TableController extends Controller
                 $branch_product = $this->productByBranch->where(['product_id' => $c['product_id'], 'branch_id' => $request['branch_id']])->first();
 
                 //daily and fixed stock quantity validation
-                if($branch_product->stock_type == 'daily' || $branch_product->stock_type == 'fixed' ){
+                if ($branch_product->stock_type == 'daily' || $branch_product->stock_type == 'fixed') {
                     $available_stock = $branch_product->stock - $branch_product->sold_quantity;
-                    if ($available_stock < $c['quantity']){
+                    if ($available_stock < $c['quantity']) {
                         return response()->json(['errors' => [['code' => 'stock', 'message' => translate('stock limit exceeded')]]], 403);
                     }
                 }
@@ -173,10 +172,10 @@ class TableController extends Controller
                 $add_on_prices = [];
                 $add_on_taxes = [];
 
-                foreach($c['add_on_ids'] as $key =>$id){
+                foreach ($c['add_on_ids'] as $key => $id) {
                     $addon = AddOn::find($id);
                     $add_on_prices[] = $addon['price'];
-                    $add_on_taxes[] = ($addon['price']*$addon['tax'])/100;
+                    $add_on_taxes[] = ($addon['price'] * $addon['tax']) / 100;
                 }
 
                 $totalAddonTax = array_reduce(
@@ -206,8 +205,8 @@ class TableController extends Controller
                     'add_on_prices' => json_encode($add_on_prices),
                     'add_on_taxes' => json_encode($add_on_taxes),
                     'add_on_tax_amount' => $totalAddonTax,
-                    'created_at' => now(),
-                    'updated_at' => now()
+                    'created_at' => now('Africa/Cairo'),
+                    'updated_at' => now('Africa/Cairo')
                 ];
 
                 $this->order_detail->insert($order_d);
@@ -216,7 +215,7 @@ class TableController extends Controller
                 $this->product->find($c['product_id'])->increment('popularity_count');
 
                 //daily and fixed stock quantity update
-                if($branch_product->stock_type == 'daily' || $branch_product->stock_type == 'fixed' ){
+                if ($branch_product->stock_type == 'daily' || $branch_product->stock_type == 'fixed') {
                     $branch_product->sold_quantity += $c['quantity'];
                     $branch_product->save();
                 }
@@ -238,8 +237,8 @@ class TableController extends Controller
                     'type' => 'new_order_admin',
                 ];
 
-                Helpers::send_push_notif_to_topic(data: $data, topic: 'admin_message', type: 'order_request', web_push_link: route('admin.orders.list',['status'=>'all']));
-                Helpers::send_push_notif_to_topic(data: $data, topic: 'branch-order-'. $order->branch_id .'-message', type: 'order_request', web_push_link: route('branch.orders.list',['status'=>'all']));
+                Helpers::send_push_notif_to_topic(data: $data, topic: 'admin_message', type: 'order_request', web_push_link: route('admin.orders.list', ['status' => 'all']));
+                Helpers::send_push_notif_to_topic(data: $data, topic: 'branch-order-' . $order->branch_id . '-message', type: 'order_request', web_push_link: route('branch.orders.list', ['status' => 'all']));
 
                 Toastr::success(translate('Notification sent successfully!'));
             } catch (\Exception $e) {
@@ -252,8 +251,6 @@ class TableController extends Controller
                 'order_id' => $order->id,
                 'branch_table_token' => $token->branch_table_token,
             ], 200);
-
-
         } catch (\Exception $e) {
             return response()->json([$e], 403);
         }

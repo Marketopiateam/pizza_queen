@@ -23,7 +23,7 @@ class EmployeeController extends Controller
     public function __construct(
         private Admin     $admin,
         private AdminRole $admin_role
-    ){}
+    ) {}
 
     /**
      * @return Renderable
@@ -85,8 +85,8 @@ class EmployeeController extends Controller
             'password' => bcrypt($request->password),
             'status' => 1,
             'image' => Helpers::upload('admin/', 'png', $request->file('image')),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => now('Africa/Cairo'),
+            'updated_at' => now('Africa/Cairo'),
         ]);
 
         Toastr::success(translate('Employee added successfully!'));
@@ -189,7 +189,7 @@ class EmployeeController extends Controller
             'admin_role_id' => $request->role_id,
             'password' => $password,
             'image' => $employee['image'],
-            'updated_at' => now(),
+            'updated_at' => now('Africa/Cairo'),
             'identity_number' => $request->identity_number,
             'identity_type' => $request->identity_type,
             'identity_image' => $identityImage,
@@ -221,7 +221,6 @@ class EmployeeController extends Controller
     {
         if ($request->id == 1) {
             Toastr::warning(translate('Master_Admin_can_not_be_deleted'));
-
         } else {
             $action = $this->admin->destroy($request->id);
             if ($action) {

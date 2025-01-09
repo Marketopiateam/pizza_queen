@@ -20,8 +20,7 @@ class DashboardController extends Controller
     public function __construct(
         private Order  $order,
         private Branch $branch,
-    )
-    {}
+    ) {}
 
     /**
      * @return Renderable
@@ -32,8 +31,8 @@ class DashboardController extends Controller
 
         $data = self::orderStatisticsData();
 
-        $from = Carbon::now()->startOfYear()->format('Y-m-d');
-        $to = Carbon::now()->endOfYear()->format('Y-m-d');
+        $from = Carbon::now('Africa/Cairo')->startOfYear()->format('Y-m-d');
+        $to = Carbon::now('Africa/Cairo')->endOfYear()->format('Y-m-d');
 
         $earning = [];
         $earningData = $this->order->where([
@@ -43,7 +42,7 @@ class DashboardController extends Controller
             DB::raw('IFNULL(sum(order_amount),0) as sums'),
             DB::raw('YEAR(created_at) year, MONTH(created_at) month')
         )
-            ->whereBetween('created_at', [Carbon::parse(now())->startOfYear(), Carbon::parse(now())->endOfYear()])
+            ->whereBetween('created_at', [Carbon::parse(now('Africa/Cairo'))->startOfYear(), Carbon::parse(now('Africa/Cairo'))->endOfYear()])
             ->groupby('year', 'month')->get()->toArray();
 
         for ($inc = 1; $inc <= 12; $inc++) {
@@ -65,7 +64,7 @@ class DashboardController extends Controller
                 DB::raw('(count(id)) as total'),
                 DB::raw('YEAR(created_at) year, MONTH(created_at) month')
             )
-            ->whereBetween('created_at', [Carbon::parse(now())->startOfYear(), Carbon::parse(now())->endOfYear()])
+            ->whereBetween('created_at', [Carbon::parse(now('Africa/Cairo'))->startOfYear(), Carbon::parse(now('Africa/Cairo'))->endOfYear()])
             ->groupby('year', 'month')->get()->toArray();
 
         for ($inc = 1; $inc <= 12; $inc++) {
@@ -178,7 +177,7 @@ class DashboardController extends Controller
                 return $query->whereDate('created_at', Carbon::today());
             })
             ->when($thisMonth, function ($query) {
-                return $query->whereMonth('created_at', Carbon::now());
+                return $query->whereMonth('created_at', Carbon::now('Africa/Cairo'));
             })
             ->count();
 
@@ -188,7 +187,7 @@ class DashboardController extends Controller
                 return $query->whereDate('created_at', Carbon::today());
             })
             ->when($thisMonth, function ($query) {
-                return $query->whereMonth('created_at', Carbon::now());
+                return $query->whereMonth('created_at', Carbon::now('Africa/Cairo'));
             })
             ->count();
 
@@ -198,7 +197,7 @@ class DashboardController extends Controller
                 return $query->whereDate('created_at', Carbon::today());
             })
             ->when($thisMonth, function ($query) {
-                return $query->whereMonth('created_at', Carbon::now());
+                return $query->whereMonth('created_at', Carbon::now('Africa/Cairo'));
             })
             ->count();
 
@@ -208,7 +207,7 @@ class DashboardController extends Controller
                 return $query->whereDate('created_at', Carbon::today());
             })
             ->when($thisMonth, function ($query) {
-                return $query->whereMonth('created_at', Carbon::now());
+                return $query->whereMonth('created_at', Carbon::now('Africa/Cairo'));
             })
             ->count();
 
@@ -218,7 +217,7 @@ class DashboardController extends Controller
                 return $query->whereDate('created_at', Carbon::today());
             })
             ->when($thisMonth, function ($query) {
-                return $query->whereMonth('created_at', Carbon::now());
+                return $query->whereMonth('created_at', Carbon::now('Africa/Cairo'));
             })
             ->count();
 
@@ -228,7 +227,7 @@ class DashboardController extends Controller
                 return $query->whereDate('created_at', Carbon::today());
             })
             ->when($thisMonth, function ($query) {
-                return $query->whereMonth('created_at', Carbon::now());
+                return $query->whereMonth('created_at', Carbon::now('Africa/Cairo'));
             })
             ->count();
 
@@ -238,7 +237,7 @@ class DashboardController extends Controller
                 return $query->whereDate('created_at', Carbon::today());
             })
             ->when($thisMonth, function ($query) {
-                return $query->whereMonth('created_at', Carbon::now());
+                return $query->whereMonth('created_at', Carbon::now('Africa/Cairo'));
             })
             ->count();
 
@@ -248,7 +247,7 @@ class DashboardController extends Controller
                 return $query->whereDate('created_at', Carbon::today());
             })
             ->when($thisMonth, function ($query) {
-                return $query->whereMonth('created_at', Carbon::now());
+                return $query->whereMonth('created_at', Carbon::now('Africa/Cairo'));
             })
             ->count();
 
@@ -258,7 +257,7 @@ class DashboardController extends Controller
                 return $query->whereDate('created_at', Carbon::today());
             })
             ->when($thisMonth, function ($query) {
-                return $query->whereMonth('created_at', Carbon::now());
+                return $query->whereMonth('created_at', Carbon::now('Africa/Cairo'));
             })
             ->count();
 
@@ -289,15 +288,15 @@ class DashboardController extends Controller
         $orderData = array();
         if ($dateType == 'yearOrder') {
             $number = 12;
-            $from = Carbon::now()->startOfYear()->format('Y-m-d');
-            $to = Carbon::now()->endOfYear()->format('Y-m-d');
+            $from = Carbon::now('Africa/Cairo')->startOfYear()->format('Y-m-d');
+            $to = Carbon::now('Africa/Cairo')->endOfYear()->format('Y-m-d');
 
             $orders = $this->order->where(['order_status' => 'delivered', 'branch_id' => auth('branch')->id()])
                 ->select(
                     DB::raw('(count(id)) as total'),
                     DB::raw('YEAR(created_at) year, MONTH(created_at) month')
                 )
-                ->whereBetween('created_at', [Carbon::parse(now())->startOfYear(), Carbon::parse(now())->endOfYear()])
+                ->whereBetween('created_at', [Carbon::parse(now('Africa/Cairo'))->startOfYear(), Carbon::parse(now('Africa/Cairo'))->endOfYear()])
                 ->groupby('year', 'month')->get()->toArray();
 
             for ($inc = 1; $inc <= $number; $inc++) {
@@ -309,7 +308,6 @@ class DashboardController extends Controller
                 }
             }
             $keyRange = array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
-
         } elseif ($dateType == 'MonthOrder') {
             $from = date('Y-m-01');
             $to = date('Y-m-t');
@@ -321,7 +319,7 @@ class DashboardController extends Controller
                     DB::raw('(count(id)) as total'),
                     DB::raw('YEAR(created_at) year, MONTH(created_at) month, DAY(created_at) day')
                 )
-                ->whereBetween('created_at', [Carbon::parse(now())->startOfMonth(), Carbon::parse(now())->endOfMonth()])
+                ->whereBetween('created_at', [Carbon::parse(now('Africa/Cairo'))->startOfMonth(), Carbon::parse(now('Africa/Cairo'))->endOfMonth()])
                 ->groupby('created_at')
                 ->get()
                 ->toArray();
@@ -334,13 +332,12 @@ class DashboardController extends Controller
                     }
                 }
             }
-
         } elseif ($dateType == 'WeekOrder') {
             Carbon::setWeekStartsAt(Carbon::SUNDAY);
             Carbon::setWeekEndsAt(Carbon::SATURDAY);
 
-            $from = Carbon::now()->startOfWeek();
-            $to = Carbon::now()->endOfWeek();
+            $from = Carbon::now('Africa/Cairo')->startOfWeek();
+            $to = Carbon::now('Africa/Cairo')->endOfWeek();
             $orders = $this->order->where(['order_status' => 'delivered', 'branch_id' => auth('branch')->id()])
                 ->whereBetween('created_at', [$from, $to])->get();
 
@@ -378,10 +375,10 @@ class DashboardController extends Controller
 
             $earning = [];
             $earningData = $this->order->where(['order_status' => 'delivered', 'branch_id' => auth('branch')->id()])->select(
-                    DB::raw('IFNULL(sum(order_amount),0) as sums'),
-                    DB::raw('YEAR(created_at) year, MONTH(created_at) month')
-                )
-                ->whereBetween('created_at', [Carbon::parse(now())->startOfYear(), Carbon::parse(now())->endOfYear()])
+                DB::raw('IFNULL(sum(order_amount),0) as sums'),
+                DB::raw('YEAR(created_at) year, MONTH(created_at) month')
+            )
+                ->whereBetween('created_at', [Carbon::parse(now('Africa/Cairo'))->startOfYear(), Carbon::parse(now('Africa/Cairo'))->endOfYear()])
                 ->groupby('year', 'month')->get()->toArray();
 
             for ($inc = 1; $inc <= 12; $inc++) {
@@ -395,7 +392,6 @@ class DashboardController extends Controller
 
             $keyRange = array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
             $orderData = $earning;
-
         } elseif ($dateType == 'MonthEarn') {
             $from = date('Y-m-01');
             $to = date('Y-m-t');
@@ -405,7 +401,7 @@ class DashboardController extends Controller
             $earning = $this->order
                 ->where(['order_status' => 'delivered', 'branch_id' => auth('branch')->id()])
                 ->select(DB::raw('IFNULL(sum(order_amount),0) as sums'), DB::raw('YEAR(created_at) year, MONTH(created_at) month, DAY(created_at) day'))
-                ->whereBetween('created_at', [Carbon::parse(now())->startOfMonth(), Carbon::parse(now())->endOfMonth()])
+                ->whereBetween('created_at', [Carbon::parse(now('Africa/Cairo'))->startOfMonth(), Carbon::parse(now('Africa/Cairo'))->endOfMonth()])
                 ->groupby('created_at')
                 ->get()
                 ->toArray();
@@ -424,8 +420,8 @@ class DashboardController extends Controller
             Carbon::setWeekStartsAt(Carbon::SUNDAY);
             Carbon::setWeekEndsAt(Carbon::SATURDAY);
 
-            $from = Carbon::now()->startOfWeek();
-            $to = Carbon::now()->endOfWeek();
+            $from = Carbon::now('Africa/Cairo')->startOfWeek();
+            $to = Carbon::now('Africa/Cairo')->endOfWeek();
             $orders = $this->order
                 ->where(['order_status' => 'delivered', 'branch_id' => auth('branch')->id()])
                 ->whereBetween('created_at', [$from, $to])->get();
@@ -448,6 +444,4 @@ class DashboardController extends Controller
 
         return response()->json($data);
     }
-
 }
-

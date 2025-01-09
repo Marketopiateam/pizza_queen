@@ -158,7 +158,7 @@ class ProductController extends Controller
                     });
                 })
                 ->when(isset($request['sort_by']) && $request['sort_by'] == 'new_arrival', function ($query) {
-                    return $query->whereBetween('created_at', [Carbon::now()->subMonth(3), Carbon::now()]);
+                    return $query->whereBetween('created_at', [Carbon::now('Africa/Cairo')->subMonth(3), Carbon::now('Africa/Cairo')]);
                 })
                 ->when(isset($request['sort_by']) && $request['sort_by'] == 'popular', function ($query) {
                     return $query->orderBy('popularity_count', 'DESC');
@@ -746,7 +746,7 @@ class ProductController extends Controller
     }
     public static function is_available(array $products): array
     {
-        $now = now();
+        $now = now('Africa/Cairo');
 
         foreach ($products as &$product) {
             if (isset($product['item_type']) && $product['item_type'] === 'set_menu') {

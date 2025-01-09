@@ -284,9 +284,6 @@ class ProductController extends Controller
                         $temp_option['label'] = $value['label'];
                     }
                     $temp_option['optionPrice'] = $value['optionPrice'];
-                    if ($option['type'] != 'single') {
-                        $temp_option['qty'] = 1;
-                    }
                     $temp_value[] = $temp_option;
                 }
                 $temp_variation['values'] = $temp_value;
@@ -516,9 +513,6 @@ class ProductController extends Controller
                         $temp_option['label'] = $value['label'];
                     }
                     $temp_option['optionPrice'] = $value['optionPrice'];
-                    if ($option['type'] != 'single') {
-                        $temp_option['qty'] = 1;
-                    }
                     $temp_value[] = $temp_option;
                 }
                 $temp_variation['values'] = $temp_value;
@@ -797,8 +791,8 @@ class ProductController extends Controller
                 'tax_type' => $collection['tax_type'],
                 'set_menu' => $collection['set_menu'],
                 'product_type' => $collection['product_type'],
-                'created_at' => now(),
-                'updated_at' => now()
+                'created_at' => now('Africa/Cairo'),
+                'updated_at' => now('Africa/Cairo')
             ];
         }
         $this->product->insert($data);

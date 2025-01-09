@@ -20,7 +20,7 @@ class CustomerWalletController extends Controller
         private BusinessSetting   $businessSetting,
         private WalletTransaction $walletTransaction,
         private WalletBonus       $walletBonus
-    ){}
+    ) {}
 
     /**
      * @param Request $request
@@ -111,8 +111,8 @@ class CustomerWalletController extends Controller
     public function walletBonusList(): JsonResponse
     {
         $bonuses = $this->walletBonus->active()
-            ->where('start_date', '<=', now()->format('Y-m-d'))
-            ->where('end_date', '>=', now()->format('Y-m-d'))
+            ->where('start_date', '<=', now('Africa/Cairo')->format('Y-m-d'))
+            ->where('end_date', '>=', now('Africa/Cairo')->format('Y-m-d'))
             ->latest()
             ->get();
 

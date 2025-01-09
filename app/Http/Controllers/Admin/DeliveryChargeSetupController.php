@@ -245,7 +245,6 @@ class DeliveryChargeSetupController extends Controller
         $deliveryArea->save();
 
         return redirect()->back()->with('success', 'Delivery charge updated successfully!');
-
     }
 
     /**
@@ -354,8 +353,8 @@ class DeliveryChargeSetupController extends Controller
                     'branch_id' => $collection['branch_id'],
                     'area_name' => $collection['area_name'],
                     'delivery_charge' => $collection['delivery_charge'],
-                    'created_at' => now(),
-                    'updated_at' => now()
+                    'created_at' => now('Africa/Cairo'),
+                    'updated_at' => now('Africa/Cairo')
                 ];
             }
 

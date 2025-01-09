@@ -90,7 +90,7 @@ class OrderController extends Controller
             'guest_id' => auth('api')->user() ? 'nullable' : 'required',
             'is_partial' => 'required|in:0,1',
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
@@ -131,8 +131,8 @@ class OrderController extends Controller
         $preparation_time = Branch::where(['id' => $request['branch_id']])->first()->preparation_time ?? 0;
 
         if ($request['delivery_time'] == 'now') {
-            $deliveryDate = Carbon::now()->format('Y-m-d');
-            $deliveryTime = Carbon::now()->add($preparation_time, 'minute')->format('H:i:s');
+            $deliveryDate = Carbon::now('Africa/Cairo')->format('Y-m-d');
+            $deliveryTime = Carbon::now('Africa/Cairo')->add($preparation_time, 'minute')->format('H:i:s');
         } else {
             $deliveryDate = $request['delivery_date'];
             $deliveryTime = Carbon::parse($request['delivery_time'])->add($preparation_time, 'minute')->format('H:i:s');
@@ -179,8 +179,8 @@ class OrderController extends Controller
                 'delivery_charge' => $deliveryCharge,
                 'preparation_time' => 0,
                 'is_cutlery_required' => $request['is_cutlery_required'] ?? 0,
-                'created_at' => now(),
-                'updated_at' => now()
+                'created_at' => now('Africa/Cairo'),
+                'updated_at' => now('Africa/Cairo')
             ];
             $totalTaxAmount = 0;
 
@@ -269,8 +269,8 @@ class OrderController extends Controller
                     'add_on_prices' => json_encode($add_on_prices),
                     'add_on_taxes' => json_encode($add_on_taxes),
                     'add_on_tax_amount' => $total_addon_tax,
-                    'created_at' => now(),
-                    'updated_at' => now()
+                    'created_at' => now('Africa/Cairo'),
+                    'updated_at' => now('Africa/Cairo')
                 ];
 
                 $totalTaxAmount += $or_d['tax_amount'] * $c['quantity'];

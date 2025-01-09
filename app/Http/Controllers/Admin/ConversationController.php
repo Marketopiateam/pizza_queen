@@ -18,8 +18,7 @@ class ConversationController extends Controller
         private User         $user,
         private Admin        $admin,
         private Conversation $conversation
-    )
-    {}
+    ) {}
 
     /**
      * @return Renderable
@@ -74,8 +73,8 @@ class ConversationController extends Controller
             'image' => json_encode($images),
             'checked' => 1,
             'is_reply' => true,
-            'created_at' => now(),
-            'updated_at' => now()
+            'created_at' => now('Africa/Cairo'),
+            'updated_at' => now('Africa/Cairo')
         ]);
 
         $convs = $this->conversation->where(['user_id' => $user_id])->get();

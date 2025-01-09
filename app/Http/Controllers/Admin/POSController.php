@@ -465,12 +465,12 @@ class POSController extends Controller
         $order->transaction_reference = $request->transaction_reference ?? null;
         $order->delivery_charge = $delivery_charge;
         $order->delivery_address_id = $order_type == 'home_delivery' ? $customer_address->id : null;
-        $order->delivery_date = Carbon::now()->format('Y-m-d');
-        $order->delivery_time = Carbon::now()->format('H:i:s');
+        $order->delivery_date = Carbon::now('Africa/Cairo')->format('Y-m-d');
+        $order->delivery_time = Carbon::now('Africa/Cairo')->format('H:i:s');
         $order->order_note = null;
         $order->checked = 1;
-        $order->created_at = now();
-        $order->updated_at = now();
+        $order->created_at = now('Africa/Cairo');
+        $order->updated_at = now('Africa/Cairo');
 
         $total_product_main_price = 0;
 
@@ -529,8 +529,8 @@ class POSController extends Controller
                         'add_on_prices' => json_encode($c['add_on_prices']),
                         'add_on_taxes' => json_encode($c['add_on_tax']),
                         'add_on_tax_amount' => $c['addon_total_tax'],
-                        'created_at' => now(),
-                        'updated_at' => now()
+                        'created_at' => now('Africa/Cairo'),
+                        'updated_at' => now('Africa/Cairo')
                     ];
                     $total_tax_amount += $or_d['tax_amount'] * $c['quantity'];
                     $total_addon_price += $addon_data['total_add_on_price'];

@@ -33,9 +33,7 @@ class CustomerController extends Controller
         private Newsletter       $newsletter,
         private Conversation     $conversation,
         private BusinessSetting  $businessSetting
-    )
-    {
-    }
+    ) {}
 
     /**
      * @param Request $request
@@ -58,8 +56,8 @@ class CustomerController extends Controller
             $loyaltyPointTransaction->amount = $CurrentAmount;
             $loyaltyPointTransaction->credit = $credit;
             $loyaltyPointTransaction->debit = $debit;
-            $loyaltyPointTransaction->created_at = now();
-            $loyaltyPointTransaction->updated_at = now();
+            $loyaltyPointTransaction->created_at = now('Africa/Cairo');
+            $loyaltyPointTransaction->updated_at = now('Africa/Cairo');
             $loyaltyPointTransaction->save();
 
             $user->point = $CurrentAmount;
@@ -163,14 +161,13 @@ class CustomerController extends Controller
             'description' => 'admin Added point',
             'type' => 'point_in',
             'amount' => $request['point'],
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => now('Africa/Cairo'),
+            'updated_at' => now('Africa/Cairo'),
 
         ]);
 
         Toastr::success(translate('Point Added Successfully !'));
         return back();
-
     }
 
     /**
@@ -326,7 +323,6 @@ class CustomerController extends Controller
         } catch (\Exception $exception) {
             return false;
         }
-
     }
 
     /**
@@ -369,7 +365,6 @@ class CustomerController extends Controller
         try {
             $this->customer->findOrFail($request['id'])->delete();
             Toastr::success(translate('user_deleted_successfully!'));
-
         } catch (\Exception $e) {
             Toastr::error(translate('user_not_found!'));
         }
@@ -446,5 +441,4 @@ class CustomerController extends Controller
         Toastr::success(translate('customer_settings_updated_successfully'));
         return back();
     }
-
 }

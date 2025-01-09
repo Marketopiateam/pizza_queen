@@ -37,7 +37,7 @@ class OrderController extends Controller
         private BusinessSetting $business_setting,
         private CustomerAddress $customer_addresses,
         private OrderArea $orderArea,
-    ){}
+    ) {}
 
     /**
      * @param $status
@@ -57,17 +57,15 @@ class OrderController extends Controller
             $orders = $this->order
                 ->with(['customer'])
                 ->where(['branch_id' => auth('branch')->id()]);
-
         } elseif ($status == 'schedule') {
             $orders = $this->order
-                ->whereDate('delivery_date', '>', \Carbon\Carbon::now()->format('Y-m-d'))
+                ->whereDate('delivery_date', '>', \Carbon\Carbon::now('Africa/Cairo')->format('Y-m-d'))
                 ->where(['branch_id' => auth('branch')->id()]);
-
         } else {
             $orders = $this->order
                 ->with(['customer'])
                 ->where(['order_status' => $status, 'branch_id' => auth('branch')->id()])
-                ->whereDate('delivery_date', '<=', \Carbon\Carbon::now()->format('Y-m-d'));
+                ->whereDate('delivery_date', '<=', \Carbon\Carbon::now('Africa/Cairo')->format('Y-m-d'));
         }
 
         $queryParam = [];
@@ -77,7 +75,7 @@ class OrderController extends Controller
             $key = explode(' ', $request['search']);
             $orders = $this->order
                 ->where(['branch_id' => auth('branch')->id()])
-                ->whereDate('delivery_date', '<=', Carbon::now()->format('Y-m-d'))
+                ->whereDate('delivery_date', '<=', Carbon::now('Africa/Cairo')->format('Y-m-d'))
                 ->where(function ($q) use ($key) {
                     foreach ($key as $value) {
                         $q->orWhere('id', 'like', "%{$value}%")
@@ -172,7 +170,7 @@ class OrderController extends Controller
     public function details($id): Renderable|RedirectResponse
     {
         $order = $this->order
-            ->with(['details','order_partial_payments'])
+            ->with(['details', 'order_partial_payments'])
             ->where(['id' => $id, 'branch_id' => auth('branch')->id()])
             ->first();
 
@@ -201,7 +199,7 @@ class OrderController extends Controller
             ->first();
 
         if (in_array($order->order_status, ['delivered', 'failed'])) {
-            Toastr::warning(translate('you_can_not_change_the_status_of '. $order->order_status .' order'));
+            Toastr::warning(translate('you_can_not_change_the_status_of ' . $order->order_status . ' order'));
             return back();
         }
 
@@ -221,7 +219,7 @@ class OrderController extends Controller
         }
 
         if ($request->order_status == 'delivered') {
-            if ($order->is_guest == 0){
+            if ($order->is_guest == 0) {
                 if ($order->user_id) CustomerLogic::create_loyalty_point_transaction($order->user_id, $order->id, $order->order_amount, 'order_place');
 
                 if ($order->transaction == null) {
@@ -229,7 +227,7 @@ class OrderController extends Controller
                 }
 
                 $user = $this->user->find($order->user_id);
-                if(isset($user)){
+                if (isset($user)) {
                     $isFirstOrder = $this->order->where(['user_id' => $user->id, 'order_status' => 'delivered'])->count('id');
                     $referredByUser = $this->user->find($user->refer_by);
 
@@ -241,9 +239,9 @@ class OrderController extends Controller
                 }
             }
 
-            if ($order['payment_method'] == 'cash_on_delivery'){
+            if ($order['payment_method'] == 'cash_on_delivery') {
                 $partialData = OrderPartialPayment::where(['order_id' => $order->id])->first();
-                if ($partialData){
+                if ($partialData) {
                     $partial = new OrderPartialPayment;
                     $partial->order_id = $order['id'];
                     $partial->paid_with = 'cash_on_delivery';
@@ -262,28 +260,28 @@ class OrderController extends Controller
 
         $message = Helpers::order_status_update_message($request->order_status);
         $restaurantName = Helpers::get_business_settings('restaurant_name');
-        $deliverymanName = $order->delivery_man ? $order->delivery_man->f_name. ' '. $order->delivery_man->l_name : '';
-        $customerName = $order->is_guest == 0 ? ($order->customer ? $order->customer->f_name. ' '. $order->customer->l_name : '') : 'Guest User';
+        $deliverymanName = $order->delivery_man ? $order->delivery_man->f_name . ' ' . $order->delivery_man->l_name : '';
+        $customerName = $order->is_guest == 0 ? ($order->customer ? $order->customer->f_name . ' ' . $order->customer->l_name : '') : 'Guest User';
         $local = $order->is_guest == 0 ? ($order->customer ? $order->customer->language_code : 'en') : 'en';
 
-        if ($local != 'en'){
+        if ($local != 'en') {
             $statusKey = Helpers::order_status_message_key($request->order_status);
             $translatedMessage = $this->business_setting->with('translations')->where(['key' => $statusKey])->first();
-            if (isset($translatedMessage->translations)){
-                foreach ($translatedMessage->translations as $translation){
-                    if ($local == $translation->locale){
+            if (isset($translatedMessage->translations)) {
+                foreach ($translatedMessage->translations as $translation) {
+                    if ($local == $translation->locale) {
                         $message = $translation->value;
                     }
                 }
             }
         }
 
-        $value = Helpers::text_variable_data_format(value:$message, user_name: $customerName, restaurant_name: $restaurantName, delivery_man_name: $deliverymanName, order_id: $order->id);
+        $value = Helpers::text_variable_data_format(value: $message, user_name: $customerName, restaurant_name: $restaurantName, delivery_man_name: $deliverymanName, order_id: $order->id);
 
         $customerFcmToken = null;
-        if($order->is_guest == 0){
+        if ($order->is_guest == 0) {
             $customerFcmToken = $order->customer ? $order->customer->cm_firebase_token : null;
-        }elseif($order->is_guest == 1){
+        } elseif ($order->is_guest == 1) {
             $customerFcmToken = $order->guest ? $order->guest->fcm_token : null;
         }
 
@@ -300,7 +298,6 @@ class OrderController extends Controller
                     Helpers::send_push_notif_to_device($customerFcmToken, $data);
                 }
             }
-
         } catch (\Exception $e) {
             Toastr::warning(translate('Push notification failed for Customer!'));
         }
@@ -326,7 +323,6 @@ class OrderController extends Controller
                     if (isset($deliverymanFcmToken)) {
                         Helpers::send_push_notif_to_device(fcm_token: $deliverymanFcmToken, data: $data);
                     }
-
                 }
             } catch (\Exception $e) {
                 Toastr::warning(translate('Push notification failed for DeliveryMan!'));
@@ -345,7 +341,6 @@ class OrderController extends Controller
 
             try {
                 Helpers::send_push_notif_to_topic(data: $data, topic: "kitchen-{$order->branch_id}", type: 'general', isNotificationPayloadRemove: true);
-
             } catch (\Exception $e) {
                 Toastr::warning(translate('Push notification failed!'));
             }
@@ -389,7 +384,7 @@ class OrderController extends Controller
             $order->preparation_time = 0;
         }
 
-        $newDeliveryDateTime = Carbon::now()->addMinutes($request->extra_minute);
+        $newDeliveryDateTime = Carbon::now('Africa/Cairo')->addMinutes($request->extra_minute);
         $order->delivery_date = $newDeliveryDateTime->format('Y-m-d');
         $order->delivery_time = $newDeliveryDateTime->format('H:i:s');
         $order->save();
@@ -412,7 +407,6 @@ class OrderController extends Controller
             } else {
                 throw new \Exception(translate('failed'));
             }
-
         } catch (\Exception $e) {
             Toastr::warning(translate('Push notification send failed for Customer!'));
         }
@@ -505,8 +499,8 @@ class OrderController extends Controller
             'address' => $request->address,
             'longitude' => $request->longitude,
             'latitude' => $request->latitude,
-            'created_at' => now(),
-            'updated_at' => now()
+            'created_at' => now('Africa/Cairo'),
+            'updated_at' => now('Africa/Cairo')
         ]);
 
         Toastr::success(translate('Address updated!'));
@@ -577,7 +571,6 @@ class OrderController extends Controller
         $order->save();
 
         return response()->json(['status' => true]);
-
     }
 
     /**
@@ -597,7 +590,7 @@ class OrderController extends Controller
 
         $orders = $this->order->with(['offline_payment'])
             ->where(['branch_id' => auth('branch')->id(), 'payment_method' => 'offline_payment'])
-            ->whereHas('offline_payment', function ($query) use($status){
+            ->whereHas('offline_payment', function ($query) use ($status) {
                 $query->where('status', $status);
             })
             ->when($request->has('search'), function ($query) use ($request) {
@@ -637,18 +630,18 @@ class OrderController extends Controller
     public function verifyOfflinePayment($order_id, $status): JsonResponse
     {
         $offlineData = OfflinePayment::where(['order_id' => $order_id])->first();
-        if (!isset($offlineData)){
+        if (!isset($offlineData)) {
             return response()->json(['status' => false], 200);
         }
         $offlineData->status = $status;
         $offlineData->save();
 
         $order = Order::find($order_id);
-        if (!isset($order)){
+        if (!isset($order)) {
             return response()->json(['status' => false], 200);
         }
 
-        if ($offlineData->status == 1){
+        if ($offlineData->status == 1) {
             $order->order_status = 'confirmed';
             $order->payment_status = 'paid';
             $order->save();
@@ -656,27 +649,27 @@ class OrderController extends Controller
             $message = Helpers::order_status_update_message('confirmed');
             $local = $order->is_guest == 0 ? ($order->customer ? $order->customer->language_code : 'en') : 'en';;
 
-            if ($local != 'en'){
+            if ($local != 'en') {
                 $statusKey = Helpers::order_status_message_key('confirmed');
                 $translatedMessage = $this->business_setting->with('translations')->where(['key' => $statusKey])->first();
-                if (isset($translatedMessage->translations)){
-                    foreach ($translatedMessage->translations as $translation){
-                        if ($local == $translation->locale){
+                if (isset($translatedMessage->translations)) {
+                    foreach ($translatedMessage->translations as $translation) {
+                        if ($local == $translation->locale) {
                             $message = $translation->value;
                         }
                     }
                 }
             }
             $restaurantName = Helpers::get_business_settings('restaurant_name');
-            $deliverymanName = $order->delivery_man ? $order->delivery_man->f_name. ' '. $order->delivery_man->l_name : '';
-            $customerName = $order->is_guest == 0 ? ($order->customer ? $order->customer->f_name. ' '. $order->customer->l_name : '') : '';
+            $deliverymanName = $order->delivery_man ? $order->delivery_man->f_name . ' ' . $order->delivery_man->l_name : '';
+            $customerName = $order->is_guest == 0 ? ($order->customer ? $order->customer->f_name . ' ' . $order->customer->l_name : '') : '';
 
-            $value = Helpers::text_variable_data_format(value:$message, user_name: $customerName, restaurant_name: $restaurantName, delivery_man_name: $deliverymanName, order_id: $order->id);
+            $value = Helpers::text_variable_data_format(value: $message, user_name: $customerName, restaurant_name: $restaurantName, delivery_man_name: $deliverymanName, order_id: $order->id);
 
             $customerFcmToken = null;
-            if($order->is_guest == 0){
+            if ($order->is_guest == 0) {
                 $customerFcmToken = $order->customer ? $order->customer->cm_firebase_token : null;
-            }elseif($order->is_guest == 1){
+            } elseif ($order->is_guest == 1) {
                 $customerFcmToken = $order->guest ? $order->guest->fcm_token : null;
             }
 
@@ -694,12 +687,11 @@ class OrderController extends Controller
             } catch (\Exception $e) {
                 //
             }
-
-        }elseif ($offlineData->status == 2){
+        } elseif ($offlineData->status == 2) {
             $customerFcmToken = null;
-            if($order->is_guest == 0){
+            if ($order->is_guest == 0) {
                 $customerFcmToken = $order->customer ? $order->customer->cm_firebase_token : null;
-            }elseif($order->is_guest == 1){
+            } elseif ($order->is_guest == 1) {
                 $customerFcmToken = $order->guest ? $order->guest->fcm_token : null;
             }
             if ($customerFcmToken != null) {
@@ -715,7 +707,6 @@ class OrderController extends Controller
                 } catch (\Exception $e) {
                 }
             }
-
         }
         return response()->json(['status' => true], 200);
     }
@@ -727,7 +718,7 @@ class OrderController extends Controller
         ]);
 
         $order = $this->order->find($order_id);
-        if (!$order){
+        if (!$order) {
             Toastr::warning(translate('order not found'));
             return back();
         }
@@ -747,7 +738,7 @@ class OrderController extends Controller
         }
 
         $area = DeliveryChargeByArea::where(['id' => $request['selected_area_id'], 'branch_id' => $order->branch_id])->first();
-        if (!$area){
+        if (!$area) {
             Toastr::warning(translate('Area not found'));
             return back();
         }
@@ -760,9 +751,9 @@ class OrderController extends Controller
         $orderArea->save();
 
         $customerFcmToken = null;
-        if($order->is_guest == 0){
+        if ($order->is_guest == 0) {
             $customerFcmToken = $order->customer ? $order->customer->cm_firebase_token : null;
-        }elseif($order->is_guest == 1){
+        } elseif ($order->is_guest == 1) {
             $customerFcmToken = $order->guest ? $order->guest->fcm_token : null;
         }
 

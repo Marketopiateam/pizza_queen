@@ -118,26 +118,14 @@ class Helpers
         $variation_price = 0;
 
         foreach ($variations as $k => $variation) {
-            foreach ($product_variations as $product_variation) {
-                if (isset($variation['values']) && isset($product_variation['values']) && $product_variation['name'] === $variation['name']) {
+            foreach ($product_variations as  $product_variation) {
+                if (isset($variation['values']) && isset($product_variation['values']) && $product_variation['name'] == $variation['name']) {
                     $result[$k] = $product_variation;
-                    $result[$k]['values'] = []; // Initialize as an array to hold ['label', 'qty']
-
+                    $result[$k]['values'] = [];
                     foreach ($product_variation['values'] as $key => $option) {
                         if (in_array($option['label'], $variation['values']['label'])) {
-                            // Match the label's index to fetch the corresponding qty
-                            $labelIndex = array_search($option['label'], $variation['values']['label']);
-                            $qty = $variation['values']['qty'][$labelIndex] ?? 1;
-                            $optionalPrice = $option['optionPrice'] ?? 0;
-                            // Calculate the price based on qty and optionPrice
-                            $priceperOneVareiant = $optionalPrice * $qty;
-                            // Add the structured ['label', 'qty'] pair
-                            $result[$k]['values'][] = [
-                                'label'       => $option['label'],
-                                'optionPrice' => $priceperOneVareiant,
-                                'qty'         => $qty,
-                            ];
-                            $variation_price += $optionalPrice * $qty;
+                            $result[$k]['values'][] = $option;
+                            $variation_price += $option['optionPrice'];
                         }
                     }
                 }
