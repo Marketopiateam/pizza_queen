@@ -25,7 +25,7 @@
                                         <i class="tio-shop"></i>
                                         {{translate('branch')}} :
                                         <label class="badge-soft-info px-2 rounded">
-                                            {{$order->branch?$order->branch->name:'Branch deleted!'}}
+                                            {{$order->branch ? $order->branch->name : 'Branch deleted!'}}
                                         </label>
                                     </h5>
 
@@ -35,7 +35,7 @@
                                                 <h5 class="text-capitalize">
                                                     <i class="tio-table"></i>
                                                     {{translate('table no')}} : <label
-                                                        class="badge badge-secondary">{{$order->table?$order->table->number:'Table deleted!'}}</label>
+                                                        class="badge badge-secondary">{{$order->table ? $order->table->number : 'Table deleted!'}}</label>
                                                 </h5>
                                             </div>
                                             @if($order['number_of_people'] != null)
@@ -50,7 +50,7 @@
                                         @endif
                                     </div>
                                     <div class="">
-                                        {{translate('Order_Date_&_Time')}}: <i class="tio-date-range"></i>{{date('d M Y',strtotime($order['created_at']))}} {{ date(config('time_format'), strtotime($order['created_at'])) }}
+                                        {{translate('Order_Date_&_Time')}}: <i class="tio-date-range"></i>{{date('d M Y', strtotime($order['created_at']))}} {{ date(config('time_format'), strtotime($order['created_at'])) }}
                                     </div>
                                 </div>
 
@@ -62,14 +62,14 @@
                             <div class="col-sm-6">
                                 <div class="text-sm-right">
                                     <div class="d-flex flex-wrap gap-2 justify-content-sm-end">
-                                        @if($order['order_type']!='take_away' && $order['order_type'] != 'pos' && $order['order_type'] != 'dine_in')
+                                        @if($order['order_type'] != 'take_away' && $order['order_type'] != 'pos' && $order['order_type'] != 'dine_in')
 
                                             @php($googleMapStatus = \App\CentralLogics\Helpers::get_business_settings('google_map_status'))
                                             @if($googleMapStatus)
                                                 <div class="hs-unfold ml-1">
-                                                    @if($order['order_status']=='out_for_delivery')
-                                                        @php($origin=\App\Model\DeliveryHistory::where(['deliveryman_id'=>$order['delivery_man_id'],'order_id'=>$order['id']])->first())
-                                                        @php($current=\App\Model\DeliveryHistory::where(['deliveryman_id'=>$order['delivery_man_id'],'order_id'=>$order['id']])->latest()->first())
+                                                    @if($order['order_status'] == 'out_for_delivery')
+                                                        @php($origin = \App\Model\DeliveryHistory::where(['deliveryman_id' => $order['delivery_man_id'], 'order_id' => $order['id']])->first())
+                                                        @php($current = \App\Model\DeliveryHistory::where(['deliveryman_id' => $order['delivery_man_id'], 'order_id' => $order['id']])->latest()->first())
                                                         @if(isset($origin))
                                                             <a class="btn btn-outline-primary" target="_blank"
                                                                title="{{translate('Delivery Man Last Location')}}" data-toggle="tooltip" data-placement="top"
@@ -93,38 +93,38 @@
                                             @endif
 
                                         @endif
-                                        <a class="btn btn-info" href={{route('admin.orders.generate-invoice',[$order['id']])}}>
+                                        <a class="btn btn-info" href={{route('admin.orders.generate-invoice', [$order['id']])}}>
                                             <i class="tio-print"></i> {{translate('Print_Invoice')}}
                                         </a>
                                     </div>
 
                                     <div class="d-flex gap-3 justify-content-sm-end my-3">
                                         <div class="text-dark font-weight-semibold">{{translate('Status')}} :</div>
-                                        @if($order['order_status']=='pending')
+                                        @if($order['order_status'] == 'pending')
                                             <span class="badge-soft-info px-2 rounded text-capitalize">{{translate('pending')}}</span>
-                                        @elseif($order['order_status']=='confirmed')
+                                        @elseif($order['order_status'] == 'confirmed')
                                             <span class="badge-soft-info px-2 rounded text-capitalize">{{translate('confirmed')}}</span>
-                                        @elseif($order['order_status']=='processing')
+                                        @elseif($order['order_status'] == 'processing')
                                             <span class="badge-soft-warning px-2 rounded text-capitalize">{{translate('processing')}}</span>
-                                        @elseif($order['order_status']=='out_for_delivery')
+                                        @elseif($order['order_status'] == 'out_for_delivery')
                                             <span class="badge-soft-warning px-2 rounded text-capitalize">{{translate('out_for_delivery')}}</span>
-                                        @elseif($order['order_status']=='delivered')
+                                        @elseif($order['order_status'] == 'delivered')
                                             <span class="badge-soft-success px-2 rounded text-capitalize">{{translate('delivered')}}</span>
-                                        @elseif($order['order_status']=='failed')
+                                        @elseif($order['order_status'] == 'failed')
                                             <span class="badge-soft-danger px-2 rounded text-capitalize">{{translate('failed_to_deliver')}}</span>
                                         @else
-                                            <span class="badge-soft-danger px-2 rounded text-capitalize">{{str_replace('_',' ',$order['order_status'])}}</span>
+                                            <span class="badge-soft-danger px-2 rounded text-capitalize">{{str_replace('_', ' ', $order['order_status'])}}</span>
                                         @endif
                                     </div>
 
 
                                     <div class="text-capitalize d-flex gap-3 justify-content-sm-end mb-3">
                                         <span>{{translate('payment')}} {{translate('method')}} :</span>
-                                        <span class="text-dark">{{str_replace('_',' ',$order['payment_method'])}}</span>
+                                        <span class="text-dark">{{str_replace('_', ' ', $order['payment_method'])}}</span>
                                     </div>
 
                                     @if(!in_array($order['payment_method'], ['cash_on_delivery', 'wallet_payment', 'offline_payment']))
-                                        @if($order['transaction_reference']==null && $order['order_type']!='pos' && $order['order_type'] != 'dine_in')
+                                        @if($order['transaction_reference'] == null && $order['order_type'] != 'pos' && $order['order_type'] != 'dine_in')
                                             <div class="d-flex gap-3 justify-content-sm-end align-items-center mb-3">
                                                 {{translate('reference')}} {{translate('code')}} :
                                                 <button class="btn btn-outline-primary px-3 py-1" data-toggle="modal"
@@ -132,7 +132,7 @@
                                                     {{translate('add')}}
                                                 </button>
                                             </div>
-                                        @elseif($order['order_type']!='pos' && $order['order_type'] != 'dine_in')
+                                        @elseif($order['order_type'] != 'pos' && $order['order_type'] != 'dine_in')
                                             <div class="d-flex gap-3 justify-content-sm-end align-items-center mb-3">
                                                 {{translate('reference')}} {{translate('code')}}
                                                 : {{$order['transaction_reference']}}
@@ -143,9 +143,9 @@
 
                                     <div class="d-flex gap-3 justify-content-sm-end mb-3">
                                         <div>{{translate('Payment_Status')}} :</div>
-                                        @if($order['payment_status']=='paid')
+                                        @if($order['payment_status'] == 'paid')
                                             <span class="badge-soft-success px-2 rounded text-capitalize">{{translate('paid')}}</span>
-                                        @elseif($order['payment_status']=='partial_paid')
+                                        @elseif($order['payment_status'] == 'partial_paid')
                                             <span class="badge-soft-success px-2 rounded text-capitalize">{{translate('partial_paid')}}</span>
                                         @else
                                             <span class="badge-soft-danger px-2 rounded text-capitalize">{{translate('unpaid')}}</span>
@@ -155,7 +155,7 @@
                                     <div class="d-flex gap-3 justify-content-sm-end mb-3 text-capitalize">
                                         {{translate('order')}} {{translate('type')}}
                                         : <label class="badge-soft-info px-2 rounded">
-                                            {{str_replace('_',' ',$order['order_type'])}}
+                                            {{str_replace('_', ' ', $order['order_type'])}}
                                         </label>
                                     </div>
                                 </div>
@@ -169,6 +169,9 @@
                             <tr>
                                 <th>{{translate('SL')}}</th>
                                 <th>{{translate('Item Details')}}</th>
+                               @if (isset($order->details[0]->free_product))
+                                    <th>{{translate('Free Products')}}</th>
+                               @endif
                                 <th>{{translate('Price')}}</th>
                                 <th>{{translate('Discount')}}</th>
                                 <th>{{translate('Tax')}}</th>
@@ -179,18 +182,18 @@
                             <tbody>
                             <tr>
                             </tr>
-                            @php($subTotal=0)
-                            @php($totalTax=0)
-                            @php($totalDisOnPro=0)
-                            @php($addOnsCost=0)
-                            @php($addOnTax=0)
-                            @php($addOnsTaxCost=0)
+                            @php($subTotal = 0)
+                            @php($totalTax = 0)
+                            @php($totalDisOnPro = 0)
+                            @php($addOnsCost = 0)
+                            @php($addOnTax = 0)
+                            @php($addOnsTaxCost = 0)
                             @foreach($order->details as $detail)
                                 @php($productDetails = json_decode($detail['product_details'], true))
-                                @php($addOnQtys=json_decode($detail['add_on_qtys'],true))
-                                @php($addOnPrices=json_decode($detail['add_on_prices'],true))
-                                @php($addOnTaxes=json_decode($detail['add_on_taxes'],true))
-
+                                @php($addOnQtys = json_decode($detail['add_on_qtys'], true))
+                                @php($addOnPrices = json_decode($detail['add_on_prices'], true))
+                                @php($addOnTaxes = json_decode($detail['add_on_taxes'], true))
+                                @php($free_product = json_decode($detail->free_product, true))
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
@@ -204,8 +207,8 @@
                                                 <h6 class="text-capitalize">{{$productDetails['name']}}</h6>
                                                 <div class="d-flex gap-2">
                                                     @if (isset($detail['variation']))
-                                                        @foreach(json_decode($detail['variation'],true) as  $variation)
-                                                            @if (isset($variation['name'])  && isset($variation['values']))
+                                                        @foreach(json_decode($detail['variation'], true) as $variation)
+                                                            @if (isset($variation['name']) && isset($variation['values']))
                                                                 <span class="d-block text-capitalize">
                                                                 <strong>{{  $variation['name']}} -</strong>
                                                             </span>
@@ -213,13 +216,13 @@
 
                                                                     <span class="d-block text-capitalize">
                                                                      {{ $value['label']}} :
-                                                                    <strong>{{Helpers::set_symbol( $value['optionPrice'])}}</strong>
+                                                                    <strong>{{Helpers::set_symbol($value['optionPrice'])}}</strong>
                                                                 </span>
                                                                 @endforeach
                                                             @else
-                                                                @if (isset(json_decode($detail['variation'],true)[0]))
+                                                                @if (isset(json_decode($detail['variation'], true)[0]))
                                                                     <strong><u> {{  translate('Variation') }} : </u></strong>
-                                                                    @foreach(json_decode($detail['variation'],true)[0] as $key1 =>$variation)
+                                                                    @foreach(json_decode($detail['variation'], true)[0] as $key1 => $variation)
                                                                         <div class="font-size-sm text-body">
                                                                             <span>{{$key1}} :  </span>
                                                                             <span class="font-weight-bold">{{$variation}}</span>
@@ -240,13 +243,13 @@
                                                     </div>
 
                                                     <br>
-                                                    @php($addon_ids = json_decode($detail['add_on_ids'],true))
+                                                    @php($addon_ids = json_decode($detail['add_on_ids'], true))
                                                     @if ($addon_ids)
                                                     <span>
                                                         <u><strong>{{translate('addons')}}</strong></u>
-                                                        @foreach($addon_ids as $key2 =>$id)
-                                                            @php($addon=\App\Model\AddOn::find($id))
-                                                            @php($addOnQtys==null? $add_on_qty=1 : $add_on_qty=$addOnQtys[$key2])
+                                                        @foreach($addon_ids as $key2 => $id)
+                                                            @php($addon = \App\Model\AddOn::find($id))
+                                                            @php($addOnQtys == null ? $add_on_qty = 1 : $add_on_qty = $addOnQtys[$key2])
 
                                                             <div class="font-size-sm text-body">
                                                                     <span>{{$addon ? $addon['name'] : translate('addon deleted')}} :  </span>
@@ -254,8 +257,8 @@
                                                                         {{$add_on_qty}} x {{ Helpers::set_symbol($addOnPrices[$key2]) }} <br>
                                                                     </span>
                                                                 </div>
-                                                            @php($addOnsCost+=$addOnPrices[$key2] * $add_on_qty)
-                                                            @php($addOnsTaxCost +=  $addOnTaxes[$key2] * $add_on_qty)
+                                                            @php($addOnsCost += $addOnPrices[$key2] * $add_on_qty)
+                                                            @php($addOnsTaxCost += $addOnTaxes[$key2] * $add_on_qty)
                                                         @endforeach
                                                     </span>
                                                     @endif
@@ -263,19 +266,39 @@
                                             </div>
                                         </div>
                                     </td>
+                                    @if($free_product)
+                                        <td>
+                                            <div class="media gap-3 w-max-content">
+
+                                                <img class="img-fluid avatar avatar-lg"
+                                                    src="{{ $free_product['image'] ? asset('storage/app/public/product/' . $free_product['image']) : asset('public/assets/admin/img/160x160/img2.jpg') }}"
+                                                    alt="Image Description">
+                                                <div class="media-body text-dark fz-12">
+                                                    <h6 class="text-capitalize">{{$free_product['name']}}</h6>
+                                                    <div class="d-flex gap-2">
+                                                        <div class="d-flex gap-2">
+                                                            <span class="">{{translate('Qty')}} : </span>
+                                                            <span>{{$free_product['qty']}}</span>
+                                                        </div>
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    @endif
                                     <td>
-                                        @php($amount=$detail['price']*$detail['quantity'])
+                                        @php($amount = $detail['price'] * $detail['quantity'])
                                         {{Helpers::set_symbol($amount)}}
                                     </td>
                                     <td>
-                                        @php($totDiscount = $detail['discount_on_product']*$detail['quantity'])
+                                        @php($totDiscount = $detail['discount_on_product'] * $detail['quantity'])
                                         {{Helpers::set_symbol($totDiscount)}}
                                     </td>
                                     <td>
-                                        @php($productTax = $detail['tax_amount']*$detail['quantity'])
+                                        @php($productTax = $detail['tax_amount'] * $detail['quantity'])
                                         {{Helpers::set_symbol($productTax + $addOnsTaxCost)}}
                                     </td>
-                                    <td class="text-right">{{Helpers::set_symbol($amount-$totDiscount + $productTax)}}</td>
+                                    <td class="text-right">{{Helpers::set_symbol($amount - $totDiscount + $productTax)}}</td>
                                 </tr>
                                 @php($totalDisOnPro += $totDiscount)
                                 @php($subTotal += $amount)
@@ -334,7 +357,7 @@
                                         </div>
                                     </dt>
                                     <dd class="col-6 text-dark text-right">
-                                        {{ Helpers::set_symbol($subTotal =$subTotal+$totalTax+$addOnsCost-$totalDisOnPro + $addOnsTaxCost) }}</dd>
+                                        {{ Helpers::set_symbol($subTotal = $subTotal + $totalTax + $addOnsCost - $totalDisOnPro + $addOnsTaxCost) }}</dd>
 
                                     <dt class="col-6">
 
@@ -362,10 +385,10 @@
                                         </div>
                                     </dt>
                                     <dd class="col-6 text-dark text-right">
-                                        @if($order['order_type']=='take_away')
-                                            @php($del_c=0)
+                                        @if($order['order_type'] == 'take_away')
+                                            @php($del_c = 0)
                                         @else
-                                            @php($del_c=$order['delivery_charge'])
+                                            @php($del_c = $order['delivery_charge'])
                                         @endif
                                         {{ Helpers::set_symbol($del_c) }}
                                     </dd>
@@ -383,7 +406,7 @@
                                             <dt class="col-6">
                                                 <div class="d-flex max-w220 ml-auto">
                                             <span>
-                                                {{translate('Paid By')}} ({{str_replace('_', ' ',$partial->paid_with)}})</span>
+                                                {{translate('Paid By')}} ({{str_replace('_', ' ', $partial->paid_with)}})</span>
                                                     <span>:</span>
                                                 </div>
                                             </dt>
@@ -392,8 +415,8 @@
                                             </dd>
                                         @endforeach
                                             <?php
-                                                $due_amount = 0;
-                                                $due_amount = $order->order_partial_payments->first()?->due_amount;
+    $due_amount = 0;
+    $due_amount = $order->order_partial_payments->first()?->due_amount;
                                             ?>
                                             <dt class="col-6">
                                                 <div class="d-flex max-w220 ml-auto">
@@ -466,10 +489,10 @@
                                                     <a class="dropdown-item offline-payment-order-alert"
                                                        href="javascript:">{{translate('delivered')}}</a>
                                                     <a class="dropdown-item route-alert"
-                                                       data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'returned'])}}" data-message="{{ translate("Change status to returned ?") }}"
+                                                       data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'returned'])}}" data-message="{{ translate("Change status to returned ?") }}"
                                                        href="javascript:">{{translate('returned')}}</a>
                                                     <a class="dropdown-item route-alert"
-                                                       data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'failed'])}}" data-message="{{ translate("Change status to failed ?") }}"
+                                                       data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'failed'])}}" data-message="{{ translate("Change status to failed ?") }}"
                                                        href="javascript:">{{translate('failed')}}</a>
                                                 @endif
 
@@ -480,51 +503,51 @@
                                                        href="javascript:">{{translate('completed')}}</a>
                                                 @endif
                                                 <a class="dropdown-item route-alert"
-                                                   data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'canceled'])}}" data-message="{{ translate("Change status to canceled ?") }}"
+                                                   data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'canceled'])}}" data-message="{{ translate("Change status to canceled ?") }}"
                                                    href="javascript:">{{translate('canceled')}}</a>
                                             @else
 
                                                 @if($order['order_type'] != 'dine_in')
                                                     <a class="dropdown-item route-alert"
-                                                       data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'pending'])}}" data-message="{{ translate("Change status to pending ?") }}"
+                                                       data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'pending'])}}" data-message="{{ translate("Change status to pending ?") }}"
                                                        href="javascript:">{{translate('pending')}}</a>
                                                 @endif
 
                                                 <a class="dropdown-item route-alert"
-                                                   data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'confirmed'])}}" data-message="{{ translate("Change status to confirmed ?") }}"
+                                                   data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'confirmed'])}}" data-message="{{ translate("Change status to confirmed ?") }}"
                                                    href="javascript:">{{translate('confirmed')}}</a>
 
                                                 @if($order['order_type'] != 'dine_in')
                                                     <a class="dropdown-item route-alert"
-                                                        data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'processing'])}}" data-message="{{ translate("Change status to processing ?") }}"
+                                                        data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'processing'])}}" data-message="{{ translate("Change status to processing ?") }}"
                                                         href="javascript:">{{translate('processing')}}</a>
                                                     <a class="dropdown-item route-alert"
-                                                       data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'out_for_delivery'])}}" data-message="{{ translate("Change status to out for delivery ?") }}"
+                                                       data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'out_for_delivery'])}}" data-message="{{ translate("Change status to out for delivery ?") }}"
                                                        href="javascript:">{{translate('out_for_delivery')}}</a>
                                                     <a class="dropdown-item route-alert"
-                                                       data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'delivered'])}}" data-message="{{ translate("Change status to delivered ?") }}"
+                                                       data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'delivered'])}}" data-message="{{ translate("Change status to delivered ?") }}"
                                                        href="javascript:">{{translate('delivered')}}</a>
 
                                                     <a class="dropdown-item route-alert"
-                                                       data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'returned'])}}" data-message="{{ translate("Change status to returned ?") }}"
+                                                       data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'returned'])}}" data-message="{{ translate("Change status to returned ?") }}"
                                                        href="javascript:">{{translate('returned')}}</a>
 
                                                     <a class="dropdown-item route-alert"
-                                                       data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'failed'])}}" data-message="{{ translate("Change status to failed ?") }}"
+                                                       data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'failed'])}}" data-message="{{ translate("Change status to failed ?") }}"
                                                        href="javascript:">{{translate('failed')}}</a>
                                                 @endif
                                                 @if($order['order_type'] == 'dine_in')
                                                     <a class="dropdown-item route-alert"
-                                                       data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'cooking'])}}" data-message="{{ translate("Change status to cooking ?") }}"
+                                                       data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'cooking'])}}" data-message="{{ translate("Change status to cooking ?") }}"
                                                        href="javascript:">{{translate('cooking')}}</a>
 
                                                     <a class="dropdown-item route-alert"
-                                                       data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'completed'])}}" data-message="{{ translate("Change status to completed ?") }}"
+                                                       data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'completed'])}}" data-message="{{ translate("Change status to completed ?") }}"
                                                        href="javascript:">{{translate('completed')}}</a>
                                                 @endif
 
                                                 <a class="dropdown-item route-alert"
-                                                   data-route="{{route('admin.orders.status',['id'=>$order['id'],'order_status'=>'canceled'])}}" data-message="{{ translate("Change status to canceled ?") }}"
+                                                   data-route="{{route('admin.orders.status', ['id' => $order['id'], 'order_status' => 'canceled'])}}" data-message="{{ translate("Change status to canceled ?") }}"
                                                    href="javascript:">{{translate('canceled')}}</a>
                                             @endif
                                         </div>
@@ -536,15 +559,15 @@
                                         @if($order['payment_method'] == 'offline_payment' && $order->offline_payment?->status != 1)
                                             <label class="switcher payment-status-text">
                                                 <input class="switcher_input offline-payment-status-alert" type="checkbox" name="payment_status" value="1" id="payment_status_switch"
-                                                    {{$order->payment_status == 'paid' ?'checked':''}}>
+                                                    {{$order->payment_status == 'paid' ? 'checked' : ''}}>
                                                 <span class="switcher_control"></span>
                                             </label>
                                         @else
                                             <label class="switcher payment-status-text">
                                                 <input class="switcher_input change-payment-status" type="checkbox" name="payment_status" value="1"
                                                        data-id="{{ $order['id'] }}"
-                                                       data-status="{{ $order->payment_status == 'paid' ?'unpaid':'paid' }}"
-                                                    {{$order->payment_status == 'paid' ?'checked':''}}>
+                                                       data-status="{{ $order->payment_status == 'paid' ? 'unpaid' : 'paid' }}"
+                                                    {{$order->payment_status == 'paid' ? 'checked' : ''}}>
                                                 <span class="switcher_control"></span>
                                             </label>
                                         @endif
@@ -553,14 +576,14 @@
                             @endif
                             @if($order->customer || $order->is_guest == 1)
                                 <div>
-                                    <label class="font-weight-bold text-dark fz-14">{{translate('Delivery_Date_&_Time')}} {{$order['delivery_date'] > \Carbon\Carbon::now()->format('Y-m-d')? translate('(Scheduled)') : ''}}</label>
+                                    <label class="font-weight-bold text-dark fz-14">{{translate('Delivery_Date_&_Time')}} {{$order['delivery_date'] > \Carbon\Carbon::now()->format('Y-m-d') ? translate('(Scheduled)') : ''}}</label>
                                     <div class="d-flex gap-2 flex-wrap flex-xxl-nowrap">
                                         <input name="delivery_date" type="date" class="form-control delivery-date" value="{{$order['delivery_date'] ?? ''}}">
                                         <input name="delivery_time" type="time" class="form-control delivery-time" value="{{$order['delivery_time'] ?? ''}}">
                                     </div>
 
                                 </div>
-                                @if($order['order_type']!='take_away' && $order['order_type'] != 'pos' && $order['order_type'] != 'dine_in' && !$order['delivery_man_id'])
+                                @if($order['order_type'] != 'take_away' && $order['order_type'] != 'pos' && $order['order_type'] != 'dine_in' && !$order['delivery_man_id'])
 
                                     <a href="#" class="btn btn-primary btn-block d-flex gap-1 justify-content-center align-items-center" data-toggle="modal" data-target="#assignDeliveryMan">
                                         <img width="17" src="{{asset('public/assets/admin/img/icons/assain_delivery_man.png')}}" alt="">
@@ -600,7 +623,7 @@
                                                 <img class="avatar avatar-lg rounded-circle" src="{{$order->delivery_man?->imageFullPath }}" alt="Image">
                                             </a>
                                             <div class="media-body d-flex flex-column gap-1">
-                                                <a target="" href="#" class="text-dark"><span>{{$order->delivery_man['f_name'].' '.$order->delivery_man['l_name'] ?? ''}}</span></a>
+                                                <a target="" href="#" class="text-dark"><span>{{$order->delivery_man['f_name'] . ' ' . $order->delivery_man['l_name'] ?? ''}}</span></a>
                                                 <span class="text-dark"> <span>{{$order->delivery_man['orders_count']}}</span> {{translate('Orders')}}</span>
                                                 <span class="text-dark break-all">
                                             <i class="tio-call-talking-quiet mr-2"></i>
@@ -613,17 +636,17 @@
                                             </div>
                                         </div>
                                         <hr class="w-100">
-                                        @if($order['order_status']=='out_for_delivery')
+                                        @if($order['order_status'] == 'out_for_delivery')
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <h5>{{translate('Last_location')}}</h5>
                                             </div>
-                                            @php($origin=\App\Model\DeliveryHistory::where(['deliveryman_id'=>$order['delivery_man_id'],'order_id'=>$order['id']])->first())
-                                            @php($current=\App\Model\DeliveryHistory::where(['deliveryman_id'=>$order['delivery_man_id'],'order_id'=>$order['id']])->latest()->first())
+                                            @php($origin = \App\Model\DeliveryHistory::where(['deliveryman_id' => $order['delivery_man_id'], 'order_id' => $order['id']])->first())
+                                            @php($current = \App\Model\DeliveryHistory::where(['deliveryman_id' => $order['delivery_man_id'], 'order_id' => $order['id']])->latest()->first())
                                             @if(isset($origin))
                                                 <a target="_blank" class="text-dark"
                                                    title="Delivery Boy Last Location" data-toggle="tooltip" data-placement="top"
                                                    href="http://maps.google.com/maps?z=12&t=m&q=loc:{{$current['latitude']}}+{{$current['longitude']}}">
-                                                    <img width="13" src="{{asset('public/assets/admin/img/icons/location.png')}}" alt="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{$current['location']?? ''}}
+                                                    <img width="13" src="{{asset('public/assets/admin/img/icons/location.png')}}" alt="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{$current['location'] ?? ''}}
                                                 </a>
                                             @else
                                                 <a href="javascript:" data-toggle="tooltip" class="text-dark"
@@ -642,7 +665,7 @@
                                 </div>
                             @endif
 
-                            @if($order['order_type']!='take_away' && $order['order_type'] != 'pos' && $order['order_type'] != 'dine_in')
+                            @if($order['order_type'] != 'take_away' && $order['order_type'] != 'pos' && $order['order_type'] != 'dine_in')
                             <div class="card">
                                 <div class="card-body">
                                     <div class="mb-4 d-flex gap-2 justify-content-between">
@@ -656,14 +679,14 @@
                                         </div>
                                     </div>
                                     <div class="delivery--information-single flex-column">
-                                        @php($address=\App\Model\CustomerAddress::find($order['delivery_address_id']))
+                                        @php($address = \App\Model\CustomerAddress::find($order['delivery_address_id']))
                                         <div class="d-flex">
                                             <div class="name">{{ translate('Name') }}</div>
-                                            <div class="info">{{ $address? $address['contact_person_name']: '' }}</div>
+                                            <div class="info">{{ $address ? $address['contact_person_name'] : '' }}</div>
                                         </div>
                                         <div class="d-flex">
                                             <div class="name">{{translate('Contact')}}</div>
-                                            <a href="tel:{{ $address? $address['contact_person_number']: '' }}" class="info">{{ $address? $address['contact_person_number']: '' }}</a>
+                                            <a href="tel:{{ $address ? $address['contact_person_number'] : '' }}" class="info">{{ $address ? $address['contact_person_number'] : '' }}</a>
                                         </div>
                                         <div class="d-flex">
                                             <div class="name">{{translate('floor')}}</div>
@@ -760,11 +783,11 @@
                             @else
                                 @if($order->customer)
                                     <div class="media flex-wrap gap-3">
-                                        <a target="_blank" class="" href="{{route('admin.customer.view',[$order->customer['id']])}}">
+                                        <a target="_blank" class="" href="{{route('admin.customer.view', [$order->customer['id']])}}">
                                             <img class="avatar avatar-lg rounded-circle" src="{{$order->customer?->imageFullPath}}" alt="Image">
                                         </a>
                                         <div class="media-body d-flex flex-column gap-1">
-                                            <a target="_blank" href="{{route('admin.customer.view',[$order->customer['id']])}}" class="text-dark"><strong>{{$order->customer['f_name'].' '.$order->customer['l_name']}}</strong></a>
+                                            <a target="_blank" href="{{route('admin.customer.view', [$order->customer['id']])}}" class="text-dark"><strong>{{$order->customer['f_name'] . ' ' . $order->customer['l_name']}}</strong></a>
                                             <span class="text-dark">{{$order->customer['orders_count']}} {{translate('Orders')}}</span>
                                             <span class="text-dark">
                                             <i class="tio-call-talking-quiet mr-2"></i>
@@ -868,7 +891,7 @@
                                         <img class="img-fit rounded-circle" loading="lazy" decoding="async"
                                          src="{{$deliveryMan->imageFullPath}}" alt="Jhon Doe">
                                     </div>
-                                    <span>{{$deliveryMan['f_name'].' '.$deliveryMan['l_name']}}</span>
+                                    <span>{{$deliveryMan['f_name'] . ' ' . $deliveryMan['l_name']}}</span>
                                 </div>
                                 <a id="{{$deliveryMan->id}}" class="btn btn-primary btn-sm assign-deliveryman">{{translate('Assign')}}</a>
                             </li>
@@ -892,7 +915,7 @@
                     </button>
                 </div>
 
-                <form action="{{route('admin.orders.add-payment-ref-code',[$order['id']])}}" method="post">
+                <form action="{{route('admin.orders.add-payment-ref-code', [$order['id']])}}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -918,7 +941,7 @@
                     </button>
                 </div>
                 @if($order['delivery_address_id'])
-                    <form action="{{route('admin.orders.update-shipping',[$order['delivery_address_id']])}}" method="post">
+                    <form action="{{route('admin.orders.update-shipping', [$order['delivery_address_id']])}}" method="post">
                         @csrf
                         <input type="hidden" name="user_id" value="{{$order->user_id}}">
                         <input type="hidden" name="order_id" value="{{$order->id}}">
@@ -944,7 +967,7 @@
                                         <label class="input-label" for="">{{ translate('Contact Number') }}
                                             <span class="input-label-secondary text-danger">*</span></label>
                                         <input type="text" class="form-control" name="contact_person_number"
-                                               placeholder="{{translate('EX : 01888888888')}}" value="{{ $address['contact_person_number']?? '' }}" required>
+                                               placeholder="{{translate('EX : 01888888888')}}" value="{{ $address['contact_person_number'] ?? '' }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -1059,8 +1082,8 @@
 
                             <div class="card-body">
                                 @if($order->is_guest == 0)
-                                    <p>{{ translate('name') }} : {{ $order->customer ? $order->customer->f_name.' '. $order->customer->l_name: ''}} </p>
-                                    <p>{{ translate('contact') }} : {{ $order->customer ? $order->customer->phone: ''}}</p>
+                                    <p>{{ translate('name') }} : {{ $order->customer ? $order->customer->f_name . ' ' . $order->customer->l_name : ''}} </p>
+                                    <p>{{ translate('contact') }} : {{ $order->customer ? $order->customer->phone : ''}}</p>
                                 @else
                                     <p>{{ translate('guest_customer') }} </p>
                                 @endif
@@ -1115,9 +1138,9 @@
                         <div class="row">
 
                             <?php
-                            $branch = \App\Model\Branch::with(['delivery_charge_setup', 'delivery_charge_by_area'])
-                                ->where(['id' => $order['branch_id']])
-                                ->first(['id', 'name', 'status']);
+$branch = \App\Model\Branch::with(['delivery_charge_setup', 'delivery_charge_by_area'])
+    ->where(['id' => $order['branch_id']])
+    ->first(['id', 'name', 'status']);
                             ?>
 
                             <div class="col-md-6">

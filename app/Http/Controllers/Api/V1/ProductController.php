@@ -781,4 +781,57 @@ class ProductController extends Controller
 
         return $products;
     }
+
+    public function can_free(Request $request, string $id)
+    {
+        $validate = Validator::make($request->all(), [
+            'category_id' => 'required|integer',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'message' => $validate->errors()->first()
+            ], 400);
+        }
+        $category_id = $request->category_id;
+
+        $product = Product::find($id);
+        if (!$product)
+            return response()->json([
+                'message' => 'Product Not Found',
+            ], 404);
+
+        if (!$product->has_free)
+            return response()->json([
+                'message' => 'This Product Not Available to this Feature',
+            ], 404);
+
+        // $product->category_ids = json_decode($product->category_ids, true);
+        // if ($category_id == $product->category_ids[0]['id'])
+        //     return response()->json([
+        //         'message' => 'This Product Not Available to this Feature',
+        //     ], 404);
+
+        $products = Product::active()
+            ->with(['b_product' =>  function ($query) {
+                $query->where('is_available', true);
+            }])
+            ->where('price', '<=', $product->price)
+            ->when($category_id, function ($q) use ($category_id) {
+                $q->whereJsonContains('category_ids', [['id' => $category_id]]);
+            })
+            ->where('can_free', true)->get();
+
+        foreach ($products as $product) {
+            $product->category_ids = json_decode($product->category_ids, true);
+            $product->variations = json_decode($product->variations, true);
+            $product->add_ons = json_decode($product->add_ons, true);
+            $product->attributes = json_decode($product->attributes, true);
+            $product->choice_options = json_decode($product->choice_options, true);
+        }
+        
+        return response()->json([
+            'products' => $products,
+        ]);
+    }
 }

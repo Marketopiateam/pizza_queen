@@ -13,7 +13,7 @@ class OrderLogic
 {
     public static function track_order($order_id)
     {
-        $order = Order::with(['details', 'delivery_address', 'delivery_man.rating','order_partial_payments', 'branch', 'offline_payment'])
+        $order = Order::with(['details', 'delivery_address', 'delivery_man.rating', 'order_partial_payments', 'branch', 'offline_payment'])
             ->where(['id' => $order_id])
             ->first();
 
@@ -21,7 +21,7 @@ class OrderLogic
         $productId = $orderDetails?->product_id;
         $order['is_product_available'] = $productId ? Product::find($productId) ? 1 : 0 : 0;
 
-        $order->offline_payment_information = $order->offline_payment ? json_decode($order->offline_payment->payment_info, true): null;
+        $order->offline_payment_information = $order->offline_payment ? json_decode($order->offline_payment->payment_info, true) : null;
 
         return Helpers::order_data_formatting($order, false);
     }
@@ -74,17 +74,15 @@ class OrderLogic
             if (isset($emailServices['status']) && $emailServices['status'] == 1) {
                 Mail::to($email)->send(new \App\Mail\OrderPlaced($o_id));
             }
-
         } catch (\Exception $e) {
-
         }
 
         return $o_id;
     }
 
-    public static function create_transaction($order, $received_by=false)
+    public static function create_transaction($order, $received_by = false)
     {
-        try{
+        try {
             $order_transaction = new OrderTransaction;
             $order_transaction->delivery_man_id = $order->delivery_man_id;
             $order_transaction->order_id = $order->id;
@@ -92,13 +90,13 @@ class OrderLogic
             $order_transaction->delivery_charge = $order->delivery_charge;
             $order_transaction->original_delivery_charge = $order->delivery_charge;
             $order_transaction->tax = $order->total_tax_amount;
-            $order_transaction->received_by = $received_by?$received_by:'admin';
+            $order_transaction->received_by = $received_by ? $received_by : 'admin';
             //dd($order_transaction);
             $order_transaction->save();
 
             //if($order->user_id) CustomerLogic::create_loyalty_point_transaction($order->user_id, $order->id, $order->order_amount, 'order_place');
 
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             info($e);
             return false;

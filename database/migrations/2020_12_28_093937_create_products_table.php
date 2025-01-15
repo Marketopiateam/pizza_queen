@@ -23,6 +23,8 @@ class CreateProductsTable extends Migration
             $table->string('variations')->nullable();
             $table->string('add_ons')->nullable();
             $table->decimal('tax')->default(0);
+            $table->boolean('can_free')->default(0);
+            $table->boolean('has_free')->default(0);
             $table->date('available_date_starts')->nullable();
             $table->date('available_date_ends')->nullable();
             $table->time('available_time_starts')->nullable();

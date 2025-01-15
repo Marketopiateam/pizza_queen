@@ -1,3 +1,21 @@
+<div class="modal fade" id="free-product-modal" tabindex="-1" role="dialog" aria-labelledby="freeProductModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="freeProductModalLabel">Free Product</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                   
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="dismiss" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal-header p-2">
     <h4 class="modal-title product-title"></h4>
     <button class="close call-when-done" type="button" data-dismiss="modal" aria-label="Close">
@@ -15,23 +33,23 @@
         </div>
 
         <?php
-            $pb = json_decode($product->branch_products, true);
-            $discountData = [];
-            if(isset($pb[0])){
-                $price = $pb[0]['price'];
-                $discountData =[
-                    'discount_type' => $pb[0]['discount_type'],
-                    'discount' => $pb[0]['discount']
-                ];
-            }else{
-                $price = $product['price'];
-                $discountType = $product['discount_type'];
-                $discount = $product['discount'];
-                $discountData =[
-                    'discount_type' => $product['discount_type'],
-                    'discount' => $product['discount']
-                ];
-            }
+$pb = json_decode($product->branch_products, true);
+$discountData = [];
+if (isset($pb[0])) {
+    $price = $pb[0]['price'];
+    $discountData = [
+        'discount_type' => $pb[0]['discount_type'],
+        'discount' => $pb[0]['discount']
+    ];
+} else {
+    $price = $product['price'];
+    $discountType = $product['discount_type'];
+    $discount = $product['discount'];
+    $discountData = [
+        'discount_type' => $product['discount_type'],
+        'discount' => $product['discount']
+    ];
+}
         ?>
         <div class="details">
             <div class="break-all">
@@ -40,7 +58,7 @@
 
             <div class="mb-2 text-dark d-flex align-items-baseline gap-2">
                 <h3 class="font-weight-normal text-accent mb-0">
-                    {{Helpers::set_symbol(($price -Helpers::discount_calculate($discountData, $price))) }}
+                    {{Helpers::set_symbol(($price - Helpers::discount_calculate($discountData, $price))) }}
                 </h3>
                 @if($discountData['discount'] > 0)
                     <strike class="fz-12">
@@ -61,14 +79,14 @@
     <div class="row pt-2">
         <div class="col-12">
             <?php
-            $cart = false;
-            if (session()->has('cart')) {
-                foreach (session()->get('cart') as $key => $cartItem) {
-                    if (is_array($cartItem) && $cartItem['id'] == $product['id']) {
-                        $cart = $cartItem;
-                    }
-                }
-            }
+$cart = false;
+if (session()->has('cart')) {
+    foreach (session()->get('cart') as $key => $cartItem) {
+        if (is_array($cartItem) && $cartItem['id'] == $product['id']) {
+            $cart = $cartItem;
+        }
+    }
+}
 
             ?>
             <h3 class="mt-3">{{translate('description')}}</h3>
@@ -85,6 +103,7 @@
             <form id="add-to-cart-form" class="mb-2">
                 @csrf
                 <input type="hidden" name="id" value="{{ $product->id }}">
+                <input type="hidden" name="category_id" value="{{ $product->category_ids }}">
                 @if (isset($product->branch_products) && count($product->branch_products))
                     @foreach($product->branch_products as $branch_product)
                         @foreach ($branch_product->variations as $key => $choice)
@@ -92,7 +111,7 @@
                                 <div class="h3 p-0 pt-2">
                                     {{ $choice['name'] }}
                                     <small class="text-muted custom-text-size12">
-                                        ({{ ($choice['required'] == 'on')  ?  translate('Required') : translate('optional') }})
+                                        ({{ ($choice['required'] == 'on') ? translate('Required') : translate('optional') }})
                                     </small>
                                 </div>
                                 @if ($choice['min'] != 0 && $choice['max'] != 0)
@@ -145,7 +164,7 @@
                     </div>
                 </div>
                 @php($addOns = json_decode($product->add_ons))
-                @if(count($addOns)>0)
+                @if(count($addOns) > 0)
                     <h3 class="pt-2">{{ translate('addon') }}</h3>
 
                     <div class="d-flex flex-wrap addon-wrap">
@@ -192,7 +211,14 @@
                         <i class="tio-shopping-cart"></i>
                         {{translate('add')}}
                     </button>
+                    @if ($product->has_free)
+                        <button class="btn btn-secondary px-md-5" id="show-free-product" type="button">
+                        <i class="tio-gift"></i>
+                        {{translate('add free product')}}
+                    </button>
+                    @endif
                 </div>
+
             </form>
         </div>
     </div>
@@ -237,6 +263,86 @@
 
     $('.add-to-cart-button').click(function() {
         addToCart();
+    });
+    $('#show-free-product').click(function() {
+        showFreeProduct();
+    });
+    
+    function showFreeProduct(){
+        var product_id = $('input[name="id"]').val();
+        var category_id = $('input[name="category_id"]').val();
+        var cat = JSON.parse(category_id);
+
+         $.ajax({
+            url: '{{ route('can_free', ':product_id') }}'.replace(':product_id', product_id),
+            type: 'GET',
+            data: {
+                category_id: cat[0]?.id
+            },
+            success: function (response) {
+                 console.log(response);
+
+                 if (response.products) {
+                     let modalBody = $('#free-product-modal .modal-body .row');
+                     modalBody.empty(); // Clear any existing content in the modal body
+
+                     // Loop through the products and generate HTML
+                     response.products.forEach(product => {
+                        product.price = 0;
+                         const productHTML = `
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="../storage/app/public/product/${product.image}" class="card-img-top" alt="${product.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">${product.description || 'No description available.'}</p>
+                            <button class="btn btn-primary btn-sm" id="select-free-product" data-id="${product.id}">
+                                Select
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                         modalBody.append(productHTML); // Add product HTML to modal body
+                     });
+
+                     // Show the modal
+                     $('#free-product-modal').modal('show');
+                 } else {
+                     alert(response.message || 'No free products available.');
+                 }
+             },error: function (xhr, status, error) {
+                console.error(error);
+                // Handle errors here
+            }
+        });
+    }
+    $('#dismiss').click(function(){
+        $('#free-product-modal').modal('hide');
+    })
+    $(document).on('click', '#select-free-product', function () {
+        var id = $(this).data('id');
+        console.log(id);
+        $.ajax({
+            url: 'pos/add-to-cart',
+            type: 'POST',
+            data: {
+                id: id,
+                is_free : true,
+                quantity : 1,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function (response) {
+                alert('Free product added to cart successfully.');
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                alert('An error occurred while adding the free product to the cart.');
+            }
+
+        });
+        $('#free-product-modal').modal('hide');
     });
 </script>
 

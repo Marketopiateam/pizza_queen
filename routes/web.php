@@ -56,7 +56,8 @@ $is_published = 0;
 try {
     $full_data = include('Modules/Gateways/Addon/info.php');
     $is_published = $full_data['is_published'] == 1 ? 1 : 0;
-} catch (\Exception $exception) {}
+} catch (\Exception $exception) {
+}
 
 if (!$is_published) {
     Route::group(['prefix' => 'payment'], function () {

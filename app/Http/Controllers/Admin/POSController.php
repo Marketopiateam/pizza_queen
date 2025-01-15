@@ -329,7 +329,12 @@ class POSController extends Controller
         $data['variant'] = $str;
 
         $data['quantity'] = $request['quantity'];
-        $data['price'] = $price;
+
+        if (isset($request->is_free))
+            $data['price'] = 0;
+        else
+            $data['price'] = $price;
+        // $data['price'] = $price;
         $data['name'] = $product->name;
         $data['discount'] = $discount_on_product;
         $data['image'] = $product->image;

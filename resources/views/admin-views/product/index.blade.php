@@ -2,18 +2,18 @@
 @section('title', translate('Add new product'))
 
 @push('css_or_js')
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link href="{{ asset('public/assets/admin/css/tags-input.min.css') }}" rel="stylesheet">
+    <meta name="csrf-token" content="{{csrf_token()}}">
+    <link href="{{asset('public/assets/admin/css/tags-input.min.css')}}" rel="stylesheet">
 @endpush
 
 @section('content')
     <div class="content container-fluid">
         <div class="d-flex flex-wrap gap-2 align-items-center mb-4">
             <h2 class="h1 mb-0 d-flex align-items-center gap-2">
-                <img width="20" class="avatar-img" src="{{ asset('public/assets/admin/img/icons/product.png') }}"
+                <img width="20" class="avatar-img" src="{{asset('public/assets/admin/img/icons/product.png')}}"
                     alt="">
                 <span class="page-header-title">
-                    {{ translate('Add_New_Product') }}
+                    {{translate('Add_New_Product')}}
                 </span>
             </h2>
         </div>
@@ -28,65 +28,105 @@
                                 @php($data = Helpers::get_business_settings('language'))
                                 @php($defaultLang = Helpers::get_default_language())
 
-                                @if ($data && array_key_exists('code', $data[0]))
+                                @if         ($data && array_key_exists('code', $data[0]))
                                     <ul class="nav nav-tabs mb-4">
 
-                                        @foreach ($data as $lang)
+                                        @foreach         ($data as $lang)
                                             <li class="nav-item">
-                                                <a class="nav-link lang_link {{ $lang['default'] == true ? 'active' : '' }}"
+                                                <a class="nav-link lang_link {{$lang['default'] == true ? 'active' : ''}}"
                                                     href="#"
-                                                    id="{{ $lang['code'] }}-link">{{ Helpers::get_language_name($lang['code']) . '(' . strtoupper($lang['code']) . ')' }}</a>
+                                                    id="{{$lang['code']}}-link">{{Helpers::get_language_name($lang['code']) . '(' . strtoupper($lang['code']) . ')'}}</a>
                                             </li>
                                         @endforeach
+    
+    
+    
+    
+    
+    
+    
+    
 
                                     </ul>
-                                    @foreach ($data as $lang)
-                                        <div class="{{ $lang['default'] == false ? 'd-none' : '' }} lang_form"
-                                            id="{{ $lang['code'] }}-form">
+                                    @foreach         ($data as $lang)
+                                        <div class="{{$lang['default'] == false ? 'd-none' : ''}} lang_form"
+                                            id="{{$lang['code']}}-form">
                                             <div class="form-group">
                                                 <label class="input-label"
-                                                    for="{{ $lang['code'] }}_name">{{ translate('name') }}
-                                                    ({{ strtoupper($lang['code']) }})
+                                                    for="{{$lang['code']}}_name">{{translate('name')}}
+                                                    ({{strtoupper($lang['code'])}})
                                                 </label>
-                                                <input type="text" name="name[]" id="{{ $lang['code'] }}_name"
-                                                    class="form-control" placeholder="{{ translate('New Product') }}"
-                                                    {{ $lang['status'] == true ? 'required' : '' }}
-                                                    @if ($lang['status'] == true) oninvalid="document.getElementById('{{ $lang['code'] }}-link').click()" @endif>
+                                                <input type="text" name="name[]" id="{{$lang['code']}}_name"
+                                                    class="form-control" placeholder="{{translate('New Product')}}"
+                                                    {{$lang['status'] == true ? 'required' : ''}}
+                                                    @if         ($lang['status'] == true) oninvalid="document.getElementById('{{$lang['code']}}-link').click()" @endif
+        
+        
+        
+        
+        
+        
+        
+        >
                                             </div>
-                                            <input type="hidden" name="lang[]" value="{{ $lang['code'] }}">
+                                            <input type="hidden" name="lang[]" value="{{$lang['code']}}">
                                             <div class="form-group">
                                                 <label class="input-label"
-                                                    for="{{ $lang['code'] }}_description">{{ translate('short') }}
-                                                    {{ translate('description') }}
-                                                    ({{ strtoupper($lang['code']) }})</label>
-                                                <textarea name="description[]" class="form-control textarea-h-100" id="{{ $lang['code'] }}_hiddenArea"></textarea>
+                                                    for="{{$lang['code']}}_description">{{translate('short')}}
+                                                    {{translate('description')}}
+                                                    ({{strtoupper($lang['code'])}})</label>
+                                                <textarea name="description[]" class="form-control textarea-h-100" id="{{$lang['code']}}_hiddenArea"></textarea>
                                             </div>
                                         </div>
                                     @endforeach
+    
+    
+    
+    
+    
+    
+    
+    
                                 @else
-                                    <div class="" id="{{ $defaultLang }}-form">
+    
+    
+    
+    
+    
+    
+    
+    
+                                    <div class="" id="{{$defaultLang}}-form">
                                         <div class="form-group">
                                             <label class="input-label"
-                                                for="exampleFormControlInput1">{{ translate('name') }} (EN)</label>
+                                                for="exampleFormControlInput1">{{translate('name')}} (EN)</label>
                                             <input type="text" name="name[]" class="form-control"
-                                                placeholder="{{ translate('New Product') }}" required>
+                                                placeholder="{{translate('New Product')}}" required>
                                         </div>
                                         <input type="hidden" name="lang[]" value="en">
                                         <div class="form-group">
                                             <label class="input-label"
-                                                for="exampleFormControlInput1">{{ translate('short') }}
-                                                {{ translate('description') }} (EN)</label>
+                                                for="exampleFormControlInput1">{{translate('short')}}
+                                                {{translate('description')}} (EN)</label>
                                             <textarea name="description[]" class="form-control textarea-h-100" id="hiddenArea"></textarea>
                                         </div>
                                     </div>
                                 @endif
+
+
+
+
+
+
+
+
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="card card-body h-100">
                                 <div class="form-group">
-                                    <label class="font-weight-bold text-dark">{{ translate('product_Image') }}</label>
-                                    <small class="text-danger">* ( {{ translate('ratio') }} 1:1 )</small>
+                                    <label class="font-weight-bold text-dark">{{translate('product_Image')}}</label>
+                                    <small class="text-danger">* ( {{translate('ratio')}} 1:1 )</small>
                                     <div class="d-flex justify-content-center mt-4">
                                         <div class="upload-file">
                                             <input type="file" name="image"
@@ -94,7 +134,7 @@
                                                 class="upload-file__input">
                                             <div class="upload-file__img_drag upload-file__img">
                                                 <img width="176"
-                                                    src="{{ asset('public/assets/admin/img/icons/upload_img.png') }}"
+                                                    src="{{asset('public/assets/admin/img/icons/upload_img.png')}}"
                                                     alt="">
                                             </div>
                                         </div>
@@ -109,7 +149,7 @@
                                         <div class="card-header">
                                             <h4 class="mb-0 d-flex gap-2 align-items-center">
                                                 <i class="tio-category"></i>
-                                                {{ translate('Category') }}
+                                                {{translate('Category')}}
                                             </h4>
                                         </div>
                                         <div class="card-body">
@@ -117,29 +157,37 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label class="input-label" for="exampleFormControlSelect1">
-                                                            {{ translate('category') }}
+                                                            {{translate('category')}}
                                                             <span class="text-danger">*</span>
                                                         </label>
                                                         <select name="category_id" class="form-control js-select2-custom"
-                                                            onchange="getRequest('{{ url('/') }}/admin/product/get-categories?parent_id='+this.value,'sub-categories')">
-                                                            <option selected disabled>---{{ translate('select') }}---
+                                                            onchange="getRequest('{{url('/')}}/admin/product/get-categories?parent_id='+this.value,'sub-categories')">
+                                                            <option selected disabled>---{{translate('select')}}---
                                                             </option>
-                                                            @foreach ($categories as $category)
-                                                                <option value="{{ $category['id'] }}">
-                                                                    {{ $category['name'] }}</option>
+                                                            @foreach         ($categories as $category)
+                                                                <option value="{{$category['id']}}">
+                                                                    {{$category['name']}}</option>
                                                             @endforeach
+
+
+
+
+
+
+
+
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label class="input-label"
-                                                            for="exampleFormControlSelect1">{{ translate('sub_category') }}<span
+                                                            for="exampleFormControlSelect1">{{translate('sub_category')}}<span
                                                                 class="input-label-secondary"></span></label>
                                                         <select name="sub_category_id" id="sub-categories"
                                                             class="form-control js-select2-custom"
-                                                            onchange="getRequest('{{ url('/') }}/admin/product/get-categories?parent_id='+this.value,'sub-sub-categories')">
-                                                            <option selected disabled>---{{ translate('select') }}---
+                                                            onchange="getRequest('{{url('/')}}/admin/product/get-categories?parent_id='+this.value,'sub-sub-categories')">
+                                                            <option selected disabled>---{{translate('select')}}---
                                                             </option>
                                                         </select>
                                                     </div>
@@ -147,32 +195,32 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label class="input-label" for="itemTypeDropdown">
-                                                            {{ translate('item_Type') }}
+                                                            {{translate('item_Type')}}
                                                             <span class="text-danger">*</span>
                                                         </label>
 
                                                         <select id="itemTypeDropdown" name="item_type"
                                                             class="form-control js-select2-custom">
-                                                            <option selected disabled>---{{ translate('select') }}---
+                                                            <option selected disabled>---{{translate('select')}}---
                                                             </option>
-                                                            <option value="0">{{ translate('product') }}
-                                                                {{ translate('item') }}</option>
-                                                            <option value="1">{{ translate('set_menu') }}</option>
+                                                            <option value="0">{{translate('product')}}
+                                                                {{translate('item')}}</option>
+                                                            <option value="1">{{translate('set_menu')}}</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label class="input-label">
-                                                            {{ translate('product_Type') }}
+                                                            {{translate('product_Type')}}
                                                             <span class="text-danger">*</span>
                                                         </label>
                                                         <select name="product_type"
                                                             class="form-control js-select2-custom">
-                                                            <option selected disabled>---{{ translate('select') }}---
+                                                            <option selected disabled>---{{translate('select')}}---
                                                             </option>
-                                                            <option value="veg">{{ translate('veg') }}</option>
-                                                            <option value="non_veg">{{ translate('nonveg') }}</option>
+                                                            <option value="veg">{{translate('veg')}}</option>
+                                                            <option value="non_veg">{{translate('nonveg')}}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -185,68 +233,69 @@
                                         <div class="card-header">
                                             <h4 class="mb-0 d-flex gap-2 align-items-center">
                                                 <i class="tio-dollar"></i>
-                                                {{ translate('Price_Information') }}
+                                                {{translate('Price_Information')}}
                                             </h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label class="input-label">{{ translate('default_Price') }}
+                                                        <label class="input-label">{{translate('default_Price')}}
                                                             <span class="text-danger">*</span></label>
                                                         <input type="number" min="0" step="any"
                                                             value="1" name="price" class="form-control"
-                                                            placeholder="{{ translate('Ex : 100') }}" required>
+                                                            placeholder="{{translate('Ex : 100')}}" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <label class="input-label">{{ translate('discount_Type') }}
+                                                        <label class="input-label">{{translate('discount_Type')}}
                                                             <span class="text-danger">*</span>
                                                         </label>
                                                         <select name="discount_type"
                                                             class="form-control js-select2-custom" id="discount_type">
-                                                            <option selected disabled>---{{ translate('select') }}---
+                                                            <option selected disabled>---{{translate('select')}}---
                                                             </option>
-                                                            <option value="percent">{{ translate('percentage') }}</option>
-                                                            <option value="amount">{{ translate('amount') }}</option>
+                                                            <option value="percent">{{translate('percentage')}}</option>
+                                                            <option value="amount">{{translate('amount')}}</option>
+                                                            <option value="not_selected">{{translate('Not Selected')}}</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label id="discount_label"
-                                                            class="input-label">{{ translate('discount') }}
+                                                            class="input-label">{{translate('discount')}}
                                                             <span class="text-danger">*</span>
                                                         </label>
                                                         <input id="discount_input" type="number" min="0"
                                                             name="discount" class="form-control"
-                                                            placeholder="{{ translate('Ex : 5%') }}" required>
+                                                            placeholder="{{translate('Ex : 5%')}}" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <label class="input-label">{{ translate('tax_Type') }}
+                                                        <label class="input-label">{{translate('tax_Type')}}
                                                             <span class="text-danger">*</span>
                                                         </label>
                                                         <select name="tax_type" class="form-control js-select2-custom"
                                                             id="tax_type">
-                                                            <option selected disabled>---{{ translate('select') }}---
+                                                            <option selected disabled>---{{translate('select')}}---
                                                             </option>
-                                                            <option value="percent">{{ translate('percentage') }}</option>
-                                                            <option value="amount">{{ translate('amount') }}</option>
+                                                            <option value="percent">{{translate('percentage')}}</option>
+                                                            <option value="amount">{{translate('amount')}}</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label id="tax_label" class="input-label"
-                                                            for="exampleFormControlInput1">{{ translate('tax_Rate') }}
+                                                            for="exampleFormControlInput1">{{translate('tax_Rate')}}
                                                             <span class="text-danger">*</span>
                                                         </label>
                                                         <input id="tax_input" type="number" min="0"
                                                             step="any" name="tax" class="form-control"
-                                                            placeholder="{{ translate('Ex : $100') }}" required>
+                                                            placeholder="{{translate('Ex : $100')}}" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -259,30 +308,30 @@
                                         <div class="card-header">
                                             <h4 class="mb-0 d-flex gap-2 align-items-center">
                                                 <i class="tio-dollar"></i>
-                                                {{ translate('Stock Information') }}
+                                                {{translate('Stock Information')}}
                                             </h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
-                                                        <label class="input-label">{{ translate('Stock Type') }}</label>
+                                                        <label class="input-label">{{translate('Stock Type')}}</label>
                                                         <select name="stock_type" class="form-control js-select2-custom"
                                                             id="stock_type">
-                                                            <option value="unlimited">{{ translate('unlimited') }}
+                                                            <option value="unlimited">{{translate('unlimited')}}
                                                             </option>
-                                                            <option value="daily">{{ translate('daily') }}</option>
-                                                            <option value="fixed">{{ translate('fixed') }}</option>
+                                                            <option value="daily">{{translate('daily')}}</option>
+                                                            <option value="fixed">{{translate('fixed')}}</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 d-none" id="product_stock_div">
                                                     <div class="form-group">
-                                                        <label class="input-label">{{ translate('Product Stock') }}
+                                                        <label class="input-label">{{translate('Product Stock')}}
                                                         </label>
                                                         <input id="product_stock" type="number" name="product_stock"
                                                             class="form-control"
-                                                            placeholder="{{ translate('Ex : 10') }}">
+                                                            placeholder="{{translate('Ex : 10')}}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -293,15 +342,32 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="row g-2">
+                                <div class="col-12" id="free">
+                                    <div class="card h-100">
+                                        <div class="card-header">
+                                            <h4 class="mb-0 d-flex gap-2 align-items-center">
+                                                <i class="tio-gift"></i>
+                                                {{translate('Free')}}
+                                            </h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <input type="checkbox" id="can_free" name="can_free" value="1">&nbsp; <label class="input-label" style="display: inline">{{translate('This product Can Be Free?')}}</label> 
+                                                <br><br>
+                                                <input type="checkbox" id="has_free" name="has_free" value="1">&nbsp; <label class="input-label" id="has_free_label" style="display: inline">{{translate('This product Has a Free Products?')}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center justify-content-between gap-3">
                                                 <div class="text-dark">
-                                                    {{ translate('turning visibility off will not show this product in the user app and website') }}
+                                                    {{translate('turning visibility off will not show this product in the user app and website')}}
                                                 </div>
                                                 <div class="d-flex gap-3 align-items-center">
-                                                    <h5>{{ translate('Visibility') }}</h5>
+                                                    <h5>{{translate('Visibility')}}</h5>
                                                     <label class="switcher">
                                                         <input class="switcher_input" type="checkbox" checked="checked"
                                                             name="status">
@@ -318,24 +384,24 @@
                                             <div class="card-header">
                                                 <h4 class="mb-0 d-flex gap-2 align-items-center">
                                                     <i class="tio-watches"></i>
-                                                    {{ translate('Availability') }}
+                                                    {{translate('Availability')}}
                                                 </h4>
                                             </div>
                                             <div class="card-body">
                                                 <div class="row g-2">
                                                     <!-- Radio Buttons for Time or Date Selection -->
                                                     <div id="availability-options" style="display: none;">
-                                                        <p>{{ translate('Set Availability Type:') }}</p>
+                                                        <p>{{translate('Set Availability Type:')}}</p>
                                                         <div class="form-group">
                                                             <label>
                                                                 <input type="radio" name="availability_type"
                                                                     value="time">
-                                                                {{ translate('Time') }}
+                                                                {{translate('Time')}}
                                                             </label>
                                                             <label>
                                                                 <input type="radio" name="availability_type"
                                                                     value="date">
-                                                                {{ translate('date') }}
+                                                                {{translate('date')}}
                                                             </label>
                                                         </div>
                                                     </div>
@@ -344,13 +410,13 @@
                                                     <div id="time-fields" style="display: none;">
                                                         <div class="form-group">
                                                             <label
-                                                                class="input-label">{{ translate('available_From') }}</label>
+                                                                class="input-label">{{translate('available_From')}}</label>
                                                             <input type="time" name="available_time_starts"
                                                                 class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label
-                                                                class="input-label">{{ translate('available_Till') }}</label>
+                                                                class="input-label">{{translate('available_Till')}}</label>
                                                             <input type="time" name="available_time_ends"
                                                                 class="form-control">
                                                         </div>
@@ -360,13 +426,13 @@
                                                     <div id="date-fields" style="display: none;">
                                                         <div class="form-group">
                                                             <label
-                                                                class="input-label">{{ translate('available_From') }}</label>
+                                                                class="input-label">{{translate('available_From')}}</label>
                                                             <input type="date" name="available_date_starts"
                                                                 class="form-control">
                                                         </div>
                                                         <div class="form-group">
                                                             <label
-                                                                class="input-label">{{ translate('available_Till') }}</label>
+                                                                class="input-label">{{translate('available_Till')}}</label>
                                                             <input type="date" name="available_date_ends"
                                                                 class="form-control">
                                                         </div>
@@ -382,18 +448,26 @@
                                         <div class="card-header">
                                             <h4 class="mb-0 d-flex gap-2 align-items-center">
                                                 <i class="tio-puzzle"></i>
-                                                {{ translate('Addons') }}
+                                                {{translate('Addons')}}
                                             </h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label class="input-label">{{ translate('Select_Addons') }}</label>
+                                                <label class="input-label">{{translate('Select_Addons')}}</label>
                                                 <select name="addon_ids[]" class="form-control" id="choose_addons"
                                                     multiple="multiple">
-                                                    @foreach (\App\Model\AddOn::orderBy('name')->get() as $addon)
-                                                        <option value="{{ $addon['id'] }}">{{ $addon['name'] }}
+                                                    @foreach         (\App\Model\AddOn::orderBy('name')->get() as $addon)
+                                                        <option value="{{$addon['id']}}">{{$addon['name']}}
                                                         </option>
                                                     @endforeach
+
+
+
+
+
+
+
+
                                                 </select>
                                             </div>
                                         </div>
@@ -404,14 +478,14 @@
                                         <div class="card-header">
                                             <h4 class="mb-0 d-flex gap-2 align-items-center">
                                                 <i class="tio-label"></i>
-                                                {{ translate('tags') }}
+                                                {{translate('tags')}}
                                             </h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="">
-                                                        <label class="input-label">{{ translate('search_tag') }}</label>
+                                                        <label class="input-label">{{translate('search_tag')}}</label>
                                                         <input type="text" class="form-control" name="tags"
                                                             placeholder="Enter tags" data-role="tagsinput">
                                                     </div>
@@ -476,7 +550,7 @@
                         <div class="card-header">
                             <h4 class="mb-0 d-flex gap-2 align-items-center">
                                 <i class="tio-canvas-text"></i>
-                                {{ translate('product_Variations') }}
+                                {{translate('product_Variations')}}
                             </h4>
                         </div>
                         <div class="card-body pb-0">
@@ -487,7 +561,7 @@
                                     <br>
                                     <div class="">
                                         <a class="btn btn-outline-success"
-                                            id="add_new_option_button">{{ translate('add_New_Variation') }}</a>
+                                            id="add_new_option_button">{{translate('add_New_Variation')}}</a>
                                     </div>
                                     <br><br>
                                 </div>
@@ -496,8 +570,8 @@
                     </div>
 
                     <div class="d-flex justify-content-end gap-3 mt-4">
-                        <button type="reset" class="btn btn-secondary">{{ translate('reset') }}</button>
-                        <button type="submit" class="btn btn-primary">{{ translate('submit') }}</button>
+                        <button type="reset" class="btn btn-secondary">{{translate('reset')}}</button>
+                        <button type="submit" class="btn btn-primary">{{translate('submit')}}</button>
                     </div>
                 </form>
             </div>
@@ -507,7 +581,7 @@
 @endsection
 
 @push('script_2')
-    <script src="{{ asset('public/assets/admin/js/spartan-multi-image-picker.js') }}"></script>
+    <script src="{{asset('public/assets/admin/js/spartan-multi-image-picker.js')}}"></script>
 
     <script>
         $(document).ready(function() {
@@ -609,12 +683,12 @@
                 var add_option_view = `
                     <div class="card view_new_option mb-2" >
                         <div class="card-header">
-                            <label for="" id=new_option_name_` + count + `> {{ translate('add_new') }}</label>
+                            <label for="" id=new_option_name_` + count + `> {{translate('add_new')}}</label>
                         </div>
                         <div class="card-body">
                             <div class="row g-2">
                                 <div class="col-lg-3 col-md-6">
-                                    <label for="">{{ translate('name') }}</label>
+                                    <label for="">{{translate('name')}}</label>
                                     <input required name=options[` + count + `][name] class="form-control" type="text"
                                         onkeyup="new_option_name(this.value,` + count +
                     `)">
@@ -622,21 +696,21 @@
 
                                 <div class="col-lg-3 col-md-6">
                                     <div class="form-group">
-                                        <label class="input-label text-capitalize d-flex alig-items-center"><span class="line--limit-1">{{ translate('selcetion_type') }} </span></label>
+                                        <label class="input-label text-capitalize d-flex alig-items-center"><span class="line--limit-1">{{translate('selcetion_type')}} </span></label>
                                         <div class="resturant-type-group border">
                                             <label class="form-check form--check mr-2 mr-md-4">
                                                 <input class="form-check-input" type="radio" value="multi "name="options[` +
                     count + `][type]" id="type` + count +
                     `" checked onchange="show_min_max(` + count +
                     `)">
-                                                <span class="form-check-label">{{ translate('Multiple') }}</span>
+                                                <span class="form-check-label">{{translate('Multiple')}}</span>
                                             </label>
 
                                             <label class="form-check form--check mr-2 mr-md-4">
                                                 <input class="form-check-input" type="radio" value="single" name="options[` +
                     count + `][type]" id="type` + count +
                     `" onchange="hide_min_max(` + count + `)" >
-                                                <span class="form-check-label">{{ translate('Single') }}</span>
+                                                <span class="form-check-label">{{translate('Single')}}</span>
                                             </label>
                                         </div>
                                     </div>
@@ -644,11 +718,11 @@
                                 <div class="col-12 col-lg-6">
                                     <div class="row g-2">
                                         <div class="col-sm-6 col-md-4">
-                                            <label for="">{{ translate('Min') }}</label>
+                                            <label for="">{{translate('Min')}}</label>
                                             <input id="min_max1_` + count + `" required  name="options[` + count + `][min]" class="form-control" type="number" min="1">
                                         </div>
                                         <div class="col-sm-6 col-md-4">
-                                            <label for="">{{ translate('Max') }}</label>
+                                            <label for="">{{translate('Max')}}</label>
                                             <input id="min_max2_` + count + `"   required name="options[` + count + `][max]" class="form-control" type="number" min="1">
                                         </div>
 
@@ -657,10 +731,10 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                         <div>
                                             <input id="options[` + count + `][required]" name="options[` + count + `][required]" type="checkbox">
-                                            <label for="options[` + count + `][required]" class="m-0">{{ translate('Required') }}</label>
+                                            <label for="options[` + count + `][required]" class="m-0">{{translate('Required')}}</label>
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-danger btn-sm delete_input_button" onclick="removeOption(this)"title="{{ translate('Delete') }}">
+                                            <button type="button" class="btn btn-danger btn-sm delete_input_button" onclick="removeOption(this)"title="{{translate('Delete')}}">
                                                 <i class="tio-add-to-trash"></i>
                                             </button>
                                         </div>
@@ -675,12 +749,12 @@
                             <div  id="option_price_view_` + count + `">
                                 <div class="row g-3 add_new_view_row_class mb-3">
                                     <div class="col-md-4 col-sm-6">
-                                        <label for="">{{ translate('Option_name') }}</label>
+                                        <label for="">{{translate('Option_name')}}</label>
                                         <input class="form-control" required type="text" name="options[` + count +
                     `][values][0][label]" id="">
                                     </div>
                                     <div class="col-md-4 col-sm-6">
-                                        <label for="">{{ translate('Additional_price') }}</label>
+                                        <label for="">{{translate('Additional_price')}}</label>
                                         <input class="form-control" required type="number" min="0" step="0.01" name="options[` +
                     count + `][values][0][optionPrice]" id="">
                                     </div>
@@ -688,7 +762,7 @@
                             </div>
                             <div class="row mt-3 p-3 mr-1 d-flex "  id="add_new_button_` + count + `">
                                 <button type="button" class="btn btn-outline-primary" onclick="add_new_row_button(` +
-                    count + `)" >{{ translate('Add_New_Option') }}
+                    count + `)" >{{translate('Add_New_Option')}}
                                 </button>
                             </div>
                         </div>
@@ -739,19 +813,19 @@
             var add_new_row_view = `
                 <div class="row add_new_view_row_class mb-3 position-relative pt-3 pt-sm-0">
                     <div class="col-md-4 col-sm-5">
-                        <label for="">{{ translate('Option_name') }}</label>
+                        <label for="">{{translate('Option_name')}}</label>
                         <input class="form-control" required type="text" name="options[` + count + `][values][` +
                 countRow + `][label]" id="">
                     </div>
                     <div class="col-md-4 col-sm-5">
-                        <label for="">{{ translate('Additional_price') }}</label>
+                        <label for="">{{translate('Additional_price')}}</label>
                         <input class="form-control"  required type="number" min="0" step="0.01" name="options[` +
                 count + `][values][` + countRow + `][optionPrice]" id="">
                     </div>
                     <div class="col-sm-2 max-sm-absolute">
                         <label class="d-none d-sm-block">&nbsp;</label>
                         <div class="mt-1">
-                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteRow(this)"title="{{ translate('Delete') }}">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteRow(this)"title="{{translate('Delete')}}">
                                     <i class="tio-add-to-trash"></i>
                             </button>
                         </div>
@@ -792,7 +866,7 @@
             let lang = form_id.split("-")[0];
             console.log(lang);
             $("#" + lang + "-form").removeClass('d-none');
-            if (lang == '{{ $defaultLang }}') {
+            if (lang == '{{$defaultLang}}') {
                 $("#from_part_2").removeClass('d-none');
             } else {
                 $("#from_part_2").addClass('d-none');
@@ -819,7 +893,7 @@
                 }
             });
             $.post({
-                url: '{{ route('admin.product.store') }}',
+                url: '{{route('admin.product.store')}}',
                 data: formData,
                 cache: false,
                 contentType: false,
@@ -833,12 +907,12 @@
                             });
                         }
                     } else {
-                        toastr.success('{{ translate('product added successfully!') }}', {
+                        toastr.success('{{translate('product added successfully!')}}', {
                             CloseButton: true,
                             ProgressBar: true
                         });
                         setTimeout(function() {
-                            location.href = '{{ route('admin.product.list') }}';
+                            location.href = '{{route('admin.product.list')}}';
                         }, 2000);
                     }
                 }
@@ -866,7 +940,7 @@
         });
     </script>
 
-    <script src="{{ asset('public/assets/admin') }}/js/tags-input.min.js"></script>
+    <script src="{{asset('public/assets/admin')}}/js/tags-input.min.js"></script>
 
 
     <script>
@@ -888,22 +962,37 @@
 
     <script>
         $("#discount_type").change(function() {
+            if(this.value != 'not_selected'){
+                $("#has_free").hide();
+                $("#has_free_label").hide();
+                $("#has_free").prop("checked", false);
+            }else{
+                $("#has_free").show();
+                $("#has_free_label").show();
+            }
             if (this.value === 'amount') {
-                $("#discount_label").text("{{ translate('discount_amount') }}");
-                $("#discount_input").attr("placeholder", "{{ translate('Ex: 500') }}")
+                $("#discount_input").show();
+                $("#discount_label").show();
+                $("#discount_label").text("{{translate('discount_amount')}}");
+                $("#discount_input").attr("placeholder", "{{translate('Ex: 500')}}")
             } else if (this.value === 'percent') {
-                $("#discount_label").text("{{ translate('discount_percent') }}")
-                $("#discount_input").attr("placeholder", "{{ translate('Ex: 50%') }}")
+                $("#discount_input").show();
+                $("#discount_label").show();
+                $("#discount_label").text("{{translate('discount_percent')}}")
+                $("#discount_input").attr("placeholder", "{{translate('Ex: 50%')}}")
+            } else if (this.value === 'not_selected') {
+                $("#discount_input").hide();
+                $("#discount_label").hide();
             }
         });
 
         $("#tax_type").change(function() {
             if (this.value === 'amount') {
-                $("#tax_label").text("{{ translate('tax_amount') }}");
-                $("#tax_input").attr("placeholder", "{{ translate('Ex: 500') }}")
+                $("#tax_label").text("{{translate('tax_amount')}}");
+                $("#tax_input").attr("placeholder", "{{translate('Ex: 500')}}")
             } else if (this.value === 'percent') {
-                $("#tax_label").text("{{ translate('tax_percent') }}")
-                $("#tax_input").attr("placeholder", "{{ translate('Ex: 50%') }}")
+                $("#tax_label").text("{{translate('tax_percent')}}")
+                $("#tax_input").attr("placeholder", "{{translate('Ex: 50%')}}")
             }
         });
 

@@ -1,4 +1,4 @@
-<?php return array (
+<?php return array(
   'Dashboard' => 'لوحة القيادة',
   'welcome' => 'أهلاً وسهلاً',
   'Monitor_your_business_analytics_and_statistics' => 'راقب تحليلات وإحصائيات عملك',
@@ -2651,4 +2651,12 @@
   'Set Availability Type:' => 'Set Availability Type:',
   'Ex : 2024-12-09' => 'Ex : 2024-12-09',
   'Ex : 2024-12-10' => 'Ex : 2024-12-10',
+  'Free' => 'Free',
+  'This product Can Be Free?' => 'هل يمكن أن يكون هذا المنتج مجانيًا؟',
+  'This product Has a Free Products?' => 'هل يحتوي هذا المنتج على منتجات مجانية؟',
+  'Free Products' => 'المنتجات المجانيه',
+  'Update_Delivery_Area' => 'Update Delivery Area',
+  'Has Free' => 'لديه منتج مجاني',
+  'Not Has Free' => 'لا يحتوي على منتج مجاني',
+  'add free product' => 'إضافة منتج مجاني',
 );

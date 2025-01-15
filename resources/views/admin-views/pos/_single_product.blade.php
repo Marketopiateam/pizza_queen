@@ -8,27 +8,35 @@
             {{ Str::limit($product['name'], 15) }}
         </div>
 
+        <div class="pos-product-item_title">
+            @if ($product['has_free'] == 1)
+                <span class="badge badge-inline badge-success">{{ translate('Has Free') }}</span>
+            @else
+                <span class="badge badge-inline badge-secondary">{{ translate('Not Has Free') }}</span>
+            @endif
+        </div>
+
         <?php
-            $pb = json_decode($product->branch_products, true);
-            $discountData = [];
-            if(isset($pb[0])){
-                $price = $pb[0]['price'];
-                $discountData =[
-                    'discount_type' => $pb[0]['discount_type'],
-                    'discount' => $pb[0]['discount']
-                ];
-            }else{
-                $price = $product['price'];
-                $discountType = $product['discount_type'];
-                $discount = $product['discount'];
-                $discountData =[
-                    'discount_type' => $product['discount_type'],
-                    'discount' => $product['discount']
-                ];
-            }
+$pb = json_decode($product->branch_products, true);
+$discountData = [];
+if (isset($pb[0])) {
+    $price = $pb[0]['price'];
+    $discountData = [
+        'discount_type' => $pb[0]['discount_type'],
+        'discount' => $pb[0]['discount']
+    ];
+} else {
+    $price = $product['price'];
+    $discountType = $product['discount_type'];
+    $discount = $product['discount'];
+    $discountData = [
+        'discount_type' => $product['discount_type'],
+        'discount' => $product['discount']
+    ];
+}
         ?>
         <div class="pos-product-item_price">
-            {{Helpers::set_symbol(($price-Helpers::discount_calculate($discountData, $price))) }}
+            {{Helpers::set_symbol(($price - Helpers::discount_calculate($discountData, $price))) }}
         </div>
     </div>
 </div>

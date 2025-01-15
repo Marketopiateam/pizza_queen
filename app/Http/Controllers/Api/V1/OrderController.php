@@ -186,14 +186,24 @@ class OrderController extends Controller
 
             foreach ($request['cart'] as $c) {
                 $product = $this->product->find($c['product_id']);
-
                 $branch_product = $this->product_by_branch->where(['product_id' => $c['product_id'], 'branch_id' => $request['branch_id']])->first();
-
-                //daily and fixed stock quantity validation
-                if ($branch_product->stock_type == 'daily' || $branch_product->stock_type == 'fixed') {
-                    $available_stock = $branch_product->stock - $branch_product->sold_quantity;
-                    if ($available_stock < $c['quantity']) {
-                        return response()->json(['errors' => [['code' => 'stock', 'message' => translate('stock limit exceeded')]]], 403);
+                if (isset($c['free_product'])) {
+                    $free_product = $this->product->find($c['free_product']['productId']);
+                    $free_product->price = $c['free_product']['price'] ?? 0;
+                    $free_product['qty'] = $c['free_product']['qty'] ?? 0;
+                    $branch_product_free = $this->product_by_branch->where(['product_id' => $c['free_product']['productId'], 'branch_id' => $request['branch_id']])->first();
+                    if ($branch_product->stock_type == 'daily' || $branch_product->stock_type == 'fixed') {
+                        $available_stock_free = $branch_product_free->stock - $branch_product_free->sold_quantity;
+                        if ($available_stock_free < $c['free_product']->quantity) {
+                            return response()->json(['errors' => [['code' => 'stock', 'message' => translate('stock limit exceeded')]]], 403);
+                        }
+                    }
+                    //daily and fixed stock quantity validation
+                    if ($branch_product->stock_type == 'daily' || $branch_product->stock_type == 'fixed') {
+                        $available_stock = $branch_product->stock - $branch_product->sold_quantity;
+                        if ($available_stock < $c['quantity']) {
+                            return response()->json(['errors' => [['code' => 'stock', 'message' => translate('stock limit exceeded')]]], 403);
+                        }
                     }
                 }
 
@@ -257,6 +267,7 @@ class OrderController extends Controller
                     'order_id' => $order_id,
                     'product_id' => $c['product_id'],
                     'product_details' => $product,
+                    'free_product'  => $free_product ? json_encode($free_product) : null,
                     'quantity' => $c['quantity'],
                     'price' => $price,
                     'tax_amount' => Helpers::tax_calculate($product, $price),
@@ -272,7 +283,7 @@ class OrderController extends Controller
                     'created_at' => now('Africa/Cairo'),
                     'updated_at' => now('Africa/Cairo')
                 ];
-
+                // $or_d['product_details']->push($free_products);
                 $totalTaxAmount += $or_d['tax_amount'] * $c['quantity'];
                 $this->order_detail->insert($or_d);
 
@@ -372,7 +383,7 @@ class OrderController extends Controller
                     Helpers::send_push_notif_to_device($fcmToken, $data);
                 }
             } catch (\Exception $e) {
-                //
+                return response()->json(['message' => $e->getMessage()]);
             }
 
             try {
@@ -382,7 +393,7 @@ class OrderController extends Controller
                     Mail::to(auth('api')->user()->email)->send(new \App\Mail\OrderPlaced($order_id));
                 }
             } catch (\Exception $e) {
-                //dd($e);
+                return response()->json(['message' => $e->getMessage()]);
             }
 
             if ($or['order_status'] == 'confirmed') {
@@ -412,16 +423,15 @@ class OrderController extends Controller
 
                 Helpers::send_push_notif_to_topic(data: $data, topic: 'admin_message', type: 'order_request', web_push_link: route('admin.orders.list', ['status' => 'all']));
                 Helpers::send_push_notif_to_topic(data: $data, topic: 'branch-order-' . $or['branch_id'] . '-message', type: 'order_request', web_push_link: route('branch.orders.list', ['status' => 'all']));
-            } catch (\Exception $exception) {
-                //
+            } catch (\Exception $e) {
+                return response()->json(['message' => $e->getMessage()]);
             }
-
             return response()->json([
                 'message' => translate('order_success'),
                 'order_id' => $order_id
             ], 200);
         } catch (\Exception $e) {
-            return response()->json([$e], 403);
+            return response()->json(['message' => $e->getMessage()]);
         }
     }
 
@@ -527,6 +537,7 @@ class OrderController extends Controller
         }
 
         $details = Helpers::order_details_formatter($details);
+
         return response()->json($details, 200);
     }
 

@@ -188,7 +188,7 @@
         <div class="modal fade" id="quick-view" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content" id="quick-view-modal">
-
+                    
                 </div>
             </div>
         </div>

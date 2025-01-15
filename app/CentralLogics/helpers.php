@@ -232,6 +232,15 @@ class Helpers
                 $detail->variant = gettype($detail->variant) != 'array' ? json_decode($detail->variant) : $detail->variant;
                 $detail->add_on_qtys = gettype($detail->add_on_qtys) != 'array' ? json_decode($detail->add_on_qtys) : $detail->add_on_qtys;
             }
+            
+            foreach ($data->details as $detail) {
+                $detail->free_product = json_decode($detail->free_product ?? null);
+                $detail->free_product->variations = json_decode($detail->free_product->variations ?? null);
+                $detail->free_product->attributes = json_decode($detail->free_product->attributes ?? null);
+                $detail->free_product->category_ids = json_decode($detail->free_product->category_ids ?? null);
+                $detail->free_product->choice_options = json_decode($detail->free_product->choice_options ?? null);
+                $detail->free_product->add_ons = json_decode($detail->free_product->add_ons ?? null);
+            }
         }
 
         return $data;
@@ -969,6 +978,15 @@ class Helpers
 
                 $product_availability = Product::where('id', $detail['product_id'])->first();
                 $detail['is_product_available'] = isset($product_availability) ? 1 : 0;
+            }
+
+            foreach ($details as $detail) {
+                $detail->free_product = json_decode($detail->free_product ?? null);
+                $detail->free_product->variations = json_decode($detail->free_product->variations ?? null);
+                $detail->free_product->attributes = json_decode($detail->free_product->attributes ?? null);
+                $detail->free_product->category_ids = json_decode($detail->free_product->category_ids ?? null);
+                $detail->free_product->choice_options = json_decode($detail->free_product->choice_options ?? null);
+                $detail->free_product->add_ons = json_decode($detail->free_product->add_ons ?? null);
             }
         }
 

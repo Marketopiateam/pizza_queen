@@ -2713,4 +2713,12 @@
   'Coupon updated successfully!' => 'Coupon updated successfully!',
   1230913490 => '1230913490',
   'schedule_overlapping_warning' => 'Schedule overlapping warning',
+  'Free' => 'Free',
+  'This product Can Be Free?' => 'This product Can Be Free?',
+  'This product Has a Free Products?' => 'This product Has a Free Products?',
+  'Free Products' => 'Free Products',
+  'Has Free' => 'Has Free',
+  'Not Has Free' => 'Not Has Free',
+  'add free product' => 'add free product',
+  'Not Selected' => 'Not Selected',
 );

@@ -296,6 +296,12 @@ class ProductController extends Controller
         $product->set_menu = $request->item_type;
         $product->product_type = $request->product_type;
         $product->image = Helpers::upload('product/', 'png', $request->file('image'));
+
+        if (isset($request->can_free))
+            $product->can_free = $request->can_free;
+        if (isset($request->has_free))
+            $product->has_free = $request->has_free;
+
         $product->available_date_starts = $request->available_date_starts ?? null;
         $product->available_date_ends = $request->available_date_ends ?? null;
         $product->available_time_starts = $request->available_time_starts ?? null;
@@ -303,9 +309,13 @@ class ProductController extends Controller
 
         $product->tax = $request->tax_type == 'amount' ? $request->tax : $request->tax;
         $product->tax_type = $request->tax_type;
-
-        $product->discount = $request->discount_type == 'amount' ? $request->discount : $request->discount;
-        $product->discount_type = $request->discount_type;
+        if ($request->discount_type == 'not_selected') {
+            $product->discount = 0;
+            $product->discount_type = 'amount';
+        } else {
+            $product->discount = $request->discount_type == 'amount' ? $request->discount : $request->discount;
+            $product->discount_type = $request->discount_type;
+        }
 
         $product->attributes = $request->has('attribute_id') ? json_encode($request->attribute_id) : json_encode([]);
         $product->add_ons = $request->has('addon_ids') ? json_encode($request->addon_ids) : json_encode([]);
@@ -566,6 +576,17 @@ class ProductController extends Controller
         $product->set_menu = $request->item_type;
         $product->product_type = $request->product_type;
         $product->image = $request->has('image') ? Helpers::update('product/', $product->image, 'png', $request->file('image')) : $product->image;
+
+        if (isset($request->can_free))
+            $product->can_free = $request->can_free;
+        else
+            $product->can_free = false;
+
+        if (isset($request->has_free))
+            $product->has_free = $request->has_free;
+        else
+            $product->has_free = false;
+
         $product->available_date_starts = $request->available_date_starts ?? null;
         $product->available_date_ends = $request->available_date_ends ?? null;
         $product->available_time_starts = $request->available_time_starts ?? null;
@@ -574,9 +595,13 @@ class ProductController extends Controller
         $product->tax = $request->tax_type == 'amount' ? $request->tax : $request->tax;
         $product->tax_type = $request->tax_type;
 
-        $product->discount = $request->discount_type == 'amount' ? $request->discount : $request->discount;
-        $product->discount_type = $request->discount_type;
-
+        if ($request->discount_type == 'not_selected') {
+            $product->discount = 0;
+            $product->discount_type = 'amount';
+        } else {
+            $product->discount = $request->discount_type == 'amount' ? $request->discount : $request->discount;
+            $product->discount_type = $request->discount_type;
+        }
         $product->attributes = $request->has('attribute_id') ? json_encode($request->attribute_id) : json_encode([]);
         $product->add_ons = $request->has('addon_ids') ? json_encode($request->addon_ids) : json_encode([]);
         $product->status = $request->status == 'on' ? 1 : 0;
