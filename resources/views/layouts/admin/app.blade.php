@@ -604,7 +604,7 @@
                     measurementId: "{{ isset($fcm_credentials['measurementId']) ? $fcm_credentials['measurementId'] : '' }}"
                 };
 
-
+                
                 firebase.initializeApp(firebaseConfig);
                 const messaging = firebase.messaging();
 

@@ -2721,4 +2721,6 @@
   'Not Has Free' => 'Not Has Free',
   'add free product' => 'add free product',
   'Not Selected' => 'Not Selected',
+  'The phone is already taken' => 'The phone is already taken',
+  'The email is already taken' => 'The email is already taken',
 );

@@ -2,7 +2,7 @@ importScripts('https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.3.2/firebase-messaging.js');
 
 firebase.initializeApp({
-    apiKey: "",
+    apiKey: "AIzaSyCpL1S5iHGCwV0dbEOgdBSmbF02bqzMlIk",
     authDomain: "pizza-queen-app.firebaseapp.com",
     projectId: "pizza-queen-app",
     storageBucket: "pizza-queen-app.firebasestorage.app",
