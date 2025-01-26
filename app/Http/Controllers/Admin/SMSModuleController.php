@@ -40,8 +40,7 @@ class SMSModuleController extends Controller
                 }
             }
         }
-        $dataValues= Setting::where('settings_type','sms_config')->whereIn('key_name', ['twilio','nexmo','2factor','msg91', 'signal_wire', 'alphanet_sms'])->get() ?? [];
-
+        $dataValues = Setting::where('settings_type', 'sms_config')->whereIn('key_name', ['twilio', 'nexmo', '2factor', 'msg91', 'signal_wire', 'alphanet_sms', 'sms_misr'])->get() ?? [];
         return view('admin-views.business-settings.sms-index',  compact('publishedStatus', 'paymentUrl', 'dataValues'));
     }
 
@@ -101,6 +100,14 @@ class SMSModuleController extends Controller
                 'api_key' => 'required_if:status,1',
                 'otp_template' => 'required_if:status,1',
             ];
+        } elseif ($module == 'sms_misr') {
+            $validationData = [
+                'status' => 'required|in:1,0',
+                'user_name' => 'required_if:status,1',
+                'password' => 'required_if:status,1',
+                'sender_id' => 'required_if:status,1',
+                'otp_template' => 'required_if:status,1',
+            ];
         }
 
         $validation = $request->validate(array_merge($validation, $validationData));
@@ -115,17 +122,15 @@ class SMSModuleController extends Controller
                 'from' => $request['from'],
                 'otp_template' => $request['otp_template'],
             ];
-
         } elseif ($module == 'nexmo') {
             $additionalData = [
-                'status' =>$request['status'],
+                'status' => $request['status'],
                 'api_key' => $request['api_key'],
                 'api_secret' => $request['api_secret'],
                 'token' => $request['token'],
                 'from' => $request['from'],
                 'otp_template' => $request['otp_template'],
             ];
-
         } elseif ($module == '2factor') {
             $additionalData = [
                 'status' => $request['status'],
@@ -146,32 +151,45 @@ class SMSModuleController extends Controller
                 'from' => $request['from'],
                 'otp_template' => $request['otp_template'],
             ];
-        }elseif ($module == 'alphanet_sms') {
+        } elseif ($module == 'alphanet_sms') {
             $additionalData = [
                 'status' => $request['status'],
                 'api_key' => $request['api_key'],
                 'otp_template' => $request['otp_template'],
             ];
+        } elseif ($module == 'sms_misr') {
+            $additionalData = [
+                'status' => $request['status'],
+                'user_name' => $request['user_name'],
+                'password' => $request['password'],
+                'sender_id' => $request['sender_id'],
+                'otp_template' => $request['otp_template'],
+            ];
         }
 
-        $data= [
-            'gateway' => $module ,
-            'mode' =>  isset($request['status']) == 1  ?  'live': 'test'
+        $data = [
+            'gateway' => $module,
+            'mode' =>  isset($request['status']) == 1  ?  'live' : 'test'
         ];
 
-        $credentials= json_encode(array_merge($data, $additionalData));
+        $credentials = json_encode(array_merge($data, $additionalData));
 
         DB::table('addon_settings')->updateOrInsert(['key_name' => $module, 'settings_type' => 'sms_config'], [
             'key_name' => $module,
             'live_values' => $credentials,
             'test_values' => $credentials,
             'settings_type' => 'sms_config',
-            'mode' => isset($request['status']) == 1  ?  'live': 'test',
-            'is_active' => isset($request['status']) == 1  ?  1: 0 ,
+            'mode' => isset($request['status']) == 1  ?  'live' : 'test',
+            'is_active' => isset($request['status']) == 1  ?  1 : 0,
         ]);
 
         $SMSGatewayArray = [
-            'twilio','nexmo','2factor','msg91', 'signal_wire'
+            'twilio',
+            'nexmo',
+            '2factor',
+            'msg91',
+            'signal_wire',
+            'sms_misr',
         ];
 
         if ($request['status'] == 1) {

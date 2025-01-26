@@ -22,9 +22,7 @@ class ReportController extends Controller
     public function __construct(
         private Order       $order,
         private OrderDetail $orderDetail,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @return Renderable
@@ -170,7 +168,6 @@ class ReportController extends Controller
                         $totalSold += $orderTotal;
                         $totalQuantity += $detail['quantity'];
                     }
-
                 } else {
                     $price = Helpers::variation_price(json_decode($detail->product_details, true), $detail['variations']) - $detail['discount_on_product'];
                     $orderTotal = $price * $detail['quantity'];
@@ -204,7 +201,6 @@ class ReportController extends Controller
     {
         if (session()->has('export_data')) {
             $data = session('export_data');
-
         } else {
             $orders = $this->order->all();
             $data = [];
@@ -250,7 +246,6 @@ class ReportController extends Controller
 
         if ($request['branch_id'] == 'all') {
             $orders = $this->order->whereBetween('created_at', [$fromDate, $toDate])->pluck('id')->toArray();
-
         } else {
             $orders = $this->order
                 ->where(['branch_id' => $request['branch_id']])

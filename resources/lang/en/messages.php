@@ -2723,4 +2723,7 @@
   'Not Selected' => 'Not Selected',
   'The phone is already taken' => 'The phone is already taken',
   'The email is already taken' => 'The email is already taken',
+  'sms_misr' => 'Sms misr',
+  'user_name' => 'User name',
+  'sender_id' => 'Sender id',
 );
