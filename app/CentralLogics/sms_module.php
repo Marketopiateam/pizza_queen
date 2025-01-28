@@ -40,8 +40,46 @@ class SMS_module
         if (isset($config) && $config['status'] == 1) {
             return self::alphanet_sms($receiver, $otp);
         }
+        $config = self::get_settings('sms_misr');
+        if (isset($config) && $config['status'] == 1) {
+            return self::sms_misr($receiver, $otp);
+        }
 
         return 'not_found';
+    }
+    public static function sms_misr($receiver, $otp)
+    {
+        $config = self::get_settings('sms_misr');
+        $response = 'error';
+        if (isset($config) && $config['status'] == 1) {
+            $message = str_replace("#OTP#", $otp, $config['otp']);
+            $url = 'https://smsmisr.com/api/OTP/';
+            $data = [
+                "environment" => "2",
+                "username" => $config['username'],
+                "password" => $config['password'],
+                "sender" => $config['sender'],
+                "mobile" => "$receiver",
+                "template" => $config['template'],
+                "otp" => "add",
+            ];
+            $queryString = http_build_query($data);
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url . '?' . $queryString);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+            $response = curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                $response = 'Error: ' . curl_error($ch);
+            }
+
+            curl_close($ch);
+        }
+        return $response;
     }
 
     public static function twilio($receiver, $otp)
@@ -55,7 +93,8 @@ class SMS_module
             try {
                 $twilio = new Client($sid, $token);
                 $twilio->messages
-                    ->create($receiver, // to
+                    ->create(
+                        $receiver, // to
                         array(
                             "messagingServiceSid" => $config['messaging_service_sid'],
                             "body" => $message
@@ -81,7 +120,7 @@ class SMS_module
                 curl_setopt($ch, CURLOPT_URL, 'https://rest.nexmo.com/sms/json');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, "from=".$config['from']."&text=".$message."&to=".$receiver."&api_key=".$config['api_key']."&api_secret=".$config['api_secret']);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, "from=" . $config['from'] . "&text=" . $message . "&to=" . $receiver . "&api_key=" . $config['api_key'] . "&api_secret=" . $config['api_secret']);
 
                 $headers = array();
                 $headers[] = 'Content-Type: application/x-www-form-urlencoded';
@@ -191,7 +230,6 @@ class SMS_module
             } else {
                 $response = 'error';
             }
-
         }
         return $response;
     }

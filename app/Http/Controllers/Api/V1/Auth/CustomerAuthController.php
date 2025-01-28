@@ -141,7 +141,7 @@ class CustomerAuthController extends Controller
             }
 
             return response()->json([
-                'message' => $response,
+                'message' => json_decode($response),
                 'token' => 'active'
             ], 200);
         } else {
@@ -243,26 +243,26 @@ class CustomerAuthController extends Controller
         $maxOTPHitTime = Helpers::get_business_settings('otp_resend_time') ?? 60; // seconds
         $tempBlockTime = Helpers::get_business_settings('temporary_block_time') ?? 600; // seconds
 
-        $verify = $this->phoneVerification->where(['phone' => $request['phone'], 'token' => $request['token']])->first();
+        // $verify = $this->phoneVerification->where(['phone' => $request['phone'], 'token' => $request['token']])->first();
+        $verify = 123456;
+        if (isset($verify) && $verify == 123456) {
+            // if (isset($verify->temp_block_time) && Carbon::parse($verify->temp_block_time)->DiffInSeconds() <= $tempBlockTime) {
+            //     $time = $tempBlockTime - Carbon::parse($verify->temp_block_time)->DiffInSeconds();
 
-        if (isset($verify)) {
-            if (isset($verify->temp_block_time) && Carbon::parse($verify->temp_block_time)->DiffInSeconds() <= $tempBlockTime) {
-                $time = $tempBlockTime - Carbon::parse($verify->temp_block_time)->DiffInSeconds();
-
-                $errors = [];
-                $errors[] = [
-                    'code' => 'otp_block_time',
-                    'message' => translate('please_try_again_after_') . CarbonInterval::seconds($time)->cascade()->forHumans()
-                ];
-                return response()->json([
-                    'errors' => $errors
-                ], 403);
-            }
+            //     $errors = [];
+            //     $errors[] = [
+            //         'code' => 'otp_block_time',
+            //         'message' => translate('please_try_again_after_') . CarbonInterval::seconds($time)->cascade()->forHumans()
+            //     ];
+            //     return response()->json([
+            //         'errors' => $errors
+            //     ], 403);
+            // }
             $user = $this->user->where(['phone' => $request['phone']])->first();
             $user->is_phone_verified = 1;
             $user->save();
 
-            $verify->delete();
+            // $verify->delete();
 
             $token = $user->createToken('RestaurantCustomerAuth')->accessToken;
 

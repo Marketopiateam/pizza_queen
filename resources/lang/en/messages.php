@@ -2726,4 +2726,8 @@
   'sms_misr' => 'Sms misr',
   'user_name' => 'User name',
   'sender_id' => 'Sender id',
+  'sender' => 'Sender',
+  'otp' => 'Otp',
+  'template' => 'Template',
+  'OTP' => 'OTP',
 );

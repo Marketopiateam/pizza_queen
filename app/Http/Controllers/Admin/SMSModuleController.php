@@ -52,7 +52,7 @@ class SMSModuleController extends Controller
     public function smsUpdate(Request $request, $module): RedirectResponse
     {
         $validation = [
-            'gateway' => 'required|in:twilio,nexmo,2factor,msg91,signal_wire,alphanet_sms',
+            'gateway' => 'required|in:twilio,nexmo,2factor,msg91,signal_wire,alphanet_sms,sms_misr',
         ];
 
         $validationData = [];
@@ -103,10 +103,11 @@ class SMSModuleController extends Controller
         } elseif ($module == 'sms_misr') {
             $validationData = [
                 'status' => 'required|in:1,0',
-                'user_name' => 'required_if:status,1',
+                'username' => 'required_if:status,1',
                 'password' => 'required_if:status,1',
-                'sender_id' => 'required_if:status,1',
-                'otp_template' => 'required_if:status,1',
+                'sender' => 'required_if:status,1',
+                'template' => 'required_if:status,1',
+                'otp' => 'required_if:status,1',
             ];
         }
 
@@ -160,10 +161,11 @@ class SMSModuleController extends Controller
         } elseif ($module == 'sms_misr') {
             $additionalData = [
                 'status' => $request['status'],
-                'user_name' => $request['user_name'],
+                'username' => $request['username'],
                 'password' => $request['password'],
-                'sender_id' => $request['sender_id'],
-                'otp_template' => $request['otp_template'],
+                'sender' => $request['sender'],
+                'template' => $request['template'],
+                'otp' => $request['otp'],
             ];
         }
 

@@ -29,7 +29,7 @@
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <span>{{translate('admin')}}:</span>
-                                        <a href="#">{{auth('admin')->user()->f_name.' '.auth('admin')->user()->l_name}}</a>
+                                        <a href="#">{{auth('admin')->user()->f_name . ' ' . auth('admin')->user()->l_name}}</a>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                                 <option  disabled>{{translate('Select Branch')}}</option>
                                 <option value="all">All</option>
                                 @foreach(\App\Model\Branch::all() as $branch)
-                                    <option value="{{$branch['id']}}" {{session('branch_filter')==$branch['id']?'selected':''}}>{{$branch['name']}}</option>
+                                    <option value="{{$branch['id']}}" {{session('branch_filter') == $branch['id'] ? 'selected' : ''}}>{{$branch['name']}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -95,8 +95,11 @@
 
                 <hr>
 
+                <button class="btn btn-primary" id="excel">Excel</button>
                 <div class="table-responsive datatable_wrapper_row mt-5" id="set-rows">
-                    @include('admin-views.report.partials._table',['data'=>[]])
+                    @include('admin-views.report.partials._table', ['data' => []])
+                </div>
+                <div>
                 </div>
             </div>
         </div>
@@ -155,6 +158,15 @@
                     '<p class="mb-0">{{translate('No data to show')}}</p>' +
                     '</div>'
             }
+        });
+    </script>
+    <script>
+        $('#excel').click(function () {
+            var branch_id = $('#branch_id').val();
+            var from = $('#from_date').val();
+            var to = $('#to_date').val();
+            var url = "{{route('admin.report.sale-report-excel')}}?branch_id=" + branch_id + "&from=" + from + "&to=" + to;
+            window.location.href = url;
         });
     </script>
 @endpush

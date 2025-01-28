@@ -81,12 +81,49 @@ trait  SmsGateway
         if (isset($config) && $config['status'] == 1) {
             return self::alphanet_sms($receiver, $otp);
         }
+        $config = self::get_settings('sms_misr');
+        if (isset($config) && $config['status'] == 1) {
+            return self::sms_misr($receiver, $otp);
+        }
 
 
 
         return 'not_found';
     }
+    public static function sms_misr($receiver, $otp)
+    {
+        $config = self::get_settings('sms_misr');
+        $response = 'error';
+        if (isset($config) && $config['status'] == 1) {
+            $message = str_replace("#OTP#", $otp, $config['otp']);
+            $url = 'https://smsmisr.com/api/OTP/';
+            $data = [
+                "environment" => "2",
+                "username" => $config['username'],
+                "password" => $config['password'],
+                "sender" => $config['sender'],
+                "mobile" => "$receiver",
+                "template" => $config['template'],
+                "otp" => "add",
+            ];
+            $queryString = http_build_query($data);
 
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url . '?' . $queryString);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+            $response = curl_exec($ch);
+
+            if (curl_errno($ch)) {
+                $response = 'Error: ' . curl_error($ch);
+            }
+
+            curl_close($ch);
+        }
+        return $response;
+    }
     public static function twilio($receiver, $otp): string
     {
         $config = self::get_settings('twilio');
@@ -98,7 +135,8 @@ trait  SmsGateway
             try {
                 $twilio = new Client($sid, $token);
                 $twilio->messages
-                    ->create($receiver, // to
+                    ->create(
+                        $receiver, // to
                         array(
                             "messagingServiceSid" => $config['messaging_service_sid'],
                             "body" => $message
@@ -124,7 +162,7 @@ trait  SmsGateway
                 curl_setopt($ch, CURLOPT_URL, 'https://rest.nexmo.com/sms/json');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, "from=".$config['from']."&text=".$message."&to=".$receiver."&api_key=".$config['api_key']."&api_secret=".$config['api_secret']);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, "from=" . $config['from'] . "&text=" . $message . "&to=" . $receiver . "&api_key=" . $config['api_key'] . "&api_secret=" . $config['api_secret']);
 
                 $headers = array();
                 $headers[] = 'Content-Type: application/x-www-form-urlencoded';
@@ -235,7 +273,6 @@ trait  SmsGateway
             } catch (\Exception $exception) {
                 $response = 'error';
             }
-
         }
         return $response;
     }
@@ -253,7 +290,7 @@ trait  SmsGateway
 
             $curl = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "https://sms.hubtel.com/v1/messages/send?clientsecret=".$client_secret."&clientid=".$client_id."&from=".$sender_id."&to=".$receiver."&content=".$message."",
+                CURLOPT_URL => "https://sms.hubtel.com/v1/messages/send?clientsecret=" . $client_secret . "&clientid=" . $client_id . "&from=" . $sender_id . "&to=" . $receiver . "&content=" . $message . "",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
@@ -276,7 +313,6 @@ trait  SmsGateway
             }
         }
         return $response;
-
     }
 
     public static function paradox($receiver, $otp)
@@ -286,7 +322,7 @@ trait  SmsGateway
         if (isset($config) && $config['status'] == 1) {
 
             $receiver = str_replace("+", "", $receiver);
-            $message = str_replace("#OTP#",$otp,"Your otp is #OTP#.");
+            $message = str_replace("#OTP#", $otp, "Your otp is #OTP#.");
 
             $postRequest = array(
                 "sender" => $config['sender_id'],
@@ -300,7 +336,7 @@ trait  SmsGateway
             curl_setopt($cURLConnection, CURLOPT_HTTPHEADER, array(
                 "Content-type: application/json",
                 "Accept: application/json",
-                "Authorization: Bearer ".$config['api_key']
+                "Authorization: Bearer " . $config['api_key']
             ));
 
             $response = curl_exec($cURLConnection);
@@ -321,18 +357,18 @@ trait  SmsGateway
         $response = 'error';
         if (isset($config) && $config['status'] == 1) {
 
-            $message = str_replace("#OTP#",$otp,"Your otp is #OTP#.");
+            $message = str_replace("#OTP#", $otp, "Your otp is #OTP#.");
 
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "https://".$config['space_url']."/api/laml/2010-04-01/Accounts/".$config['project_id']."/Messages");
+            curl_setopt($ch, CURLOPT_URL, "https://" . $config['space_url'] . "/api/laml/2010-04-01/Accounts/" . $config['project_id'] . "/Messages");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ]);
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-            curl_setopt($ch, CURLOPT_USERPWD, $config['project_id']. ':' .$config['token']);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, "From=".$config['from']."&To=".$receiver."&Body=".$message);
+            curl_setopt($ch, CURLOPT_USERPWD, $config['project_id'] . ':' . $config['token']);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, "From=" . $config['from'] . "&To=" . $receiver . "&Body=" . $message);
 
             $response = curl_exec($ch);
             $error = curl_error($ch);
@@ -344,7 +380,6 @@ trait  SmsGateway
             } else {
                 $response = 'error';
             }
-
         }
         return $response;
     }
@@ -352,7 +387,7 @@ trait  SmsGateway
     public static function sms_019($receiver, $otp)
     {
         $config = self::get_settings('019_sms');
-        if(isset($config['api']['expiration_date']) && strtotime($config['api']['expiration_date']) <= strtotime("now")) {
+        if (isset($config['api']['expiration_date']) && strtotime($config['api']['expiration_date']) <= strtotime("now")) {
             self::generate_019_api();
             $config = self::get_settings('019_sms');
         }
@@ -397,7 +432,7 @@ trait  SmsGateway
     {
         $config = self::get_settings('019_sms');
 
-        $xml="<?xml version='1.0' encoding='UTF-8'?>
+        $xml = "<?xml version='1.0' encoding='UTF-8'?>
         <getApiToken>
         <user>
         <username>{$config['username']}</username>
@@ -419,27 +454,28 @@ trait  SmsGateway
 
             $response = $client->request('POST', "https://www.019sms.co.il/api", $options);
 
-            $data = (Array)new SimpleXMLElement($response->getBody()->getContents());
-            if(isset($data['status']) && $data['status']==0) {
-                $config['api']=[
-                    'key'=>$data['message'],
-                    'expiration_date'=>$data['expiration_date']
+            $data = (array)new SimpleXMLElement($response->getBody()->getContents());
+            if (isset($data['status']) && $data['status'] == 0) {
+                $config['api'] = [
+                    'key' => $data['message'],
+                    'expiration_date' => $data['expiration_date']
                 ];
                 Setting::where('key_name', '019_sms')
                     ->where('settings_type', 'sms_config')->update([
-                        'test_values'=>json_encode($config),
-                        'live_values'=>json_encode($config)
+                        'test_values' => json_encode($config),
+                        'live_values' => json_encode($config)
                     ]);
                 return true;
             }
             info($data);
-        }catch(\Exception $ex) {
+        } catch (\Exception $ex) {
             info($ex);
         }
         return false;
     }
 
-    public static function viatech($receiver, $otp) {
+    public static function viatech($receiver, $otp)
+    {
         $config = self::get_settings('viatech');
         $response = 'error';
         if (isset($config) && $config['status'] == 1) {
@@ -462,14 +498,11 @@ trait  SmsGateway
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             $response = curl_exec($ch);
             curl_close($ch);
-            if(!is_numeric($response) && substr($response, 0, 13) == "SMS SUBMITTED")
-            {
+            if (!is_numeric($response) && substr($response, 0, 13) == "SMS SUBMITTED") {
                 $response = 'success';
-            }
-            else{
+            } else {
                 $response = 'error';
             }
-
         }
         return $response;
     }
@@ -485,9 +518,9 @@ trait  SmsGateway
             $password = $config['password'];
             $from = $config['from'];
             try {
-                $res= Http::get("https://api.smsglobal.com/http-api.php?action=sendsms&user=".$user."&password=".$password."&from=".$from."&to=".$receiver."&text=".$message);
+                $res = Http::get("https://api.smsglobal.com/http-api.php?action=sendsms&user=" . $user . "&password=" . $password . "&from=" . $from . "&to=" . $receiver . "&text=" . $message);
                 // $response = 'success';
-                if($res->successful()) $response = 'success';
+                if ($res->successful()) $response = 'success';
                 else $response = 'error';
             } catch (\Exception $exception) {
                 $response = 'error';
@@ -509,18 +542,18 @@ trait  SmsGateway
                 $number = $receiver;
                 $text = $message;
                 $data = array(
-                    'username'=> $username,
-                    'password'=> $password,
-                    'number'=>"$number",
-                    'message'=>"$text"
+                    'username' => $username,
+                    'password' => $password,
+                    'number' => "$number",
+                    'message' => "$text"
                 );
 
                 $ch = curl_init(); // Initialize cURL
-                curl_setopt($ch, CURLOPT_URL,$url);
+                curl_setopt($ch, CURLOPT_URL, $url);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $smsresult = curl_exec($ch);
-                $p = explode("|",$smsresult);
+                $p = explode("|", $smsresult);
                 $sendstatus = $p[0];
 
                 if ($sendstatus == "1101") {
@@ -528,7 +561,6 @@ trait  SmsGateway
                 } else {
                     $response = 'error';
                 }
-
             } catch (\Exception $exception) {
                 $response = 'error';
             }
@@ -556,7 +588,7 @@ trait  SmsGateway
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS =>"{\n    \"message\": \"$message\",\n    \"to\": \"$receiver\",\n    \"sender_id\": \"$sender_id\"    \n}",
+                CURLOPT_POSTFIELDS => "{\n    \"message\": \"$message\",\n    \"to\": \"$receiver\",\n    \"sender_id\": \"$sender_id\"    \n}",
                 CURLOPT_HTTPHEADER => array(
                     "Content-Type: application/json",
                     "Accept: application/json",
@@ -592,7 +624,7 @@ trait  SmsGateway
                 CURLOPT_URL => 'https://api.sms.net.bd/sendsms',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array('api_key' => $api_key,'msg' => $message ,'to' => $receiver),
+                CURLOPT_POSTFIELDS => array('api_key' => $api_key, 'msg' => $message, 'to' => $receiver),
             ));
 
             $response = curl_exec($curl);
