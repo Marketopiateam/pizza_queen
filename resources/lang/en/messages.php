@@ -2730,4 +2730,5 @@
   'otp' => 'Otp',
   'template' => 'Template',
   'OTP' => 'OTP',
+  'Export to Excel' => 'Export to Excel',
 );

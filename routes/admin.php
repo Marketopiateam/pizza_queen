@@ -463,6 +463,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('sale-report', [ReportController::class, 'saleReport'])->name('sale-report');
             Route::post('sale-report-filter', [ReportController::class, 'saleFilter'])->name('sale-report-filter');
             Route::get('export-sale-report', [ReportController::class, 'exportSaleReport'])->name('export-sale-report');
+            Route::get('export-report', [ReportController::class, 'exportReport'])->name('export-report');
         });
 
         Route::group(['prefix' => 'customer', 'as' => 'customer.', 'middleware' => ['actch', 'module:user_management']], function () {
