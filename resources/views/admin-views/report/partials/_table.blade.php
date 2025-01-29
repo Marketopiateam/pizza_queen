@@ -31,6 +31,9 @@
     $(document).ready(function () {
         $('input').addClass('form-control');
     });
+    if (typeof window.calculated === 'undefined') {
+            window.calculated = false;
+        }
     var datatable = $.HSCore.components.HSDatatables.init($('#datatable'), {
         dom: 'Bfrtip',
         buttons: [
@@ -44,6 +47,7 @@
                 text: 'Excel',
                 className: 'btn btn-sm btn-primary',
                 action: function (e, dt, button, config) {
+                    if (!calculated) {
                     let totalQty = 0;
                     let totalAmount = 0;
                     dt.rows().every(function () {
@@ -59,7 +63,8 @@
                         totalQty,
                         totalAmount.toFixed(2)
                     ]).draw(false);
-
+                    window.calculated = true;
+                }
                     $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
                 }
             },
