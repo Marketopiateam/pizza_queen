@@ -564,7 +564,7 @@
                             </ul>
                         </li>
                         <!-- Pages -->
-                        <li
+                        {{-- <li
                             class="navbar-vertical-aside-has-menu {{ Request::is('admin/customer/subscribed-email*') ? 'active' : '' }}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link"
                                 href="{{ route('admin.customer.subscribed_emails') }}">
@@ -573,7 +573,7 @@
                                     {{ translate('Subscribed Emails') }}
                                 </span>
                             </a>
-                        </li>
+                        </li> --}}
                         <!-- End Pages -->
                     @endif
 
