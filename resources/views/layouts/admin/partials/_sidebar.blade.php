@@ -803,15 +803,15 @@
                                                 </a>
                                             </li>
 
-                                            <li
+                                            {{-- <li
                                                 class="nav-item {{ Request::is('admin/business-settings/web-app/third-party/offline-payment*') ? 'active' : '' }}">
                                                 <a class="nav-link"
                                                     href="{{ route('admin.business-settings.web-app.third-party.offline-payment.list') }}">
                                                     <span class="tio-circle nav-indicator-icon"></span>
-                                                    <span
-                                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{ translate('Offline Payment Method') }}</span>
+                                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{
+                                                        translate('Offline Payment Method') }}</span>
                                                 </a>
-                                            </li>
+                                            </li> --}}
 
                                             <li
                                                 class="nav-item {{ Request::is('admin/business-settings/web-app/third-party/fcm*') ? 'active' : '' }}">
