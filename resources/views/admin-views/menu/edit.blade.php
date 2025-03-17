@@ -15,7 +15,7 @@
                         <label class="form-label">{{ translate('Menu Image') }}</label>
                         <br>
                         <input type="file" name="image" class="form-control">
-                        <img src="{{ asset('storage/app/public/menu/' . $menu->image) }}" width="80" alt="menu">
+                        <img src="{{ asset('storage/app/public/' . $menu->image) }}" width="80" alt="menu">
                     </div>
                     <br>
                     <div class="text-end">

@@ -27,12 +27,12 @@ class MenuController extends Controller
             'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
-        $imagePath = Helpers::upload('menu/', 'png', $request->file('image'));
+        $imagePath = $request->file('image')->store('menus', 'public');
         Menu::create([
             'image' => $imagePath,
         ]);
 
-        return redirect()->route('admin.menu.menu.index')->with('success', __('messages.Menu added successfully.'));
+        return redirect()->route('admin.menu.menu.index')->with('success', translate('Menu added successfully.'));
     }
 
     public function edit(string $id)
@@ -51,11 +51,11 @@ class MenuController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $imagePath = Helpers::update('menu/', $menu->image, 'png', $request->file('image'));
+            $imagePath = $request->file('image')->store('menus', 'public');
             $menu->update(['image' => $imagePath]);
         }
 
-        return redirect()->route('admin.menu.menu.index')->with('success', __('messages.Menu updated successfully.'));
+        return redirect()->route('admin.menu.menu.index')->with('success', translate('Menu updated successfully.'));
     }
 
     public function destroy(string $id)
@@ -64,6 +64,6 @@ class MenuController extends Controller
 
         $menu->delete();
 
-        return redirect()->route('admin.menu.menu.index')->with('success', __('messages.Menu deleted successfully.'));
+        return redirect()->route('admin.menu.menu.index')->with('success', translate('Menu deleted successfully.'));
     }
 }

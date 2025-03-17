@@ -23,7 +23,7 @@
                         @foreach ($menus as $key => $menu)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                <td><img src="{{ asset('storage/app/public/menu/' . $menu->image) }}" width="50" alt="menu">
+                                <td><img src="{{ asset('storage/app/public/' . $menu->image) }}" width="50" alt="menu">
                                 </td>
                                 <td>
                                     <a href="{{ route('admin.menu.menu.edit', $menu->id) }}"

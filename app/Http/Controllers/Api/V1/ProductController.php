@@ -840,7 +840,7 @@ class ProductController extends Controller
     {
         $menus = Menu::select('image')->get();
         foreach ($menus as $menu)
-            $menu->image = 'storage/app/public/menu/' . $menu->image;
+            $menu->image = 'storage/app/public/' . $menu->image;
 
         return response()->json([
             'menus' => $menus,
