@@ -13,6 +13,8 @@
     <link rel="shortcut icon" href="">
     <link rel="icon" type="image/x-icon" href="{{ asset('storage/app/public/restaurant/' . $icon ?? '') }}">
     <!-- Font -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&amp;display=swap" rel="stylesheet">
     <!-- CSS Implementing Plugins -->
     <link rel="stylesheet" href="{{ asset('public/assets/admin') }}/css/vendor.min.css">
@@ -24,8 +26,9 @@
     <link rel="stylesheet" href="{{ asset('public/assets/admin') }}/css/style.css?v=1.0">
     @stack('css_or_js')
 
-    <script src="{{ asset('public/assets/admin') }}/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js">
-    </script>
+    <script
+        src="{{ asset('public/assets/admin') }}/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js">
+        </script>
     <link rel="stylesheet" href="{{ asset('public/assets/admin') }}/css/toastr.css">
 </head>
 
@@ -168,33 +171,33 @@
     @endif
     <!-- Toggle Direction Init -->
     <script>
-        $(document).on('ready', function() {
+                $(document).on('ready', function () {
 
-            $(".direction-toggle").on("click", function() {
-                setDirection(localStorage.getItem("direction"));
-            });
+                    $(".direction-toggle").on("click", function () {
+                        setDirection(localStorage.getItem("direction"));
+                    });
 
-            function setDirection(direction) {
-                if (direction == "rtl") {
-                    localStorage.setItem("direction", "ltr");
-                    $("html").attr('dir', 'ltr');
-                    $(".direction-toggle").find('span').text('Toggle RTL')
-                } else {
-                    localStorage.setItem("direction", "rtl");
-                    $("html").attr('dir', 'rtl');
-                    $(".direction-toggle").find('span').text('Toggle LTR')
-                }
-            }
+                    function setDirection(direction) {
+                        if (direction == "rtl") {
+                            localStorage.setItem("direction", "ltr");
+                            $("html").attr('dir', 'ltr');
+                            $(".direction-toggle").find('span').text('Toggle RTL')
+                        } else {
+                            localStorage.setItem("direction", "rtl");
+                            $("html").attr('dir', 'rtl');
+                            $(".direction-toggle").find('span').text('Toggle LTR')
+                        }
+                    }
 
-            if (localStorage.getItem("direction") == "rtl") {
-                $("html").attr('dir', "rtl");
-                $(".direction-toggle").find('span').text('Toggle LTR')
-            } else {
-                $("html").attr('dir', "ltr");
-                $(".direction-toggle").find('span').text('Toggle RTL')
-            }
+                    if (localStorage.getItem("direction") == "rtl") {
+                        $("html").attr('dir', "rtl");
+                        $(".direction-toggle").find('span').text('Toggle LTR')
+                    } else {
+                        $("html").attr('dir', "ltr");
+                        $(".direction-toggle").find('span').text('Toggle RTL')
+                    }
 
-        })
+                })
     </script>
     <!-- JS Plugins Init. -->
     <script></script>
@@ -203,16 +206,16 @@
         // =======================================================
         var sidebar = $('.js-navbar-vertical-aside').hsSideNav();
 
-        $(document).on('ready', function() {
+        $(document).on('ready', function () {
 
             // BUILDER TOGGLE INVOKER
             // =======================================================
-            $('.js-navbar-vertical-aside-toggle-invoker').click(function() {
+            $('.js-navbar-vertical-aside-toggle-invoker').click(function () {
                 $('.js-navbar-vertical-aside-toggle-invoker i').tooltip('hide');
             });
             // INITIALIZATION OF UNFOLD
             // =======================================================
-            $('.js-hs-unfold-invoker').each(function() {
+            $('.js-hs-unfold-invoker').each(function () {
                 var unfold = new HSUnfold($(this)).init();
             });
 
@@ -227,7 +230,7 @@
                 boundary: 'window'
             })
 
-            $(".js-nav-tooltip-link").on("show.bs.tooltip", function(e) {
+            $(".js-nav-tooltip-link").on("show.bs.tooltip", function (e) {
                 if (!$("body").hasClass("navbar-vertical-aside-mini-mode")) {
                     return false;
                 }
@@ -254,13 +257,13 @@
         }
 
         //File Upload
-        $(window).on('load', function() {
-            $(".upload-file__input").on("change", function() {
+        $(window).on('load', function () {
+            $(".upload-file__input").on("change", function () {
                 if (this.files && this.files[0]) {
                     let reader = new FileReader();
                     let img = $(this).siblings(".upload-file__img").find('img');
 
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         img.attr("src", e.target.result);
                     };
 
@@ -274,7 +277,7 @@
             location.href = '{{ route('admin.orders.list', ['status' => 'all']) }}';
         }
 
-        $('.route-alert').on('click', function() {
+        $('.route-alert').on('click', function () {
             let route = $(this).data('route');
             let message = $(this).data('message');
             route_alert(route, message)
@@ -298,7 +301,7 @@
             })
         }
 
-        $('.form-alert').on('click', function() {
+        $('.form-alert').on('click', function () {
             let id = $(this).data('id');
             let message = $(this).data('message');
             form_alert(id, message)
@@ -322,11 +325,11 @@
             })
         }
 
-        $('.redirect-url').change(function() {
+        $('.redirect-url').change(function () {
             location.href = $(this).data('url');
         });
 
-        $('.redirect-url-value').change(function() {
+        $('.redirect-url-value').change(function () {
             var newPriority = $(this).val();
             var url = $(this).data('url') + newPriority;
             location.href = url;
@@ -341,7 +344,7 @@
             });
         }
 
-        $('.call-demo').click(function() {
+        $('.call-demo').click(function () {
             if ('{{ env('APP_MODE') }}' === 'demo') {
                 call_demo();
             }
@@ -352,15 +355,15 @@
     <script>
         @if (env('APP_MODE') == 'live')
             //Internet Status Check
-            window.addEventListener('online', function() {
+            window.addEventListener('online', function () {
                 toastr.success('{{ translate('Became online') }}');
             });
-            window.addEventListener('offline', function() {
+            window.addEventListener('offline', function () {
                 toastr.error('{{ translate('Became offline') }}');
             });
 
             //Internet Status Check (after any event)
-            document.body.addEventListener("click", function(event) {
+            document.body.addEventListener("click", function (event) {
                 if (window.navigator.onLine === false) {
                     toastr.error('{{ translate('You are in offline') }}');
                     event.preventDefault();
@@ -375,7 +378,7 @@
             '<script src="{{ asset('public/assets/admin') }}/vendor/babel-polyfill/polyfill.min.js"><\/script>');
     </script>
     <script>
-        $(".status-change").change(function() {
+        $(".status-change").change(function () {
             var value = $(this).val();
             let url = $(this).data('url');
             status_change(this, url);
@@ -407,10 +410,10 @@
                         data: {
                             status: status
                         },
-                        success: function(data, status) {
+                        success: function (data, status) {
                             toastr.success("{{ translate('Status changed successfully') }}");
                         },
-                        error: function(data) {
+                        error: function (data) {
                             toastr.error("{{ translate('Status changed failed') }}");
                         }
                     });
@@ -428,15 +431,15 @@
 
     <script>
         let initialImages = [];
-        $(window).on('load', function() {
-            $("form").find('img').each(function(index, value) {
+        $(window).on('load', function () {
+            $("form").find('img').each(function (index, value) {
                 initialImages.push(value.src);
             })
         })
 
-        $(document).ready(function() {
-            $('form').on('reset', function(e) {
-                $("form").find('img').each(function(index, value) {
+        $(document).ready(function () {
+            $('form').on('reset', function (e) {
+                $("form").find('img').each(function (index, value) {
                     $(value).attr('src', initialImages[index]);
                 })
                 $('.js-select2-custom').val(null).trigger('change');
@@ -446,16 +449,16 @@
     </script>
 
     <script>
-        $(document).on('ready', function() {
+        $(document).on('ready', function () {
             // INITIALIZATION OF SHOW PASSWORD
             // =======================================================
-            $('.js-toggle-password').each(function() {
+            $('.js-toggle-password').each(function () {
                 new HSTogglePassword(this).init()
             });
 
             // INITIALIZATION OF FORM VALIDATION
             // =======================================================
-            $('.js-validate').each(function() {
+            $('.js-validate').each(function () {
                 $.HSCore.components.HSValidation.init($(this));
             });
         });
@@ -476,7 +479,7 @@
         }, 5000);
     </script>
     <script>
-        $(function() {
+        $(function () {
             var owl = $('.single-item-slider');
             owl.owlCarousel({
                 autoplay: false,
@@ -555,7 +558,7 @@
 
 
         function checkedFunc() {
-            $('.switch--custom-label .toggle-switch-input').each(function() {
+            $('.switch--custom-label .toggle-switch-input').each(function () {
                 if (this.checked) {
                     $(this).closest('.switch--custom-label').addClass('checked')
                 } else {
@@ -573,87 +576,87 @@
 
         @if (\App\CentralLogics\Helpers::module_permission_check('order_management') && $admin_order_notification)
 
-            @if ($admin_order_notification_type == 'manual')
-                console.log('manual')
-                setInterval(function() {
-                    $.get({
-                        url: '{{ route('admin.get-restaurant-data') }}',
-                        dataType: 'json',
-                        success: function(response) {
-                            let data = response.data;
-                            new_order_type = data.type;
-                            console.log(data)
-                            if (data.new_order > 0) {
-                                playAudio();
-                                $('#popup-modal').appendTo("body").modal('show');
-                            }
-                        },
-                    });
-                }, 10000);
-            @endif
-
-            @if ($admin_order_notification_type == 'firebase')
-                @php($fcm_credentials = \App\CentralLogics\Helpers::get_business_settings('fcm_credentials'))
-                var firebaseConfig = {
-                    apiKey: "{{ isset($fcm_credentials['apiKey']) ? $fcm_credentials['apiKey'] : '' }}",
-                    authDomain: "{{ isset($fcm_credentials['authDomain']) ? $fcm_credentials['authDomain'] : '' }}",
-                    projectId: "{{ isset($fcm_credentials['projectId']) ? $fcm_credentials['projectId'] : '' }}",
-                    storageBucket: "{{ isset($fcm_credentials['storageBucket']) ? $fcm_credentials['storageBucket'] : '' }}",
-                    messagingSenderId: "{{ isset($fcm_credentials['messagingSenderId']) ? $fcm_credentials['messagingSenderId'] : '' }}",
-                    appId: "{{ isset($fcm_credentials['appId']) ? $fcm_credentials['appId'] : '' }}",
-                    measurementId: "{{ isset($fcm_credentials['measurementId']) ? $fcm_credentials['measurementId'] : '' }}"
-                };
-
-                
-                firebase.initializeApp(firebaseConfig);
-                const messaging = firebase.messaging();
-
-                function startFCM() {
-                    messaging
-                        .requestPermission()
-                        .then(function() {
-                            return messaging.getToken();
-                        })
-                        .then(function(token) {
-                            subscribeTokenToBackend(token, 'admin_message');
-                        }).catch(function(error) {
-                            console.error('Error getting permission or token:', error);
-                        });
-                }
-
-                function subscribeTokenToBackend(token, topic) {
-                    fetch('{{ url('/') }}/subscribeToTopic', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            token: token,
-                            topic: topic
-                        })
-                    }).then(response => {
-                        if (response.status < 200 || response.status >= 400) {
-                            return response.text().then(text => {
-                                throw new Error(`Error subscribing to topic: ${response.status} - ${text}`);
-                            });
+        @if ($admin_order_notification_type == 'manual')
+            console.log('manual')
+            setInterval(function () {
+                $.get({
+                    url: '{{ route('admin.get-restaurant-data') }}',
+                    dataType: 'json',
+                    success: function (response) {
+                        let data = response.data;
+                        new_order_type = data.type;
+                        console.log(data)
+                        if (data.new_order > 0) {
+                            playAudio();
+                            $('#popup-modal').appendTo("body").modal('show');
                         }
-                        console.log(`Subscribed to "${topic}"`);
-                    }).catch(error => {
-                        console.error('Subscription error:', error);
+                    },
+                });
+            }, 10000);
+        @endif
+
+        @if ($admin_order_notification_type == 'firebase')
+        @php($fcm_credentials = \App\CentralLogics\Helpers::get_business_settings('fcm_credentials'))
+        var firebaseConfig = {
+            apiKey: "{{ isset($fcm_credentials['apiKey']) ? $fcm_credentials['apiKey'] : '' }}",
+            authDomain: "{{ isset($fcm_credentials['authDomain']) ? $fcm_credentials['authDomain'] : '' }}",
+            projectId: "{{ isset($fcm_credentials['projectId']) ? $fcm_credentials['projectId'] : '' }}",
+            storageBucket: "{{ isset($fcm_credentials['storageBucket']) ? $fcm_credentials['storageBucket'] : '' }}",
+            messagingSenderId: "{{ isset($fcm_credentials['messagingSenderId']) ? $fcm_credentials['messagingSenderId'] : '' }}",
+            appId: "{{ isset($fcm_credentials['appId']) ? $fcm_credentials['appId'] : '' }}",
+            measurementId: "{{ isset($fcm_credentials['measurementId']) ? $fcm_credentials['measurementId'] : '' }}"
+        };
+
+
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        function startFCM() {
+            messaging
+                .requestPermission()
+                .then(function () {
+                    return messaging.getToken();
+                })
+                .then(function (token) {
+                    subscribeTokenToBackend(token, 'admin_message');
+                }).catch(function (error) {
+                    console.error('Error getting permission or token:', error);
+                });
+        }
+
+        function subscribeTokenToBackend(token, topic) {
+            fetch('{{ url('/') }}/subscribeToTopic', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    token: token,
+                    topic: topic
+                })
+            }).then(response => {
+                if (response.status < 200 || response.status >= 400) {
+                    return response.text().then(text => {
+                        throw new Error(`Error subscribing to topic: ${response.status} - ${text}`);
                     });
                 }
+                console.log(`Subscribed to "${topic}"`);
+            }).catch(error => {
+                console.error('Subscription error:', error);
+            });
+        }
 
-                messaging.onMessage(function(payload) {
-                    console.log(payload.data);
-                    if (payload.data.order_id && payload.data.type == "order_request") {
-                        playAudio();
-                        $('#popup-modal').appendTo("body").modal('show');
-                    }
-                });
+        messaging.onMessage(function (payload) {
+            console.log(payload.data);
+            if (payload.data.order_id && payload.data.type == "order_request") {
+                playAudio();
+                $('#popup-modal').appendTo("body").modal('show');
+            }
+        });
 
-                startFCM();
-            @endif
+        startFCM();
+        @endif
         @endif
     </script>
 

@@ -6,6 +6,7 @@ use App\CentralLogics\Helpers;
 use App\CentralLogics\ProductLogic;
 use App\Http\Controllers\Controller;
 use App\Model\Category;
+use App\Models\Menu;
 use App\Model\Order;
 use App\Model\OrderDetail;
 use App\Model\Product;
@@ -829,9 +830,20 @@ class ProductController extends Controller
             $product->attributes = json_decode($product->attributes, true);
             $product->choice_options = json_decode($product->choice_options, true);
         }
-        
+
         return response()->json([
             'products' => $products,
+        ]);
+    }
+
+    public function getMenu()
+    {
+        $menus = Menu::select('image')->get();
+        foreach ($menus as $menu)
+            $menu->image = 'storage/app/public/menu/' . $menu->image;
+
+        return response()->json([
+            'menus' => $menus,
         ]);
     }
 }

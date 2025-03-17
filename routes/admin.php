@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\BusinessSettingsController;
 use App\Http\Controllers\Admin\BranchPromotionController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CuisineController;
@@ -245,7 +246,9 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('search', [CategoryController::class, 'search'])->name('search');
             Route::get('priority', [CategoryController::class, 'priority'])->name('priority');
         });
-
+        Route::group(['prefix' => 'menu', 'as' => 'menu.', 'middleware' => ['module:product_management']], function () {
+            Route::resource('menu', MenuController::class)->except(['show']);
+        });
         // Route::group(['prefix' => 'cuisine', 'as' => 'cuisine.', 'middleware' => ['module:product_management']], function () {
         //     Route::get('add', [CuisineController::class, 'index'])->name('add');
         //     Route::post('store', [CuisineController::class, 'store'])->name('store');

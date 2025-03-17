@@ -243,4 +243,5 @@ Route::group(['namespace' => 'Api\V1', 'middleware' => 'localization'], function
     });
 
     Route::get('/can_free/{id}', [ProductController::class, 'can_free'])->name('can_free');
+    Route::get('/menu', [ProductController::class, 'getMenu'])->name('getMenu');
 });

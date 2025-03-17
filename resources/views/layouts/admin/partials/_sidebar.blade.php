@@ -365,6 +365,35 @@
                                         </a>
                                     </li>
                                 </ul>
+                            <li
+                                class="navbar-vertical-aside-has-menu {{ Request::is('admin/menu/menu*') ? 'active' : '' }}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:">
+                                    <i class="fa-solid fa-bars nav-icon"></i>
+                                    <span
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{ translate('Menus') }}
+                                    </span>
+                                </a>
+
+                                <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
+                                    style="display: {{ Request::is('admin/menu/menu*') ? 'block' : 'none' }}">
+                                    <li class="nav-item {{ Request::is('admin/menu/menu/create') ? 'active' : '' }}">
+                                        <a class="nav-link " href="{{ route('admin.menu.menu.create') }}"
+                                            title="{{ translate('Add New Menu') }}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{__('messages.Add menu')}}</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item {{ Request::is('admin/menu/menu/index') ? 'active' : '' }}">
+                                        <a class="nav-link " href="{{ route('admin.menu.menu.index') }}"
+                                            title="{{ translate('Menus') }}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{ translate('Menus') }}</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
                             </li>
                             <!-- End Pages -->
                         @endif

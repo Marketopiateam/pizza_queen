@@ -1,4 +1,4 @@
-<?php return array(
+<?php return array (
   'Dashboard' => 'لوحة القيادة',
   'welcome' => 'أهلاً وسهلاً',
   'Monitor_your_business_analytics_and_statistics' => 'راقب تحليلات وإحصائيات عملك',
@@ -2659,4 +2659,16 @@
   'Has Free' => 'لديه منتج مجاني',
   'Not Has Free' => 'لا يحتوي على منتج مجاني',
   'add free product' => 'إضافة منتج مجاني',
+  'Menu added successfully.' => 'تم اضافة قائمة الاسعار بنجاح',
+  'Menu updated successfully.' => 'تم تعديل قائمة الاسعار بنجاح',
+  'Menu deleted successfully.' => 'تم حذف قائمة الاسعار بنجاح',
+  'Add New Menu' => 'إضافة قائمة جديدة',
+  'Menu Image' => 'صورة القائمة',
+  'Choose File' => 'اختر ملفًا',
+  'Menus' => 'قوائم الطعام',
+  'Update Menu' => 'تعديل قائمة الطعام',
+  'menus' => 'قوائم الطعام',
+  'Add menu' => 'اضافة قائمة طعام',
+  'messages.Add New Menu' => 'Messages.Add New Menu',
+  'messages.Menu Image' => 'Messages.Menu Image',
 );
