@@ -40,6 +40,13 @@
                     </tbody>
                 </table>
             </div>
+            <div class="card-footer">
+                <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
+                    <div class="col-12">
+                        {!! $menus->links() !!}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
