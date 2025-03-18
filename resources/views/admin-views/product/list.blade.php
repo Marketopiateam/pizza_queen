@@ -10,8 +10,7 @@
     <div class="content container-fluid">
         <div class="d-flex flex-wrap gap-2 align-items-center mb-4">
             <h2 class="h1 mb-0 d-flex align-items-center gap-2">
-                <img width="20" class="avatar-img" src="{{ asset('public/assets/admin/img/icons/product.png') }}"
-                    alt="">
+                <img width="20" class="avatar-img" src="{{ asset('public/assets/admin/img/icons/product.png') }}" alt="">
                 <span class="page-header-title">
                     {{ translate('Product_List') }}
                 </span>
@@ -32,8 +31,7 @@
                                             placeholder="{{ translate('search_by_product_name') }}" aria-label="Search"
                                             value="{{ $search }}" required="" autocomplete="off">
                                         <div class="input-group-append">
-                                            <button type="submit"
-                                                class="btn btn-primary">{{ translate('Search') }}</button>
+                                            <button type="submit" class="btn btn-primary">{{ translate('Search') }}</button>
                                         </div>
                                     </div>
                                 </form>
@@ -52,8 +50,7 @@
                                                 <a type="submit" class="dropdown-item d-flex align-items-center gap-2"
                                                     href="{{ route('admin.product.excel-import', ['search' => $search]) }}">
                                                     <img width="14"
-                                                        src="{{ asset('public/assets/admin/img/icons/excel.png') }}"
-                                                        alt="">
+                                                        src="{{ asset('public/assets/admin/img/icons/excel.png') }}" alt="">
                                                     {{ translate('Excel') }}
                                                 </a>
                                             </li>
@@ -86,79 +83,80 @@
 
                                 <tbody id="set-rows">
                                     @foreach ($products as $key => $product)
-                                        <tr>
-                                            <td>{{ $products->firstitem() + $key }}</td>
-                                            <td>
-                                                <div class="media align-items-center gap-3">
-                                                    <div class="avatar">
-                                                        <img src="{{ $product['imageFullPath'] }}" class="rounded img-fit"
-                                                            alt="{{ translate('product') }}">
-                                                    </div>
+                                                                    <tr>
+                                                                        <td>{{ $products->firstitem() + $key }}</td>
+                                                                        <td>
+                                                                            <div class="media align-items-center gap-3">
+                                                                                <div class="avatar">
+                                                                                    <img src="{{ $product['imageFullPath'] }}" class="rounded img-fit"
+                                                                                        alt="{{ translate('product') }}">
+                                                                                </div>
 
-                                                    <div class="media-body">
-                                                        <a class="text-dark"
-                                                            href="{{ route('admin.product.view', [$product['id']]) }}">
-                                                            {{ Str::limit($product['name'], 30) }}
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{{ \App\CentralLogics\Helpers::set_symbol($product['price']) }}</td>
-                                            <td class="text-center">
-                                                {{ \App\Model\OrderDetail::whereHas('order', function ($q) {
-                                                    $q->where('order_status', 'delivered');
-                                                })->where('product_id', $product->id)->sum('quantity') }}
-                                            </td>
-                                            <td>
-                                                <div><span class="">{{ translate('Stock Type') }} :
-                                                        {{ ucfirst($product->main_branch_product?->stock_type) }}</span>
-                                                </div>
-                                                @if (isset($product->main_branch_product) && $product->main_branch_product->stock_type != 'unlimited')
-                                                    <div><span class="">{{ translate('Stock') }} :
-                                                            {{ $product->main_branch_product->stock - $product->main_branch_product->sold_quantity }}</span>
-                                                    </div>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <label class="switcher">
-                                                        <input id="{{ $product['id'] }}"
-                                                            class="switcher_input status-change" type="checkbox"
-                                                            {{ $product['status'] == 1 ? 'checked' : '' }}
-                                                            data-url="{{ route('admin.product.status', [$product['id'], 0]) }}">
-                                                        <span class="switcher_control"></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <label class="switcher">
-                                                        <input id="recommended-{{ $product['id'] }}"
-                                                            class="switcher_input recommended-status-change" type="checkbox"
-                                                            {{ $product['is_recommended'] == 1 ? 'checked' : '' }}
-                                                            data-url="{{ route('admin.product.recommended', [$product['id'], 0]) }}">
-                                                        <span class="switcher_control"></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex justify-content-center gap-2">
-                                                    <a class="btn btn-outline-info btn-sm edit square-btn"
-                                                        href="{{ route('admin.product.edit', [$product['id']]) }}"><i
-                                                            class="tio-edit"></i></a>
-                                                    <button type="button"
-                                                        class="btn btn-outline-danger btn-sm delete square-btn form-alert"
-                                                        data-id="product-{{ $product['id'] }}"
-                                                        data-message="{{ translate('Want to delete this item ?') }}">
-                                                        <i class="tio-delete"></i>
-                                                    </button>
-                                                </div>
-                                                <form action="{{ route('admin.product.delete', [$product['id']]) }}"
-                                                    method="post" id="product-{{ $product['id'] }}">
-                                                    @csrf @method('delete')
-                                                </form>
-                                            </td>
-                                        </tr>
+                                                                                <div class="media-body">
+                                                                                    <a class="text-dark"
+                                                                                        href="{{ route('admin.product.view', [$product['id']]) }}">
+                                                                                        {{ Str::limit($product['name'], 30) }}
+                                                                                    </a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>{{ \App\CentralLogics\Helpers::set_symbol($product['price']) }}</td>
+                                                                        <td class="text-center">
+                                                                            {{ \App\Model\OrderDetail::whereHas('order', function ($q) {
+                                            $q->where('order_status', 'delivered');
+                                        })->where('product_id', $product->id)->sum('quantity') }}
+                                                                        </td>
+                                                                        <td>
+                                                                            <div><span class="">{{ translate('Stock Type') }} :
+                                                                                    {{ ucfirst($product->main_branch_product?->stock_type) }}</span>
+                                                                            </div>
+                                                                            @if (isset($product->main_branch_product) && $product->main_branch_product->stock_type != 'unlimited')
+                                                                                <div><span class="">{{ translate('Stock') }} :
+                                                                                        {{ $product->main_branch_product->stock - $product->main_branch_product->sold_quantity }}</span>
+                                                                                </div>
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            <div>
+                                                                                <label class="switcher">
+                                                                                    <input id="{{ $product['id'] }}" class="switcher_input status-change"
+                                                                                        type="checkbox" {{ $product['status'] == 1 ? 'checked' : '' }}
+                                                                                        data-url="{{ route('admin.product.status', [$product['id'], 0]) }}">
+                                                                                    <span class="switcher_control"></span>
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div>
+                                                                                <label class="switcher">
+                                                                                    <input id="recommended-{{ $product['id'] }}"
+                                                                                        class="switcher_input recommended-status-change" type="checkbox" {{ $product['is_recommended'] == 1 ? 'checked' : '' }}
+                                                                                        data-url="{{ route('admin.product.recommended', [$product['id'], 0]) }}">
+                                                                                    <span class="switcher_control"></span>
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="d-flex justify-content-center gap-2">
+                                                                                <a class="btn btn-outline-info btn-sm edit square-btn"
+                                                                                    href="{{ route('admin.product.duplicate', [$product['id']]) }}"><i
+                                                                                        class="tio-copy"></i></a>
+                                                                                <a class="btn btn-outline-info btn-sm edit square-btn"
+                                                                                    href="{{ route('admin.product.edit', [$product['id']]) }}"><i
+                                                                                        class="tio-edit"></i></a>
+                                                                                <button type="button"
+                                                                                    class="btn btn-outline-danger btn-sm delete square-btn form-alert"
+                                                                                    data-id="product-{{ $product['id'] }}"
+                                                                                    data-message="{{ translate('Want to delete this item ?') }}">
+                                                                                    <i class="tio-delete"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <form action="{{ route('admin.product.delete', [$product['id']]) }}"
+                                                                                method="post" id="product-{{ $product['id'] }}">
+                                                                                @csrf @method('delete')
+                                                                            </form>
+                                                                        </td>
+                                                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -181,7 +179,7 @@
     <script>
         "use strict";
 
-        $(".recommended-status-change").change(function() {
+        $(".recommended-status-change").change(function () {
             var value = $(this).val();
             let url = $(this).data('url');
             console.log(value, url);
@@ -215,10 +213,10 @@
                         data: {
                             status: status
                         },
-                        success: function(data, status) {
+                        success: function (data, status) {
                             toastr.success("{{ translate('updated successfully') }}");
                         },
-                        error: function(data) {
+                        error: function (data) {
                             toastr.error("{{ translate('updated failed') }}");
                         }
                     });

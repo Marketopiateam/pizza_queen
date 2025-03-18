@@ -974,4 +974,42 @@ class ProductController extends Controller
         Toastr::success(translate('updated successfully!'));
         return back();
     }
+
+    public function duplicate($id)
+    {
+        $product = $this->product->find($id);
+
+        if (!$product) {
+            return response()->json(['error' => translate('Product not found!')], 404);
+        }
+
+        $newProduct = $product->replicate();
+        $newProduct->name = $product->name . ' (Copy)';
+        $newProduct->status = 0;
+        $newProduct->save();
+
+        $newProduct->tags()->sync($product->tags->pluck('id')->toArray());
+
+        $newProduct->category_ids = $product->category_ids;
+        $newProduct->save();
+
+        $newProduct->add_ons = $product->add_ons;
+        $newProduct->save();
+
+        $translations = $this->translation->where('translationable_id', $product->id)
+            ->where('translationable_type', 'App\Model\Product')
+            ->get();
+
+        foreach ($translations as $translation) {
+            $this->translation->create([
+                'translationable_type' => 'App\Model\Product',
+                'translationable_id' => $newProduct->id,
+                'locale' => $translation->locale,
+                'key' => $translation->key,
+                'value' => $translation->value
+            ]);
+        }
+
+        return redirect()->route('admin.product.list')->with('success', __('messages.successfully added'));
+    }
 }
